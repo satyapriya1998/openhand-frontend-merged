@@ -108,15 +108,15 @@
         }
       </button>
 
-      <a href="#" class="group inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+      <a routerLink="/auth/login" class="group inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
         <i class="fa-regular fa-user text-xs"></i>
         {{ locale.t().login }}
       </a>
-      <a href="#contact" class="group whitespace-nowrap inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium transition-colors hover:bg-secondary">
+      <a routerLink="/auth/login" [queryParams]="{signup: true}" class="group whitespace-nowrap inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium transition-colors hover:bg-secondary">
         <i class="fa-regular fa-pen-to-square text-xs"></i>
         {{ locale.t().signUp }}
       </a>
-      <a href="#contact" class="group relative whitespace-nowrap inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.03]">
+      <a routerLink="/auth/login" [queryParams]="{signup: true}" class="group relative whitespace-nowrap inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.03]">
         <span class="relative z-10">{{ locale.t().startFreeTrial }}</span>
         <i class="fa-solid fa-rocket text-xs transition-transform group-hover:translate-x-0.5"></i>
         <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"></div>
@@ -261,10 +261,10 @@
           </div>
         </div>
         <div class="grid grid-cols-2 gap-2 pt-3">
-          <a href="#" class="rounded-lg border border-border px-3 py-2.5 text-center text-sm font-medium">
+          <a routerLink="/auth/login" class="rounded-lg border border-border px-3 py-2.5 text-center text-sm font-medium">
             {{ locale.t().login }}
           </a>
-          <a href="#contact" class="rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground">
+          <a routerLink="/auth/login" [queryParams]="{signup: true}" class="rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground">
             {{ locale.t().startFreeTrial }}
           </a>
         </div>

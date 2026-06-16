@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { SectionHeadingComponent } from '../section-heading/section-heading.component';
 import { LocaleService } from '../../services/locale.service';
 import { RevealDirective } from '../../shared/reveal.directive';
@@ -13,7 +14,7 @@ const PLANS = [
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [SectionHeadingComponent, RevealDirective],
+  imports: [RouterModule, SectionHeadingComponent, RevealDirective],
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.scss',
 })

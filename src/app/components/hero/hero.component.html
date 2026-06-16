@@ -38,7 +38,8 @@
 
       <div appReveal="up" [delay]="320" class="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <a
-          href="#contact"
+          routerLink="/auth/login"
+          [queryParams]="{signup: true}"
           appMagnetic
           [strength]="0.18"
           class="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.03] sm:w-auto"
@@ -48,7 +49,7 @@
           <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full"></div>
         </a>
         <a
-          href="#contact"
+          routerLink="/auth/login"
           appMagnetic
           [strength]="0.12"
           class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/50 px-7 py-3.5 text-sm font-semibold text-foreground backdrop-blur-md transition-colors hover:bg-secondary sm:w-auto"

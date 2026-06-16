@@ -76,8 +76,9 @@
                </span>
              }
            </div>
-          <button
-            type="button"
+          <a
+            routerLink="/auth/login"
+            [queryParams]="{signup: true}"
             class="group mt-6 inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all"
             [class.bg-primary]="plan.highlighted"
             [class.text-primary-foreground]="plan.highlighted"
@@ -89,7 +90,7 @@
           >
             {{ planCopy(plan.name).cta }}
             <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5"></i>
-          </button>
+          </a>
            <ul class="mt-5 flex-1 space-y-3 pb-2">
             @for (feature of planCopy(plan.name).features; track feature) {
               <li class="flex items-start gap-2.5 text-sm text-muted-foreground min-w-0">

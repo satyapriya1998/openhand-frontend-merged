@@ -161,9 +161,9 @@ subscriptionModels = [
   });
 
   ngOnInit() {
-    // Handle mode query parameter for direct navigation to login/signup
+    // Handle mode/signup query parameter for direct navigation to login/signup
     this.route.queryParams.subscribe(params => {
-      if (params['mode'] === 'signup') {
+      if (params['signup'] === 'true' || params['mode'] === 'signup') {
         this.mode.set('signup');
       } else if (params['mode'] === 'login') {
         this.mode.set('login');

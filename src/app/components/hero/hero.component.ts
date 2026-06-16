@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { DashboardMockupComponent } from '../dashboard-mockup/dashboard-mockup.component';
 import { CountUpDirective } from '../../shared/count-up.directive';
 import { RevealDirective } from '../../shared/reveal.directive';
@@ -51,6 +52,7 @@ const PHRASES = [
   selector: 'app-hero',
   standalone: true,
   imports: [
+    RouterModule,
     DashboardMockupComponent,
     CountUpDirective,
     RevealDirective,
