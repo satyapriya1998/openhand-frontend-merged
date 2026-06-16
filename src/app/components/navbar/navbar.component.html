@@ -108,19 +108,65 @@
         }
       </button>
 
-      <a routerLink="/auth/login" class="group inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-        <i class="fa-regular fa-user text-xs"></i>
-        {{ locale.t().login }}
-      </a>
-      <a routerLink="/auth/login" [queryParams]="{signup: true}" class="group whitespace-nowrap inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium transition-colors hover:bg-secondary">
-        <i class="fa-regular fa-pen-to-square text-xs"></i>
-        {{ locale.t().signUp }}
-      </a>
-      <a routerLink="/auth/login" [queryParams]="{signup: true}" class="group relative whitespace-nowrap inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.03]">
-        <span class="relative z-10">{{ locale.t().startFreeTrial }}</span>
-        <i class="fa-solid fa-rocket text-xs transition-transform group-hover:translate-x-0.5"></i>
-        <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"></div>
-      </a>
+      @if (isAuthenticated()) {
+        <!-- Profile dropdown when logged in -->
+        <div class="relative" data-dropdown="profile">
+          <button
+            type="button"
+            (click)="toggleProfile()"
+            aria-label="Profile menu"
+            class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <div class="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-aurora-1 to-aurora-3 text-xs font-bold text-white">
+              {{ userInitials() }}
+            </div>
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+          </button>
+          @if (profileOpen()) {
+            <div class="glass-strong animate-scale-in absolute right-0 mt-2 w-56 rounded-xl border border-border p-2 shadow-2xl">
+              <div class="px-3 py-2 border-b border-border">
+                <p class="text-sm font-semibold text-foreground truncate">{{ userName() }}</p>
+                <p class="text-xs text-muted-foreground truncate">{{ auth.email() }}</p>
+              </div>
+              <div class="py-1">
+                <a routerLink="/app/profile" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary">
+                  <i class="fa-solid fa-user text-xs"></i>
+                  My Profile
+                </a>
+                <a routerLink="/app/dashboard" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary">
+                  <i class="fa-solid fa-grip text-xs"></i>
+                  Dashboard
+                </a>
+              </div>
+              <div class="border-t border-border pt-1">
+                <button
+                  type="button"
+                  (click)="logout()"
+                  class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-500 transition-colors hover:bg-red-50"
+                >
+                  <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                  Logout
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- Login/Signup buttons when not logged in -->
+        <a routerLink="/auth/login" class="group inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+          <i class="fa-regular fa-user text-xs"></i>
+          {{ locale.t().login }}
+        </a>
+        <a routerLink="/auth/login" [queryParams]="{signup: true}" class="group whitespace-nowrap inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium transition-colors hover:bg-secondary">
+          <i class="fa-regular fa-pen-to-square text-xs"></i>
+          {{ locale.t().signUp }}
+        </a>
+        <a routerLink="/auth/login" [queryParams]="{signup: true}" class="group relative whitespace-nowrap inline-flex items-center gap-2 overflow-hidden rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-transform hover:scale-[1.03]">
+          <span class="relative z-10">{{ locale.t().startFreeTrial }}</span>
+          <i class="fa-solid fa-rocket text-xs transition-transform group-hover:translate-x-0.5"></i>
+          <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 group-hover:translate-x-full"></div>
+        </a>
+      }
     </div>
 
     <div class="flex items-center gap-2 lg:hidden">
@@ -260,14 +306,36 @@
             }
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-2 pt-3">
-          <a routerLink="/auth/login" class="rounded-lg border border-border px-3 py-2.5 text-center text-sm font-medium">
-            {{ locale.t().login }}
-          </a>
-          <a routerLink="/auth/login" [queryParams]="{signup: true}" class="rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground">
-            {{ locale.t().startFreeTrial }}
-          </a>
-        </div>
+        @if (isAuthenticated()) {
+          <div class="glass-strong rounded-xl border border-border p-4 mt-3">
+            <div class="flex items-center gap-3">
+              <div class="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-aurora-1 to-aurora-3 text-sm font-bold text-white">
+                {{ userInitials() }}
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-foreground truncate">{{ userName() }}</p>
+                <p class="text-xs text-muted-foreground truncate">{{ auth.email() }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 pt-3">
+            <a routerLink="/app/dashboard" class="rounded-lg border border-border px-3 py-2.5 text-center text-sm font-medium">
+              Dashboard
+            </a>
+            <button type="button" (click)="logout()" class="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-center text-sm font-medium text-red-600">
+              Logout
+            </button>
+          </div>
+        } @else {
+          <div class="grid grid-cols-2 gap-2 pt-3">
+            <a routerLink="/auth/login" class="rounded-lg border border-border px-3 py-2.5 text-center text-sm font-medium">
+              {{ locale.t().login }}
+            </a>
+            <a routerLink="/auth/login" [queryParams]="{signup: true}" class="rounded-lg bg-primary px-3 py-2.5 text-center text-sm font-semibold text-primary-foreground">
+              {{ locale.t().startFreeTrial }}
+            </a>
+          </div>
+        }
       </div>
     </div>
   }

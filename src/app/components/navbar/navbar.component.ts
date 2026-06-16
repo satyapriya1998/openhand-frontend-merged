@@ -5,6 +5,7 @@ import {
   OnInit,
   PLATFORM_ID,
   signal,
+  computed,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -16,6 +17,7 @@ import {
   type Language,
 } from '../../services/locale.service';
 import { ThemeService } from '../../services/theme.service';
+import { AuthService } from '../../core/services/auth.service';
 
 interface NavMegaItem {
   icon: string;
@@ -75,6 +77,7 @@ const NAV: readonly NavEntry[] = [
 export class NavbarComponent implements OnInit {
   readonly locale = inject(LocaleService);
   readonly theme = inject(ThemeService);
+  readonly auth = inject(AuthService);
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly navItems: readonly NavEntry[] = NAV;
@@ -88,6 +91,17 @@ export class NavbarComponent implements OnInit {
   readonly mobileLangOpen = signal(false);
   readonly mobileCurrencyOpen = signal(false);
   readonly activeMega = signal<string | null>(null);
+  readonly profileOpen = signal(false);
+
+  readonly isAuthenticated = computed(() => this.auth.authenticated());
+  readonly userName = computed(() => this.auth.userName());
+  readonly userInitials = computed(() => {
+    const user = this.auth.user();
+    if (!user) return '';
+    const first = user.firstName?.[0] || '';
+    const last = user.lastName?.[0] || '';
+    return (first + last).toUpperCase();
+  });
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -112,6 +126,9 @@ export class NavbarComponent implements OnInit {
     if (!target.closest('[data-dropdown="currency"]')) {
       this.currencyOpen.set(false);
       this.mobileCurrencyOpen.set(false);
+    }
+    if (!target.closest('[data-dropdown="profile"]')) {
+      this.profileOpen.set(false);
     }
     if (!target.closest('[data-mega]')) {
       this.activeMega.set(null);
@@ -177,7 +194,15 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  toggleProfile(): void {
+    this.profileOpen.update((open) => !open);
+  }
+
   setMega(label: string | null): void {
     this.activeMega.set(label);
+  }
+
+  logout(): void {
+    this.auth.logout();
   }
 }
