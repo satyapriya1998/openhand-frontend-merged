@@ -686,12 +686,11 @@ section {
   top: 0; 
   left: 0; 
   height: 3px; 
-  width: 0%; 
   background: linear-gradient(90deg, var(--aurora-1), var(--aurora-2), var(--aurora-3)); 
   z-index: 60; 
   will-change: width;
   backface-visibility: hidden;
-  transition: width 0.1s ease-out;
+  transition: width 0.15s ease-out;
 }
 
 /* ===== Accessibility ===== */
