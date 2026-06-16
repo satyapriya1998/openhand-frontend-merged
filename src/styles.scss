@@ -300,6 +300,8 @@ $hrms-accent: (
     color: var(--hrms-text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    z-index: 0;
   }
   ::selection {
     background: color-mix(in oklch, var(--primary) 40%, transparent);

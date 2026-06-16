@@ -1,0 +1,36 @@
+<div class="min-h-screen bg-background" appGlobalMouseParallax [strength]="1">
+  <!-- Animated gradient background -->
+  <div class="page-parallax" aria-hidden="true">
+    <div class="page-parallax__wash"></div>
+    <div class="aurora-blob aurora-blob--1"></div>
+    <div class="aurora-blob aurora-blob--2"></div>
+    <div class="aurora-blob aurora-blob--3"></div>
+    <div class="page-parallax__vignette"></div>
+  </div>
+
+  <!-- Scroll progress bar -->
+  <div class="scroll-progress" [style.--scroll-progress.%]="scrollProgress() * 100"></div>
+
+  <!-- Fixed navbar -->
+  <app-navbar />
+
+  <!-- Foreground content (pt-16 accounts for fixed navbar height) -->
+  <div class="relative z-10 pt-16 bg-background">
+    <main id="main">
+      <app-hero />
+      <app-trusted-by />
+      <app-ai-copilot />
+      <app-features />
+      <app-builder />
+      <app-migration />
+      <app-analytics />
+      <app-security />
+      <app-comparison />
+      <app-testimonials />
+      <app-pricing />
+      <app-faq />
+      <app-final-cta />
+    </main>
+    <app-footer />
+  </div>
+</div>
