@@ -1,6 +1,22 @@
 <div class="relative min-h-screen">
   <!-- Scroll progress bar - fixed at top -->
-  <div class="scroll-progress" [style.width.%]="scrollProgress() * 100"></div>
+  <div 
+    class="scroll-progress-container"
+    [class.dragging]="isDragging()"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+    (mousedown)="onDragStart($event)"
+  >
+    <div class="scroll-progress" [style.width.%]="scrollProgress() * 100">
+      <!-- Progress indicator (the circle at the tip) -->
+      <div class="scroll-progress-indicator" [class.active]="showTooltip() || isDragging()">
+        <div class="scroll-progress-dot"></div>
+        <div class="scroll-progress-tooltip" [class.visible]="showTooltip() || isDragging()">
+          {{ scrollPercentage }}%
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Main content with router -->
   <router-outlet></router-outlet>
