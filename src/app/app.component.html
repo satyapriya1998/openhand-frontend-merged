@@ -1,6 +1,6 @@
-<div class="min-h-screen bg-background" appGlobalMouseParallax [strength]="1">
+<div class="relative min-h-screen" appGlobalMouseParallax [strength]="1">
   <!-- Animated gradient background -->
-  <div class="page-parallax" aria-hidden="true">
+  <div class="fixed inset-0 page-parallax z-0" aria-hidden="true">
     <div class="page-parallax__wash"></div>
     <div class="aurora-blob aurora-blob--1"></div>
     <div class="aurora-blob aurora-blob--2"></div>
@@ -11,10 +11,10 @@
   <!-- Scroll progress bar -->
   <div class="scroll-progress" [style.--scroll-progress.%]="scrollProgress() * 100"></div>
 
-  <!-- Fixed navbar -->
+  <!-- Fixed navbar (always on top) -->
   <app-navbar />
 
-  <!-- Foreground content (pt-16 accounts for fixed navbar height) -->
+  <!-- Content wrapper with background to cover parallax -->
   <div class="relative z-10 pt-16 bg-background">
     <main id="main">
       <app-hero />
