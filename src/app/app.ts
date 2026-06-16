@@ -1,6 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -11,6 +12,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly router = inject(Router);
 
   /** Current scroll position 0..1, used by the gradient scroll progress bar. */
   readonly scrollProgress = signal(0);
@@ -20,6 +22,9 @@ export class AppComponent implements OnInit, OnDestroy {
   
   /** Whether to show the percentage tooltip */
   showTooltip = signal(false);
+  
+  /** Whether we are on the landing page */
+  readonly isLandingPage = signal(true);
   
   private lastScrollTime = 0;
   private readonly scrollThrottle = 16; // ~60fps
@@ -34,7 +39,20 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => this.onScroll(), 50);
+      // Check if we're on the landing page (root path with no additional segments)
+      this.checkLandingPage();
+      
+      // Listen for route changes
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe(() => {
+        this.checkLandingPage();
+        // Reset scroll progress when route changes
+        this.scrollProgress.set(0);
+      });
+      
+      // Initial scroll check with delay to ensure page is fully rendered
+      setTimeout(() => this.onScroll(), 100);
     }
   }
 
@@ -42,9 +60,19 @@ export class AppComponent implements OnInit, OnDestroy {
     this.removeDragListeners();
   }
 
+  /** Check if current route is the landing page */
+  private checkLandingPage(): void {
+    const url = this.router.url;
+    // Landing page is when URL is exactly '/' or '/#' or empty
+    this.isLandingPage.set(url === '/' || url === '' || url === '/#' || url.startsWith('/#'));
+  }
+
   @HostListener('window:scroll')
   onScroll(): void {
     if (!isPlatformBrowser(this.platformId)) return;
+    
+    // Only track scroll on landing page
+    if (!this.isLandingPage()) return;
     
     // Skip throttle check during drag operations
     if (this.isDragging()) return;
@@ -61,12 +89,13 @@ export class AppComponent implements OnInit, OnDestroy {
     const clientHeight = doc.clientHeight;
     const scrollableHeight = scrollHeight - clientHeight;
     
-    // Ensure progress reaches 1 when scrolled to bottom
+    // If there's no scrollable content, set to 0
     if (scrollableHeight <= 0) {
-      this.scrollProgress.set(1);
+      this.scrollProgress.set(0);
       return;
     }
     
+    // Calculate progress: 0 at top, 1 at bottom
     const progress = Math.min(1, Math.max(0, window.scrollY / scrollableHeight));
     this.scrollProgress.set(progress);
   }
@@ -142,7 +171,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /** Show tooltip on hover */
   onMouseEnter(): void {
-    this.showTooltip.set(true);
+    if (this.isLandingPage()) {
+      this.showTooltip.set(true);
+    }
   }
 
   /** Hide tooltip on leave */
