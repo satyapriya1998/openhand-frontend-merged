@@ -1,0 +1,198 @@
+<section class="px-4 py-12 sm:px-6 lg:px-8" id="analytics">
+  <div class="pointer-events-none absolute inset-0 aurora-soft opacity-40 -z-10"></div>
+  <div class="mx-auto max-w-7xl">
+    <app-section-heading
+      eyebrow="Workforce intelligence"
+      title="Real-Time Workforce Intelligence"
+      description="Live dashboards turn raw HR data into decisions — attendance, attrition, hiring funnels, and department insights at a glance."
+    />
+
+    <div class="mt-14 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      @for (kpi of kpis; track kpi.label; let i = $index) {
+        <div
+          appSpotlight
+          class="glass relative overflow-hidden rounded-2xl border border-border p-5 transition-colors hover:border-primary/40 backdrop-blur-xl"
+          appReveal="up"
+          [delay]="i * 100"
+        >
+          <div class="relative flex items-center justify-between">
+  <div class="pointer-events-none absolute -right-8 -top-8 size-24 rounded-full bg-primary/10 blur-2xl"></div>
+
+  <i class="fa-solid {{ kpi.icon }} text-lg text-primary"></i>
+
+  <span class="rounded-md bg-chart-4/15 px-1.5 py-0.5 text-[10px] font-semibold text-chart-4">
+    live
+  </span>
+</div>
+          <p class="relative mt-3 text-3xl font-bold tracking-tight text-foreground">
+            <span
+              [appCountUp]="kpi.numericValue"
+              [decimals]="kpi.decimals"
+              [duration]="1600"
+              [delay]="i * 120"
+              [suffix]="kpi.suffix"
+              [prefix]="kpi.prefix"
+              >{{ kpi.prefix }}{{ kpi.formattedStart }}{{ kpi.suffix }}</span
+            >
+          </p>
+          <p class="relative mt-1 text-xs text-muted-foreground">{{ kpi.label }}</p>
+        </div>
+      }
+    </div>
+
+    <div class="mt-4 grid gap-4 lg:grid-cols-3">
+      <!-- Attendance -->
+      <div
+        appSpotlight
+        class="glass group relative overflow-visible rounded-2xl border border-border p-4 transition-colors hover:border-primary/40"
+        appReveal="up"
+      >
+        <div class="relative flex items-center justify-between">
+  <div class="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/10 blur-3xl"></div>
+
+  <p class="text-sm font-medium text-muted-foreground">Attendance Trends</p>
+
+  <span class="flex items-center gap-1 text-[11px] font-semibold text-chart-4">
+    <i class="fa-solid fa-arrow-trend-up text-[10px]"></i>
+    +12.4%
+  </span>
+</div>
+        <div class="relative mt-3 min-h-[160px]">
+          <svg
+            viewBox="0 0 300 160"
+            preserveAspectRatio="none"
+            class="h-full w-full overflow-visible"
+          >
+            <defs>
+              <linearGradient id="attendanceFill" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="var(--chart-1)" stop-opacity="0.45" />
+                <stop offset="100%" stop-color="var(--chart-1)" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+            <g stroke="var(--border)" stroke-dasharray="3 4" stroke-width="1">
+              <line x1="0" y1="40" x2="300" y2="40" />
+              <line x1="0" y1="80" x2="300" y2="80" />
+              <line x1="0" y1="120" x2="300" y2="120" />
+            </g>
+            <path
+              [attr.d]="attendanceAreaPath"
+              fill="url(#attendanceFill)"
+              class="draw-stroke"
+              [style.--stroke-len]="attendanceFillLen"
+              [style.--stroke-delay]="0"
+            />
+            <path
+              [attr.d]="attendanceLinePath"
+              fill="none"
+              stroke="var(--chart-1)"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="draw-stroke"
+              [style.--stroke-len]="attendanceLineLen"
+              [style.--stroke-delay]="200"
+            />
+            @for (pt of attendancePoints; track pt.x; let i = $index) {
+              <circle
+                [attr.cx]="pt.x"
+                [attr.cy]="pt.y"
+                r="3.5"
+                fill="var(--chart-1)"
+                stroke="var(--card)"
+                stroke-width="2"
+                class="draw-stroke"
+                [style.--stroke-len]="100"
+                [style.--stroke-delay]="600 + i * 80"
+              />
+            }
+          </svg>
+          <div class="mt-1 flex justify-between text-[10px] text-muted-foreground">
+            @for (item of attendance; track item.m) {
+              <span>{{ item.m }}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Hiring funnel -->
+      <div
+        appSpotlight
+        class="glass group relative overflow-hidden rounded-2xl border border-border p-4 transition-colors hover:border-primary/40"
+        appReveal="up"
+        [delay]="150"
+      >
+        <div class="relative flex items-center justify-between">
+  <div class="pointer-events-none absolute -left-10 -top-10 size-32 rounded-full bg-accent/10 blur-3xl"></div>
+
+  <p class="text-sm font-medium text-muted-foreground">Hiring Funnel</p>
+
+  <span class="flex items-center gap-1 text-[11px] font-semibold text-chart-4">
+    <i class="fa-solid fa-arrow-trend-down text-[10px]"></i>
+    -8.2%
+  </span>
+</div>
+        <div class="relative mt-3 flex h-40 flex-col justify-end gap-1.5">
+          @for (item of hiring; track item.m; let i = $index) {
+            <div
+              class="funnel-step flex h-8 items-center justify-center rounded-md text-[10px] font-semibold text-white"
+              [style.width.%]="funnelWidth(i)"
+              [style.background]="chartColors[i % chartColors.length]"
+              [style.--funnel-delay]="i * 120 + 'ms'"
+              [style.margin-left.%]="(100 - funnelWidth(i)) / 2"
+            >
+              <span class="px-2">{{ item.m }} · {{ item.v }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Department donut -->
+      <div
+        appSpotlight
+        class="glass group relative overflow-hidden rounded-2xl border border-border p-4 transition-colors hover:border-primary/40"
+        appReveal="up"
+        [delay]="300"
+      >
+        <div class="relative flex items-center justify-between">
+  <div class="pointer-events-none absolute -right-10 -bottom-10 size-32 rounded-full bg-chart-3/10 blur-3xl"></div>
+
+  <p class="text-sm font-medium text-muted-foreground">Department Insights</p>
+
+  <span class="rounded-md bg-chart-3/15 px-1.5 py-0.5 text-[10px] font-semibold text-chart-3">
+    5 depts
+  </span>
+</div>
+        <div class="relative mt-3 flex h-40 items-center gap-6">
+          <div
+            class="dept-donut donut-animate size-32 shrink-0 rounded-full"
+            [style.background]="deptDonutGradient()"
+            [style.--donut-delay]="200 + 'ms'"
+          ></div>
+          <div class="min-w-0 flex-1 space-y-2">
+            @for (item of dept; track item.name; let i = $index) {
+              <div
+                class="flex items-center gap-2 text-xs"
+                appReveal="right"
+                [delay]="500 + i * 80"
+              >
+                <span
+                  class="size-2.5 shrink-0 rounded-full"
+                  [style.background]="chartColors[i % chartColors.length]"
+                ></span>
+                <span class="truncate text-muted-foreground">{{ item.name }}</span>
+                <span class="ml-auto font-medium text-foreground">
+                  <span
+                    [appCountUp]="item.v"
+                    [duration]="1200"
+                    [delay]="500 + i * 80"
+                    >0</span
+                  >%
+                </span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

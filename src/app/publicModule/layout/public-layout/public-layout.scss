@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+/* Container = flex (IMPORTANT) */
+.layout-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Sidebar */
+.layout-sidenav {
+  width: var(--hrms-sidenav-w);
+  flex-shrink: 0;
+  border-right: 1px solid var(--hrms-border);
+  background: var(--hrms-surface);
+  transition: var(--hrms-transition);
+  overflow-x: hidden;
+  
+   box-shadow:
+    inset -1px 0 9px rgba(96, 165, 250, 0.4),
+    8px 0 25px rgba(59, 130, 246, 0.12);
+
+  &.collapsed {
+    width: var(--hrms-sidenav-w-collapsed);
+  }
+}
+
+/* Content (replacement of mat-sidenav-content) */
+.layout-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--hrms-bg);
+  min-width: 0; // IMPORTANT (prevents overflow bugs)
+
+  
+}
+
+/* Main scroll area */
+.layout-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // margin: 20px;
+}
+
+

@@ -1,0 +1,46 @@
+<section class="relative py-12 sm:py-16" id="compare">
+  <div class="pointer-events-none absolute inset-0 -z-10 aurora-soft opacity-40"></div>
+  <div class="mx-auto max-w-5xl px-6">
+    <app-section-heading
+      eyebrow="Why Knodtecone"
+      title="Built Different from Traditional HRMS"
+      description="See how a modern, AI-native platform compares to the legacy systems holding your team back."
+    />
+
+    <div appReveal="up" [delay]="100" class="glass-strong relative mt-14 overflow-hidden rounded-2xl border border-border">
+      <div class="grid grid-cols-3 border-b border-border/60 bg-card/40">
+        <div class="p-5 text-sm font-medium text-muted-foreground">Capability</div>
+        <div class="flex items-center justify-center gap-2 p-5 text-center text-sm font-semibold text-primary">
+          <span class="flex size-6 items-center justify-center rounded-md bg-gradient-to-br from-aurora-1 to-aurora-3 text-[10px] font-bold text-white">K</span>
+          Knodtecone
+        </div>
+        <div class="p-5 text-center text-sm font-medium text-muted-foreground">Traditional HRMS</div>
+      </div>
+      @for (row of rows; track row; let i = $index) {
+        <div
+          class="grid grid-cols-3 items-center transition-colors hover:bg-primary/10 glass"
+          [class]="i % 2 === 0 ? 'bg-transparent' : ''"
+          appReveal="up"
+          [delay]="150 + i * 35"
+        >
+          <div class="p-5 text-sm font-medium text-foreground">{{ row }}</div>
+          <div class="flex justify-center p-5">
+            <span class="flex size-7 items-center justify-center rounded-full bg-chart-4/20 text-chart-4">
+              <i class="fa-solid fa-check text-sm"></i>
+            </span>
+          </div>
+          <div class="flex justify-center p-5">
+            <span class="flex size-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <p class="mt-6 text-center text-xs text-muted-foreground">
+      <i class="fa-solid fa-circle-info mr-1"></i>
+      Comparison based on 2,800+ customer reviews and our internal benchmarks.
+    </p>
+  </div>
+</section>

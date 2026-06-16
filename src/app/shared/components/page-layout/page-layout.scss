@@ -1,0 +1,29 @@
+.page-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 1200px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-content {
+    grid-template-columns: 1fr;
+  }
+}

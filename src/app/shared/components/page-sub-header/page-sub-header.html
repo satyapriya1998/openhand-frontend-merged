@@ -1,0 +1,27 @@
+<div class="sub-header" [ngClass]="[variant, compact ? 'compact' : '']">
+  <div class="titles">
+    <div class="title-row">
+      <div
+        class="hdr-icon"
+        [style.width]="iconContainerSize"
+        [style.height]="iconContainerSize"
+        [style.minWidth]="iconContainerSize"
+        [style.fontSize]="iconSize"
+      >
+        <fa-icon [icon]="icon"></fa-icon>
+      </div>
+
+      <h2 [style.fontSize]="titleSize" [style.fontWeight]="titleWeight" style="color: rgb(71, 71, 71);">
+        {{ title }}
+      </h2>
+    </div>
+
+    <div *ngIf="subtitle" class="subtitle" [style.fontSize]="subtitleSize" >
+      {{ subtitle }}
+    </div>
+  </div>
+
+  <div class="actions">
+    <ng-content></ng-content>
+  </div>
+</div>

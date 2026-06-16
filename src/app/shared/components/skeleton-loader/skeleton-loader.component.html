@@ -1,0 +1,33 @@
+<ng-container [ngSwitch]="variant">
+  <div *ngSwitchCase="'table'" class="sk-table">
+    <div class="sk-row sk-head" *ngFor="let _ of [0]">
+      <span class="sk-cell"></span>
+      <span class="sk-cell"></span>
+      <span class="sk-cell"></span>
+      <span class="sk-cell"></span>
+    </div>
+    <div class="sk-row" *ngFor="let r of rowsArray">
+      <span class="sk-cell"></span>
+      <span class="sk-cell"></span>
+      <span class="sk-cell"></span>
+      <span class="sk-cell"></span>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'cards'" class="sk-cards">
+    <div class="sk-card" *ngFor="let r of rowsArray"></div>
+  </div>
+
+  <div *ngSwitchCase="'profile'" class="sk-profile">
+    <div class="sk-avatar"></div>
+    <div class="sk-lines">
+      <span class="sk-line w-60"></span>
+      <span class="sk-line w-40"></span>
+      <span class="sk-line w-50"></span>
+    </div>
+  </div>
+
+  <div *ngSwitchDefault class="sk-lines">
+    <span class="sk-line" *ngFor="let r of rowsArray"></span>
+  </div>
+</ng-container>

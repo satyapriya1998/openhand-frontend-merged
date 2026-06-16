@@ -1,0 +1,124 @@
+<!-- <aside
+  class="fixed inset-y-0 left-0 bg-white border-r z-40 transition-all"
+  [ngClass]="collapsed ? 'w-16' : 'w-64'"
+>
+
+  <div class="h-16 flex items-center px-4 border-b">
+    <div class="w-8 h-8 bg-primary-600 rounded-lg"></div>
+    <span *ngIf="!collapsed" class="ml-3 font-semibold">HRMS</span>
+  </div>
+
+  
+  <nav class="flex-1 overflow-y-auto p-2 space-y-1">
+    <ng-container *ngFor="let item of menuItems">
+   
+      <a
+        *ngIf="!item.children"
+        [routerLink]="item.route"
+        class="flex items-center px-2 py-2 rounded hover:bg-gray-100"
+      >
+        {{ item.name }}
+      </a>
+
+      
+      <div *ngIf="item.children">
+        <button
+          (click)="toggleMenu.emit(item.id)"
+          class="w-full text-left px-2 py-2 hover:bg-gray-100"
+        >
+          {{ item.name }}
+        </button>
+
+        <div *ngIf="expandedMenus.includes(item.id)" class="ml-4">
+          <a *ngFor="let c of item.children" [routerLink]="c.route" class="block px-2 py-1 text-sm">
+            {{ c.name }}
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </nav>
+</aside> -->
+
+<aside class="sidenav-root" [class.collapsed]="collapsed" [class.mobile-open]="mobileOpen">
+
+    <!-- Animated circles background -->
+  <ul class="circles">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+
+    
+    
+  </ul>
+  
+  <!-- BRAND -->
+  <div class="brand">
+    <div class="brand-mark"><fa-icon [icon]="faIdCard"></fa-icon></div>
+    <div class="brand-label" *ngIf="!collapsed">
+      <span class="name">KNODTEC</span>
+      <!-- <span class="tag">People Platform</span> -->
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <ng-container *ngFor="let item of menuItems">
+      <!-- Single -->
+      <a
+        *ngIf="!item.children"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="icon"> <fa-icon [icon]="iconMap[item.id]"></fa-icon> </span>
+        <span class="label" *ngIf="!collapsed">{{ item.name }}</span>
+      </a>
+
+      <!-- Group -->
+      <div *ngIf="item.children">
+        <button
+          class="nav-item group-trigger"
+          (click)="toggleMenu.emit(item.id)"
+          [class.open]="expandedMenus.includes(item.id) && !collapsed"
+        >
+          <span class="icon">
+            <fa-icon [icon]="iconMap[item.id]"></fa-icon>
+          </span>
+          <span class="label" *ngIf="!collapsed">{{ item.name }}</span>
+          <fa-icon *ngIf="!collapsed" class="chev" [icon]="faChevronDown"> </fa-icon>
+          <!-- <span class="chev" *ngIf="!collapsed">⌄</span> -->
+        </button>
+
+        <div class="subgroup" [class.open]="expandedMenus.includes(item.id) && !collapsed">
+          <a
+            *ngFor="let c of item.children"
+            [routerLink]="c.route"
+            routerLinkActive="active"
+            class="nav-item sub"
+          >
+            <span class="dot"></span>
+            <span class="label">{{ c.name }}</span>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </nav>
+
+  <!-- FOOTER -->
+  <!-- <div class="nav-footer" *ngIf="!collapsed">
+    <div class="promo">
+      <div class="icon">✨</div>
+      <div>
+        <div class="p-title">Need assistance?</div>
+        <div class="p-sub">Check our help center</div>
+      </div>
+    </div>
+  </div> -->
+</aside>

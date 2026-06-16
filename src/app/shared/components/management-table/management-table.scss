@@ -1,0 +1,131 @@
+:host {
+  display: block;
+}
+
+.table-card {
+  background: var(--hrms-surface);
+  border-radius: 28px;
+  border: 1px solid var(--hrms-border);
+  overflow: hidden;
+  box-shadow: var(--hrms-shadow-sm);
+}
+
+.table-header {
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--hrms-border);
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--hrms-heading);
+}
+app-page-sub-header.table-header {
+  display: block;
+  width: 100%;
+  padding: 24px;
+  border-bottom: 1px solid var(--hrms-border);
+  box-sizing: border-box;
+}
+.table-header p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: var(--hrms-subtitle);
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .table-actions {
+    width: 100%;
+  }
+}
+
+
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 24px;
+
+  border-top: 1px solid var(--hrms-border);
+
+  background: rgba(248, 250, 252, 0.4);
+}
+
+.footer-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 13px;
+  color: var(--hrms-subtitle);
+
+  fa-icon {
+    color: var(--hrms-primary);
+    font-size: 12px;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-btn {
+  height: 34px;
+
+  padding: 0 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  border: 1px solid var(--hrms-border);
+  border-radius: 10px;
+
+  background: var(--hrms-surface);
+
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: var(--hrms-transition);
+
+  &:hover {
+    border-color: var(--hrms-primary);
+    color: var(--hrms-primary);
+  }
+}
+
+.page-indicator {
+  padding: 8px 14px;
+
+  border-radius: 10px;
+
+  background: var(--hrms-primary-light);
+  color: var(--hrms-primary);
+
+  font-size: 13px;
+  font-weight: 600;
+}

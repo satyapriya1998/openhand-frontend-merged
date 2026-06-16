@@ -1,0 +1,536 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Designations"
+    subtitle="Manage organization roles and reporting structure"
+    [icon]="faUserTie"
+  >
+    
+
+    <button class="page-header-btn primary" (click)="openAddDesignationModal()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      Add Designation
+    </button>
+  </app-page-header>
+
+  <div class="designation-page hrms-fade-in">
+    <!-- STATS -->
+
+    <app-stats-cards [cards]="statsCards()"> </app-stats-cards>
+
+    <app-page-layout >
+        <app-management-table main
+        title="All Designations"
+        subtitle="Overview of all designations in your organization"
+         [icon]="faSitemap"
+      >
+        <div table-actions>
+          <div class="search-box">
+            <fa-icon [icon]="faSearch"></fa-icon>
+
+            <input
+              type="text"
+              placeholder="Search designations..."
+              (input)="searchTerm.set($any($event.target).value)"
+            />
+          </div>
+        </div>
+
+        <table table-content>
+          <thead>
+            <tr>
+              <th>Designation</th>
+              <th>Department</th>
+              <th>Level</th>
+              <th>Employees</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @if (filteredDesignations().length > 0) {
+              @for (item of designations(); track item.title) {
+                <tr>
+                  <td>
+                    <div class="designation-cell">
+                      <div class="designation-line"></div>
+
+                      <div class="designation-icon" [class]="item.color">
+                        <fa-icon [icon]="faUserTie"></fa-icon>
+                      </div>
+
+                      <div>
+                        <h4>{{ item.title }}</h4>
+                        <span>{{ item.type }}</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>{{ item.department }}</td>
+
+                  <td>{{ item.level }}</td>
+
+                  <td>{{ item.employees }}</td>
+
+                  <td>
+                    <span class="status-chip">
+                      {{ item.status }}
+                    </span>
+                  </td>
+
+                  <td class="actions-cell">
+                    <button
+                      class="action-btn edit-btn"
+                      title="Edit Designation"
+                      (click)="editDesignation(item)"
+                    >
+                      <fa-icon [icon]="faPenToSquare"></fa-icon>
+                    </button>
+
+                    <button
+                      class="action-btn delete-btn"
+                      title="Delete Designation"
+                      (click)="deleteDesignation(item)"
+                    >
+                      <fa-icon [icon]="faTrashCan"></fa-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="6" class="empty-state">No designations found</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </app-management-table>
+      <div sidebar>
+        <div class="side-card">
+         
+<app-page-sub-header
+                title="Role Hierarchy"
+                subtitle="Organization reporting structure"
+                [icon]="faSitemap"
+              >
+                </app-page-sub-header>
+          <div class="hierarchy-list">
+            @for (item of hierarchy(); track item.title) {
+              <div class="hierarchy-item" [class]="item.color">
+  <div class="hierarchy-icon">
+    <fa-icon [icon]="faUserTie"></fa-icon>
+  </div>
+
+  <div class="hierarchy-content">
+    <div class="hierarchy-top">
+      <span>{{ item.title }}</span>
+
+      <span class="level-chip">
+        {{ item.level }}
+      </span>
+    </div>
+
+    <div class="hierarchy-meta">
+      <fa-icon [icon]="faUsers"></fa-icon>
+      {{ item.employees }}
+    </div>
+  </div>
+</div>
+            }
+          </div>
+
+          <button class="view-btn">View Full Hierarchy</button>
+        </div>
+      </div>
+        <app-quick-actions sidebar
+  title="Quick Actions"
+  subtitle="Designation management"
+    [icon]="faBolt"
+  [actions]="quickActions()"
+  (actionClick)="handleQuickAction($event)"
+>
+</app-quick-actions>
+    </app-page-layout>
+
+    
+  </div>
+</div>
+<app-modal
+  [isOpen]="isAddDesignationModalOpen"
+  title="Add Designation"
+  width="580px"
+  (onClose)="closeAddDesignationModal()"
+  (onConfirm)="saveDesignation()"
+>
+  <form class="department-form">
+    <div class="field">
+      <label>Designation Name <span>*</span></label>
+
+      <input
+        type="text"
+        class="department-input"
+        placeholder="Enter designation name"
+        [(ngModel)]="newDesignation.title"
+        name="designationTitle"
+        [class.invalid]="designationSubmitted && !!designationErrors.title"
+        [class.valid]="designationSubmitted && !designationErrors.title"
+      />
+      @if (designationSubmitted && designationErrors.title) {
+        <div class="field-error">
+          {{ designationErrors.title }}
+        </div>
+      }
+    </div>
+
+    <div class="field">
+      <label>Department <span>*</span></label>
+
+      <!-- <select
+        class="department-select"
+        [(ngModel)]="newDesignation.departmentId"
+        name="departmentId"
+        [class.invalid]="designationSubmitted && !!designationErrors.departmentId"
+        [class.valid]="designationSubmitted && !designationErrors.departmentId"
+      >
+        <option value="">Select Department</option>
+
+        @for (dept of departments(); track dept.id) {
+          <option [value]="dept.id">
+            {{ dept.name }}
+          </option>
+        }
+      </select> -->
+
+      <div
+        class="department-select custom-select"
+        [class.open]="departmentDropdownOpen()"
+        [class.invalid]="designationSubmitted && !!designationErrors.departmentId"
+        (click)="toggleDepartmentDropdown()"
+      >
+        <div class="custom-select-value">
+          {{
+            newDesignation.departmentId
+              ? getDepartmentName(newDesignation.departmentId)
+              : 'Select Department'
+          }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (departmentDropdownOpen()) {
+          <div class="custom-dropdown">
+            @for (dept of departments(); track dept.id) {
+              <div
+                class="custom-option"
+                [class.active]="newDesignation.departmentId === dept.id"
+                (click)="selectDepartment(dept.id, $event)"
+              >
+                {{ dept.name }}
+              </div>
+            }
+          </div>
+        }
+      </div>
+      @if (designationSubmitted && designationErrors.departmentId) {
+        <div class="field-error">
+          {{ designationErrors.departmentId }}
+        </div>
+      }
+    </div>
+
+    <div class="field">
+      <label>Level <span>*</span></label>
+
+      <div
+        class="department-select custom-select"
+        [class.open]="levelDropdownOpen()"
+        [class.invalid]="designationSubmitted && !!designationErrors.levelId"
+        (click)="toggleLevelDropdown()"
+      >
+        <div class="custom-select-value">
+          {{ newDesignation.levelId ? getLevelName(newDesignation.levelId) : 'Select Level' }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (levelDropdownOpen()) {
+          <div class="custom-dropdown">
+            @for (level of levels(); track level.id) {
+              <div
+                class="custom-option"
+                [class.active]="newDesignation.levelId === level.id"
+                (click)="selectLevel(level.id, $event)"
+              >
+                {{ level.levelName }}
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (designationSubmitted && designationErrors.levelId) {
+        <div class="field-error">
+          {{ designationErrors.levelId }}
+        </div>
+      }
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+
+      <input
+        type="text"
+        class="department-input"
+        placeholder="Reporting designation"
+        [(ngModel)]="newDesignation.description"
+        name="designationReportsTo"
+        [class.invalid]="designationSubmitted && !!designationErrors.description"
+        [class.valid]="designationSubmitted && !designationErrors.description"
+      />
+    </div>
+
+    <div class="field">
+      <label>Status</label>
+
+      <!-- <select
+        class="department-select"
+        [(ngModel)]="newDesignation.status"
+        name="designationStatus"
+      >
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select> -->
+
+      <div
+        class="department-select custom-select"
+        [class.open]="statusDropdownOpen()"
+        (click)="toggleStatusDropdown()"
+      >
+        <div class="custom-select-value">
+          {{ newDesignation.status || 'Select Status' }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (statusDropdownOpen()) {
+          <div class="custom-dropdown">
+            <div
+              class="custom-option"
+              [class.active]="newDesignation.status === 'Active'"
+              (click)="selectStatus('Active', $event)"
+            >
+              Active
+            </div>
+
+            <div
+              class="custom-option"
+              [class.active]="newDesignation.status === 'Inactive'"
+              (click)="selectStatus('Inactive', $event)"
+            >
+              Inactive
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+</app-modal>
+
+<app-modal
+  [isOpen]="isEditDesignationModalOpen"
+  title="Edit Designation"
+  width="580px"
+  (onClose)="closeEditDesignationModal()"
+  (onConfirm)="updateDesignation()"
+>
+  <form class="department-form">
+    <div class="field">
+      <label>Designation Name <span>*</span></label>
+
+      <input
+        type="text"
+        class="department-input"
+        [(ngModel)]="newDesignation.title"
+        name="editDesignationTitle"
+        [class.invalid]="designationSubmitted && !!designationErrors.title"
+        [class.valid]="designationSubmitted && !designationErrors.title"
+      />
+      @if (designationSubmitted && designationErrors.title) {
+        <div class="field-error">
+          {{ designationErrors.title }}
+        </div>
+      }
+    </div>
+
+    <div class="field">
+      <label>Department <span>*</span></label>
+
+      <!-- <select
+        class="department-select"
+        [(ngModel)]="newDesignation.departmentId"
+        name="editDepartmentId"
+        [class.invalid]="designationSubmitted && !!designationErrors.departmentId"
+        [class.valid]="designationSubmitted && !designationErrors.departmentId"
+      >
+        @for (dept of departments(); track dept.id) {
+          <option [value]="dept.id">
+            {{ dept.name }}
+          </option>
+        }
+      </select> -->
+
+      <div
+        class="department-select custom-select"
+        [class.open]="departmentDropdownOpen()"
+        [class.invalid]="designationSubmitted && !!designationErrors.departmentId"
+        (click)="toggleDepartmentDropdown()"
+      >
+        <div class="custom-select-value">
+          {{
+            newDesignation.departmentId
+              ? getDepartmentName(newDesignation.departmentId)
+              : 'Select Department'
+          }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (departmentDropdownOpen()) {
+          <div class="custom-dropdown">
+            @for (dept of departments(); track dept.id) {
+              <div
+                class="custom-option"
+                [class.active]="newDesignation.departmentId === dept.id"
+                (click)="selectDepartment(dept.id, $event)"
+              >
+                {{ dept.name }}
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (designationSubmitted && designationErrors.departmentId) {
+        <div class="field-error">
+          {{ designationErrors.departmentId }}
+        </div>
+      }
+    </div>
+
+    <div class="field">
+      <label>Level <span>*</span></label>
+
+      <div
+        class="department-select custom-select"
+        [class.open]="levelDropdownOpen()"
+        [class.invalid]="designationSubmitted && !!designationErrors.levelId"
+        (click)="toggleLevelDropdown()"
+      >
+        <div class="custom-select-value">
+          {{ newDesignation.levelId ? getLevelName(newDesignation.levelId) : 'Select Level' }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (levelDropdownOpen()) {
+          <div class="custom-dropdown">
+            @for (level of levels(); track level.id) {
+              <div
+                class="custom-option"
+                [class.active]="newDesignation.levelId === level.id"
+                (click)="selectLevel(level.id, $event)"
+              >
+                {{ level.levelName }}
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (designationSubmitted && designationErrors.levelId) {
+        <div class="field-error">
+          {{ designationErrors.levelId }}
+        </div>
+      }
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+
+      <textarea
+        class="department-textarea"
+        [(ngModel)]="newDesignation.description"
+        name="editDescription"
+      ></textarea>
+    </div>
+
+    <div class="field">
+      <label>Status</label>
+
+      <!-- <select class="department-select" [(ngModel)]="newDesignation.status" name="editStatus">
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select> -->
+
+      <div
+        class="department-select custom-select"
+        [class.open]="statusDropdownOpen()"
+        (click)="toggleStatusDropdown()"
+      >
+        <div class="custom-select-value">
+          {{ newDesignation.status || 'Select Status' }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (statusDropdownOpen()) {
+          <div class="custom-dropdown">
+            <div
+              class="custom-option"
+              [class.active]="newDesignation.status === 'Active'"
+              (click)="selectStatus('Active', $event)"
+            >
+              Active
+            </div>
+
+            <div
+              class="custom-option"
+              [class.active]="newDesignation.status === 'Inactive'"
+              (click)="selectStatus('Inactive', $event)"
+            >
+              Inactive
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+</app-modal>
+
+<app-modal
+  [isOpen]="isDeleteDesignationModalOpen"
+  title="Delete Designation"
+  width="500px"
+  (onClose)="closeDeleteDesignationModal()"
+  (onConfirm)="confirmDeleteDesignation()"
+>
+  <div class="delete-content">
+    <h4>Delete "{{ selectedDesignation?.title }}"?</h4>
+
+    <p>This action cannot be undone.</p>
+  </div>
+</app-modal>

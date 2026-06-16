@@ -1,0 +1,1383 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Organization Setup"
+    subtitle="Configure your organization settings"
+    [icon]="faGear"
+  >
+    @if (activeTab() === 'details') {
+      @if (isSaved() && !isEditMode()) {
+        <button class="page-header-btn primary" type="button" (click)="enableEdit()">
+          <fa-icon [icon]="faPen"></fa-icon>
+          Edit
+        </button>
+      }
+
+      @if (isSaved() && isEditMode()) {
+        <button class="page-header-btn danger" type="button" (click)="cancelEdit()">
+          <fa-icon [icon]="faXmark"></fa-icon>
+          Cancel
+        </button>
+      }
+    }
+  </app-page-header>
+
+  <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="activeTab.set($event)"></app-tabs>
+
+  <div class="mt-6">
+    @if (isLoading()) {
+      <div class="page-loader">
+        <div class="loader-card">
+          <div class="loader-logo">
+            <i class="fa-solid fa-building"></i>
+          </div>
+
+          <div class="loader-content">
+            <h3>Loading Organization Setup</h3>
+            <p>Preparing company information and preferences...</p>
+
+            <div class="loader-progress">
+              <div class="loader-progress-bar"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      @if (activeTab() === 'details') {
+        <div class="organization-page">
+          <!-- MAIN GRID -->
+       
+            <!-- LEFT : FORM CARD -->
+             <app-page-layout>
+
+    <div main>
+
+            <div class="organization-form-card">
+              <!-- HEADER -->
+              <app-page-sub-header
+                title="Organization Details"
+                subtitle="Manage company information and branding"
+                [icon]="faBuilding"
+              >
+                <!-- @if (isSaved() && !isEditMode()) {
+                  <button class="page-header-btn warning" type="button" (click)="enableEdit()">
+                    <fa-icon [icon]="faPen"></fa-icon>
+                    Edit
+                  </button>
+                }
+
+                @if (isSaved() && isEditMode()) {
+                  <button class="page-header-btn danger" type="button" (click)="cancelEdit()">
+                    <fa-icon [icon]="faXmark"></fa-icon>
+                    Cancel
+                  </button>
+                } -->
+              </app-page-sub-header>
+
+              <!-- FORM -->
+              <form [formGroup]="orgForm" class="organization-form" (ngSubmit)="saveOrg()">
+                <!-- ROW -->
+                <div class="form-row">
+                  <div class="field">
+                    <label>
+                      Organization Name
+                      <span>*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="hrms-input"
+                      formControlName="name"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('name')"
+                    />
+
+                    @if (isInvalid('name')) {
+                      <div class="field-error">
+                        {{ getError('name') }}
+                      </div>
+                    }
+                  </div>
+
+                  <div class="field">
+                    <label>Website</label>
+
+                    <input
+                      type="text"
+                      class="hrms-input"
+                      formControlName="website"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('website')"
+                    />
+
+                    @if (isInvalid('website')) {
+                      <div class="field-error">
+                        {{ getError('website') }}
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- ROW -->
+                <div class="form-row">
+                  <!-- <div class="field">
+                  <label>Organization Type</label>
+
+                  <select
+                    class="hrms-select"
+                    formControlName="organizationType"
+                    [class.invalid]="isInvalid('organizationType')"
+                  >
+                    <option value=""></option>
+                    <option value="private">Private</option>
+                    <option value="startup">Startup</option>
+                    <option value="agency">Agency</option>
+                  </select>
+                </div> -->
+
+                  <div class="field">
+                    <label>Organization Type</label>
+
+                    <div
+                      class="hrms-select custom-select"
+                      [class.open]="organizationDropdownOpen()"
+                      [class.invalid]="isInvalid('organizationType')"
+                      (click)="toggleOrganizationDropdown()"
+                    >
+                      <div class="custom-select-value">
+                        {{
+                          orgForm.get('organizationType')?.value
+                            ? (orgForm.get('organizationType')?.value | titlecase)
+                            : 'Select Organization Type'
+                        }}
+                      </div>
+
+                      <div class="custom-select-icon">
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+
+                      @if (organizationDropdownOpen()) {
+                        <div class="custom-dropdown">
+                          <div
+                            class="custom-option"
+                            [class.active]="orgForm.get('organizationType')?.value === 'private'"
+                            (click)="selectOrganizationType('private', $event)"
+                          >
+                            Private
+                          </div>
+
+                          <div
+                            class="custom-option"
+                            [class.active]="orgForm.get('organizationType')?.value === 'startup'"
+                            (click)="selectOrganizationType('startup', $event)"
+                          >
+                            Startup
+                          </div>
+
+                          <div
+                            class="custom-option"
+                            [class.active]="orgForm.get('organizationType')?.value === 'agency'"
+                            (click)="selectOrganizationType('agency', $event)"
+                          >
+                            Agency
+                          </div>
+                        </div>
+                      }
+                    </div>
+
+                    @if (isInvalid('organizationType')) {
+                      <div class="field-error">
+                        {{ getError('organizationType') }}
+                      </div>
+                    }
+                  </div>
+
+                  <div class="field">
+                    <label>Contact Person</label>
+
+                    <input
+                      type="text"
+                      class="hrms-input"
+                      formControlName="contactPerson"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('contactPerson')"
+                    />
+
+                    @if (isInvalid('contactPerson')) {
+                      <div class="field-error">
+                        {{ getError('contactPerson') }}
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- ROW -->
+                <div class="form-row">
+                  <div class="field">
+                    <label>Contact Number</label>
+
+                    <input
+                      type="text"
+                      class="hrms-input"
+                      formControlName="phone"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('phone')"
+                    />
+
+                    @if (isInvalid('phone')) {
+                      <div class="field-error">
+                        {{ getError('phone') }}
+                      </div>
+                    }
+                  </div>
+
+                  <div class="field">
+                    <label>
+                      Contact Email
+                      <span>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      class="hrms-input"
+                      formControlName="email"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('email')"
+                    />
+
+                    @if (isInvalid('email')) {
+                      <div class="field-error">
+                        {{ getError('email') }}
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- ROW -->
+                <div class="form-row">
+                  <div class="field">
+                    <label>City</label>
+
+                    <input
+                      type="text"
+                      class="hrms-input"
+                      formControlName="city"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('city')"
+                    />
+
+                    @if (isInvalid('city')) {
+                      <div class="field-error">
+                        {{ getError('city') }}
+                      </div>
+                    }
+                  </div>
+
+                  <div class="field">
+                    <label>State</label>
+
+                    <input
+                      type="text"
+                      class="hrms-input"
+                      formControlName="state"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('state')"
+                    />
+
+                    @if (isInvalid('state')) {
+                      <div class="field-error">
+                        {{ getError('state') }}
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- ROW -->
+                <div class="form-row">
+                  <!-- <div class="field">
+                  <label>Country</label>
+
+                  <select
+                    class="hrms-select"
+                    formControlName="country"
+                    [class.invalid]="isInvalid('country')"
+                  >
+                    <option value=""></option>
+                    <option value="india">India</option>
+                    <option value="usa">USA</option>
+                  </select>
+                </div> -->
+
+                  <div class="field">
+                    <label>Country</label>
+
+                    <div
+                      class="hrms-select custom-select"
+                      [class.open]="countryDropdownOpen()"
+                      [class.invalid]="isInvalid('country')"
+                      (click)="toggleCountryDropdown()"
+                    >
+                      <div class="custom-select-value">
+                        {{
+                          orgForm.get('country')?.value
+                            ? getCountryName(orgForm.get('country')?.value)
+                            : 'Select Country'
+                        }}
+                      </div>
+
+                      <div class="custom-select-icon">
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+
+                      @if (countryDropdownOpen()) {
+                        <div class="custom-dropdown">
+                          @for (country of countries(); track country.id) {
+                            <div
+                              class="custom-option"
+                              [class.active]="orgForm.get('country')?.value === country.id"
+                              (click)="selectCountry(country.id, $event)"
+                            >
+                              {{ country.name }}
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+
+                    @if (isInvalid('country')) {
+                      <div class="field-error">
+                        {{ getError('country') }}
+                      </div>
+                    }
+                  </div>
+
+                  <div class="field">
+                    <label>Zip Code</label>
+
+                    <input
+                      type="text"
+                      class="hrms-input"
+                      formControlName="zipCode"
+                      maxlength="10"
+                      inputmode="numeric"
+                      pattern="[0-9]*"
+                      placeholder=" "
+                      [class.invalid]="isInvalid('zipCode')"
+                      (input)="
+                        orgForm
+                          .get('zipCode')
+                          ?.setValue($any($event.target).value.replace(/[^0-9]/g, ''), {
+                            emitEvent: false,
+                          })
+                      "
+                    />
+
+                    @if (isInvalid('zipCode')) {
+                      <div class="field-error">
+                        {{ getError('zipCode') }}
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- ADDRESS -->
+                <div class="field full-width">
+                  <label>Address</label>
+
+                  <textarea
+                    class="hrms-textarea"
+                    formControlName="address"
+                    placeholder=" "
+                    [class.invalid]="isInvalid('address')"
+                  ></textarea>
+                  @if (isInvalid('address')) {
+                    <div class="field-error">
+                      {{ getError('address') }}
+                    </div>
+                  }
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="form-actions">
+                  <!-- <button type="button" class="secondary-btn" (click)="resetForm()">Cancel</button>
+
+                <button type="submit" class="primary-btn">Save Changes</button> -->
+                  @if (isEditMode()) {
+                    <div class="form-actions">
+                      <button type="button" class="secondary-btn" (click)="resetForm()">
+                        Reset
+                      </button>
+
+                      <button type="submit" class="primary-btn">
+                        {{ isSaved() ? 'Update Changes' : 'Save Changes' }}
+                      </button>
+                    </div>
+                  }
+                </div>
+              </form>
+            </div>
+</div>
+
+    <div sidebar>
+            <div class="organization-right-section">
+              <!-- BRAND CARD -->
+              <div class="organization-brand-card">
+                <!-- <div class="brand-top">
+              <div class="brand-icon">
+                <i class="fa-solid fa-image"></i>
+              </div>
+
+              <h3>Company Branding</h3>
+
+              <p>Upload and manage your organization logo</p>
+            </div> -->
+                <app-page-sub-header
+                  title="Company Branding"
+                  subtitle="Upload and manage your organization logo"
+                  [icon]="faBuilding"
+                >
+                </app-page-sub-header>
+
+                <!-- LOGO -->
+                <label class="logo-upload-box" [class.invalid]="logoError()">
+                  <input type="file" accept="image/*" hidden (change)="onLogoChange($event)" />
+
+                  <!-- IMAGE -->
+
+                  <!-- @if (logoPreview()) { -->
+                  @if (logoPreview() !== null) {
+                    <img [src]="logoPreview()" class="logo-image" alt="Organization Logo" />
+                  }
+
+                  <!-- EMPTY -->
+                  <!-- @if (!logoPreview()) { -->
+                  @if (logoPreview() === null) {
+                    <div class="logo-empty">
+                      <div class="empty-icon">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                      </div>
+
+                      <div class="upload-title">Upload Logo</div>
+
+                      <div class="upload-sub">PNG, JPG, SVG supported</div>
+                    </div>
+                  }
+                  <!-- OVERLAY -->
+                  <div class="logo-overlay">
+                    <button type="button" class="edit-logo-btn">
+                      <i class="fa-solid fa-pen"></i>
+
+                      Change Logo
+                    </button>
+                  </div>
+                </label>
+                @if (logoError()) {
+                  <div class="field-error logo-error-text">
+                    {{ logoError() }}
+                  </div>
+                }
+              </div>
+
+              <!-- THEME CARD -->
+              <div class="organization-theme-card">
+                <!-- <div class="theme-header">
+              <div class="theme-icon">
+                <i class="fa-solid fa-palette"></i>
+              </div>
+
+              <div>
+                <h3>Theme Palette</h3>
+
+                <p>Customize your organization appearance</p>
+              </div>
+            </div> -->
+
+                <app-page-sub-header
+                  title="Theme Palette"
+                  subtitle="Customize your organization appearance"
+                  [icon]="faBuilding"
+                >
+                </app-page-sub-header>
+
+                <!-- COLOR PALETTE GRID -->
+                <div class="theme-grid">
+                  <!-- BLUE -->
+                  <button
+                    type="button"
+                    class="theme-color"
+                    (click)="selectTheme('oceanBlue')"
+                    [class.active]="selectedTheme() === 'oceanBlue'"
+                  >
+                    <div
+                      class="theme-preview"
+                      style="background: linear-gradient(135deg, #2563eb, #60a5fa)"
+                    ></div>
+
+                    <div class="theme-info">
+                      <div class="theme-name">Ocean Blue</div>
+
+                      @if (selectedTheme() === 'oceanBlue') {
+                        <div class="theme-status">Active Theme</div>
+                      } @else {
+                        <div class="theme-sub">Professional Theme</div>
+                      }
+                    </div>
+                  </button>
+
+                  <!-- GREEN -->
+                  <button
+                    type="button"
+                    class="theme-color"
+                    [class.active]="selectedTheme() === 'emerald'"
+                    (click)="selectTheme('emerald')"
+                  >
+                    <div
+                      class="theme-preview"
+                      style="background: linear-gradient(135deg, #059669, #34d399)"
+                    ></div>
+
+                    <div class="theme-info">
+                      <div class="theme-name">Emerald</div>
+
+                      @if (selectedTheme() === 'emerald') {
+                        <div class="theme-status">Active Theme</div>
+                      } @else {
+                        <div class="theme-sub">Professional Theme</div>
+                      }
+                    </div>
+                  </button>
+
+                  <!-- ORANGE -->
+                  <button
+                    type="button"
+                    class="theme-color"
+                    [class.active]="selectedTheme() === 'sunsetOrange'"
+                    (click)="selectTheme('sunsetOrange')"
+                  >
+                    <div
+                      class="theme-preview"
+                      style="background: linear-gradient(135deg, #ea580c, #fb923c)"
+                    ></div>
+
+                    <div class="theme-info">
+                      <div class="theme-name">Sunset Orange</div>
+                      @if (selectedTheme() === 'sunsetOrange') {
+                        <div class="theme-status">Active Theme</div>
+                      } @else {
+                        <div class="theme-sub">Creative Style</div>
+                      }
+                    </div>
+                  </button>
+
+                  <!-- PURPLE -->
+                  <button
+                    type="button"
+                    class="theme-color"
+                    [class.active]="selectedTheme() === 'royalPurple'"
+                    (click)="selectTheme('royalPurple')"
+                  >
+                    <div
+                      class="theme-preview"
+                      style="background: linear-gradient(135deg, #7c3aed, #a78bfa)"
+                    ></div>
+
+                    <div class="theme-info">
+                      <div class="theme-name">Royal Purple</div>
+                      @if (selectedTheme() === 'royalPurple') {
+                        <div class="theme-status">Active Theme</div>
+                      } @else {
+                        <div class="theme-sub">Premium Feel</div>
+                      }
+                    </div>
+                  </button>
+
+                  <!-- ROSE -->
+                  <button
+                    type="button"
+                    class="theme-color"
+                    [class.active]="selectedTheme() === 'rosePink'"
+                    (click)="selectTheme('rosePink')"
+                  >
+                    <div
+                      class="theme-preview"
+                      style="background: linear-gradient(135deg, #e11d48, #fb7185)"
+                    ></div>
+
+                    <div class="theme-info">
+                      <div class="theme-name">Rose Pink</div>
+                      @if (selectedTheme() === 'rosePink') {
+                        <div class="theme-status">Active Theme</div>
+                      } @else {
+                        <div class="theme-sub">Modern & Vibrant</div>
+                      }
+                    </div>
+                  </button>
+
+                  <!-- DARK -->
+                  <button
+                    type="button"
+                    class="theme-color"
+                    [class.active]="selectedTheme() === 'midnightDark'"
+                    (click)="selectTheme('midnightDark')"
+                  >
+                    <div
+                      class="theme-preview"
+                      style="background: linear-gradient(135deg, #0f172a, #334155)"
+                    ></div>
+
+                    <div class="theme-info">
+                      <div class="theme-name">Midnight Dark</div>
+                      @if (selectedTheme() === 'midnightDark') {
+                        <div class="theme-status">Active Theme</div>
+                      } @else {
+                        <div class="theme-sub">Professional UI</div>
+                      }
+                    </div>
+                  </button>
+
+                  <!-- TEAL -->
+                  <!-- <button class="theme-color">
+                <div
+                  class="theme-preview"
+                  style="background: linear-gradient(135deg, #0f766e, #2dd4bf)"
+                ></div>
+
+                <div class="theme-info">
+                  <div class="theme-name">Teal Breeze</div>
+
+                  <div class="theme-sub">Soft Corporate</div>
+                </div>
+              </button> -->
+                </div>
+
+                <!-- FOOTER -->
+                <div class="theme-footer">
+                  <div class="footer-dot"></div>
+
+                  Current Theme:
+                  <!-- <strong>Ocean Blue</strong> -->
+                  <strong>
+                    {{ getFormattedTheme() }}
+                  </strong>
+                </div>
+                <!-- COLOR GRID -->
+                <div class="theme-grid">
+                  <!-- colors -->
+                </div>
+              </div>
+            </div>
+            </div>
+              </app-page-layout>
+      
+          
+        </div>
+      }
+      <!-- ORGANIZATION POLICY -->
+      @if (activeTab() === 'policy') {
+        <div class="policy-page" [formGroup]="policyForm">
+          <div class="pwrapper">
+            <app-page-sub-header
+              title="Organization Policy"
+              subtitle="Manage and configure organization policies and preferences"
+              [icon]="faGear"
+            >
+              <button class="page-header-btn primary" (click)="savePolicy()">
+                <fa-icon [icon]="faBuilding"></fa-icon>Save Changes
+              </button>
+            </app-page-sub-header>
+
+            <div class="policy-wrapper">
+              <!-- ALERT & CHAT -->
+              <div class="policy-card modern-policy-card">
+                <!-- TOP -->
+                <div class="policy-card-top">
+                  <div class="policy-top-left">
+                    <div class="policy-main-icon blue">
+                      <i class="fa-regular fa-bell"></i>
+                    </div>
+
+                    <div>
+                      <h3>Alert & Chat</h3>
+
+                      <p>Review and keep your communication preferences up to date.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- BODY -->
+                <div class="policy-card-body">
+                  <!-- Notifications -->
+                  <div class="setting-row">
+                    <div class="setting-left">
+                      <div class="setting-icon purple">
+                        <i class="fa-regular fa-bell"></i>
+                      </div>
+
+                      <div class="setting-content">
+                        <div class="setting-title">Notifications</div>
+
+                        <div class="setting-subtitle">Stop all email communications and alerts</div>
+                      </div>
+                    </div>
+
+                    <label class="modern-switch">
+                      <input type="checkbox" formControlName="notifications" />
+                      <span></span>
+                    </label>
+                  </div>
+
+                  <!-- Chat -->
+                  <div class="setting-row">
+                    <div class="setting-left">
+                      <div class="setting-icon green">
+                        <i class="fa-regular fa-comment"></i>
+                      </div>
+
+                      <div class="setting-content">
+                        <div class="setting-title">Chat</div>
+
+                        <div class="setting-subtitle">
+                          Enable or disable organization chat support
+                        </div>
+                      </div>
+                    </div>
+
+                    <label class="modern-switch">
+                      <input type="checkbox" formControlName="chat" />
+                      <span></span>
+                    </label>
+                  </div>
+
+                  <!-- Bot -->
+                  <div class="setting-row">
+                    <div class="setting-left">
+                      <div class="setting-icon orange">
+                        <i class="fa-solid fa-robot"></i>
+                      </div>
+
+                      <div class="setting-content">
+                        <div class="setting-title">AI Assistant</div>
+
+                        <div class="setting-subtitle">
+                          Enable Zia bot assistance inside workspace
+                        </div>
+                      </div>
+                    </div>
+
+                    <label class="modern-switch">
+                      <input type="checkbox" formControlName="aiAssistant" />
+                      <span></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- EMPLOYEE INFO -->
+              <div class="policy-card modern-policy-card">
+                <!-- TOP -->
+                <div class="policy-card-top">
+                  <div class="policy-top-left">
+                    <div class="policy-main-icon blue">
+                      <i class="fa-regular fa-user"></i>
+                    </div>
+
+                    <div>
+                      <h3>Employee personal information</h3>
+
+                      <p>
+                        Define permissions for employees to control visibility of their personal
+                        information.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- BODY -->
+                <div class="policy-card-body">
+                  <!-- Birthday -->
+                  <div class="setting-row">
+                    <div class="setting-left">
+                      <div class="setting-icon purple">
+                        <i class="fa-solid fa-gift"></i>
+                      </div>
+
+                      <div class="setting-content">
+                        <div class="setting-title">Birthday</div>
+
+                        <div class="setting-subtitle">
+                          Enable employees to share or hide their birthday
+                        </div>
+                      </div>
+                    </div>
+
+                    <label class="modern-switch">
+                      <input type="checkbox" formControlName="birthdayVisibility" />
+                      <span></span>
+                    </label>
+                  </div>
+
+                  <!-- Work Anniversary -->
+                  <div class="setting-row">
+                    <div class="setting-left">
+                      <div class="setting-icon green">
+                        <i class="fa-regular fa-calendar"></i>
+                      </div>
+
+                      <div class="setting-content">
+                        <div class="setting-title">Work Anniversary</div>
+
+                        <div class="setting-subtitle">
+                          Enable employees to share or hide their work anniversary
+                        </div>
+                      </div>
+                    </div>
+
+                    <label class="modern-switch">
+                      <input type="checkbox" formControlName="workAnniversaryVisibility" />
+                      <span></span>
+                    </label>
+                  </div>
+
+                  <!-- Mobile -->
+                  <div class="setting-row">
+                    <div class="setting-left">
+                      <div class="setting-icon orange">
+                        <i class="fa-solid fa-mobile-screen"></i>
+                      </div>
+
+                      <div class="setting-content">
+                        <div class="setting-title">Mobile number</div>
+
+                        <div class="setting-subtitle">
+                          Allow employees to show or hide mobile number
+                        </div>
+                      </div>
+                    </div>
+
+                    <label class="modern-switch">
+                      <input type="checkbox" formControlName="mobileNumberVisibility" />
+                      <span></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- EMPLOYEE SEARCH -->
+              <div class="policy-card modern-policy-card compact-policy-card">
+                <!-- TOP -->
+                <div class="policy-card-top">
+                  <div class="policy-top-left">
+                    <div class="policy-main-icon green">
+                      <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+
+                    <div>
+                      <h3>Employee search</h3>
+
+                      <p>
+                        Control employee visibility and search accessibility inside the
+                        organization.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- BODY -->
+                <div class="policy-card-body">
+                  <div class="setting-row">
+                    <div class="setting-left">
+                      <div class="setting-icon green">
+                        <i class="fa-solid fa-phone"></i>
+                      </div>
+
+                      <div class="setting-content">
+                        <div class="setting-title">Mobile Search Access</div>
+
+                        <div class="setting-subtitle">
+                          Allow employee information to be searchable using mobile number
+                        </div>
+                      </div>
+                    </div>
+
+                    <label class="modern-switch">
+                      <input type="checkbox" formControlName="mobileSearchAccess" />
+                      <span></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PROFILE PICTURE -->
+              <div class="policy-card modern-policy-card compact-policy-card">
+                <!-- TOP -->
+                <div class="policy-card-top">
+                  <div class="policy-top-left">
+                    <div class="policy-main-icon violet">
+                      <i class="fa-regular fa-image"></i>
+                    </div>
+
+                    <div>
+                      <h3>Profile picture update</h3>
+
+                      <p>Configure who can upload and manage employee profile pictures.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- BODY -->
+                <div class="policy-card-body">
+                  <div class="modern-form-box">
+                    <div class="modern-form-label">
+                      <div class="setting-icon violet small">
+                        <i class="fa-regular fa-user"></i>
+                      </div>
+
+                      <div>
+                        <div class="setting-title">Update Permission</div>
+
+                        <div class="setting-subtitle">
+                          Select who can modify employee profile photos
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="hrms-select custom-select"
+                      [class.open]="profilePermissionDropdownOpen()"
+                      (click)="toggleProfilePermissionDropdown()"
+                    >
+                      <div class="custom-select-value">
+                        {{
+                          policyForm.get('profileUpdatePermission')?.value || 'Select Permission'
+                        }}
+                      </div>
+
+                      <div class="custom-select-icon">
+                        <i class="fa-solid fa-chevron-down"></i>
+                      </div>
+
+                      @if (profilePermissionDropdownOpen()) {
+                        <div class="custom-dropdown">
+                          <div
+                            class="custom-option"
+                            [class.active]="
+                              policyForm.get('profileUpdatePermission')?.value === 'Employee'
+                            "
+                            (click)="selectProfilePermission('Employee', $event)"
+                          >
+                            Employee
+                          </div>
+
+                          <div
+                            class="custom-option"
+                            [class.active]="
+                              policyForm.get('profileUpdatePermission')?.value === 'Admin'
+                            "
+                            (click)="selectProfilePermission('Admin', $event)"
+                          >
+                            Admin
+                          </div>
+
+                          <div
+                            class="custom-option"
+                            [class.active]="
+                              policyForm.get('profileUpdatePermission')?.value === 'Manager'
+                            "
+                            (click)="selectProfilePermission('Manager', $event)"
+                          >
+                            Manager
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LEFT COLUMN -->
+              <div class="left-policy-column">
+                <!-- COVER IMAGE -->
+                <div class="policy-card modern-policy-card cover-card-compact">
+                  <!-- TOP -->
+                  <div class="policy-card-top">
+                    <div class="policy-top-left">
+                      <div class="policy-main-icon orange">
+                        <i class="fa-regular fa-image"></i>
+                      </div>
+
+                      <div>
+                        <h3>Cover image preference</h3>
+
+                        <p>
+                          Configure how employees can manage and personalize workspace cover images.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- BODY -->
+                  <div class="policy-card-body">
+                    <!-- SYSTEM IMAGES -->
+                    <div class="setting-row">
+                      <div class="setting-left">
+                        <div class="setting-icon orange">
+                          <i class="fa-regular fa-images"></i>
+                        </div>
+
+                        <div class="setting-content">
+                          <div class="setting-title">System Cover Images</div>
+
+                          <div class="setting-subtitle">
+                            Allow employees to select from organization provided cover images
+                          </div>
+                        </div>
+                      </div>
+
+                      <label class="modern-switch">
+                        <input type="checkbox" formControlName="systemCoverImages" />
+                        <span></span>
+                      </label>
+                    </div>
+
+                    <!-- CUSTOM IMAGE -->
+                    <div class="setting-row">
+                      <div class="setting-left">
+                        <div class="setting-icon orange">
+                          <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+
+                        <div class="setting-content">
+                          <div class="setting-title">Custom Cover Upload</div>
+
+                          <div class="setting-subtitle">
+                            Allow employees to upload custom My Space cover images
+                          </div>
+                        </div>
+                      </div>
+
+                      <label class="modern-switch">
+                        <input type="checkbox" formControlName="customCoverUpload" />
+                        <span></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- MINI CARDS -->
+                <div class="mini-policy-grid">
+                  <!-- RECYCLE -->
+                  <div class="policy-card modern-policy-card compact-policy-card mini-policy-card">
+                    <div class="mini-policy-header">
+                      <div class="policy-main-icon red small-icon">
+                        <i class="fa-regular fa-trash-can"></i>
+                      </div>
+
+                      <div>
+                        <h3>Recycle bin preference</h3>
+
+                        <p>Configure deleted record retention duration.</p>
+                      </div>
+                    </div>
+
+                    <div class="mini-policy-body">
+                      <div class="mini-policy-label">Record retention (months)</div>
+
+                      <input
+                        type="number"
+                        class="modern-policy-input small-input"
+                        formControlName="recycleRetention"
+                        min="1"
+                        max="120"
+                        [class.invalid]="
+                          policyForm.get('recycleRetention')?.invalid &&
+                          policyForm.get('recycleRetention')?.touched
+                        "
+                      />
+                      @if (
+                        policyForm.get('recycleRetention')?.invalid &&
+                        policyForm.get('recycleRetention')?.touched
+                      ) {
+                        <div class="field-error">
+                          {{ getRecycleRetentionError() }}
+                        </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- APPROVAL -->
+                  <div class="policy-card modern-policy-card compact-policy-card mini-policy-card">
+                    <div class="mini-policy-header">
+                      <div class="policy-main-icon success small-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                      </div>
+
+                      <div>
+                        <h3>Mandate approval</h3>
+
+                        <p>Approval workflow for sensitive updates.</p>
+                      </div>
+                    </div>
+
+                    <div class="mini-policy-body">
+                      <div class="mini-switch-row">
+                        <div class="mini-switch-content">
+                          <div class="mini-switch-title">Profile picture approval</div>
+
+                          <div class="mini-switch-sub">Require admin approval before updates</div>
+                        </div>
+
+                        <label class="modern-switch">
+                          <input type="checkbox" />
+                          <span></span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- RIGHT COLUMN -->
+              <div class="policy-card modern-policy-card large-card">
+                <!-- LOCALE -->
+                <div class="policy-card-top">
+                  <div class="policy-top-left">
+                    <div class="policy-main-icon blue">
+                      <i class="fa-solid fa-globe"></i>
+                    </div>
+
+                    <div>
+                      <h3>Locale & Display format</h3>
+
+                      <p>
+                        Configure regional preferences, date formats, naming styles, and time
+                        display settings.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- BODY -->
+                <div class="policy-card-body">
+                  <div class="modern-locale-grid">
+                    <!-- Country -->
+                    <div class="modern-form-box">
+                      <div class="modern-form-label">
+                        <div class="setting-icon blue small">
+                          <i class="fa-solid fa-earth-asia"></i>
+                        </div>
+
+                        <div>
+                          <div class="setting-title">Country / Region</div>
+                          <div class="setting-subtitle">Set organization regional location</div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="hrms-select custom-select"
+                        [class.open]="policyCountryDropdownOpen()"
+                        (click)="togglePolicyCountryDropdown()"
+                      >
+                        <div class="custom-select-value">
+                          {{
+                            policyForm.get('localeCountry')?.value
+                              ? getCountryName(policyForm.get('localeCountry')?.value)
+                              : 'Select Country'
+                          }}
+                        </div>
+
+                        <div class="custom-select-icon">
+                          <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+
+                        @if (policyCountryDropdownOpen()) {
+                          <div class="custom-dropdown">
+                            @for (country of countries(); track country.id) {
+                              <div
+                                class="custom-option"
+                                [class.active]="
+                                  policyForm.get('localeCountry')?.value === country.id
+                                "
+                                (click)="selectPolicyCountry(country.id, $event)"
+                              >
+                                {{ country.name }}
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Timezone -->
+                    <div class="modern-form-box">
+                      <div class="modern-form-label">
+                        <div class="setting-icon blue small">
+                          <i class="fa-regular fa-clock"></i>
+                        </div>
+
+                        <div>
+                          <div class="setting-title">Time zone</div>
+                          <div class="setting-subtitle">Configure organization timezone</div>
+                        </div>
+                      </div>
+                      <div
+                        class="hrms-select custom-select"
+                        [class.open]="timezoneDropdownOpen()"
+                        (click)="toggleTimezoneDropdown()"
+                      >
+                        <div class="custom-select-value">
+                          {{
+                            getTimezoneName(policyForm.get('timezone')?.value) || 'Select Timezone'
+                          }}
+                        </div>
+
+                        <div class="custom-select-icon">
+                          <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+
+                        @if (timezoneDropdownOpen()) {
+                          <div class="custom-dropdown">
+                            @for (tz of timezones(); track tz.id) {
+                              <div
+                                class="custom-option"
+                                [class.active]="policyForm.get('timezone')?.value === tz.id"
+                                (click)="selectTimezone(tz.id, $event)"
+                              >
+                                {{ tz.displayName }}
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="modern-form-box">
+                      <div class="modern-form-label">
+                        <div class="setting-icon blue small">
+                          <i class="fa-regular fa-user"></i>
+                        </div>
+
+                        <div>
+                          <div class="setting-title">Name format</div>
+                          <div class="setting-subtitle">Choose employee naming convention</div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="hrms-select custom-select"
+                        [class.open]="nameFormatDropdownOpen()"
+                        (click)="toggleNameFormatDropdown()"
+                      >
+                        <div class="custom-select-value">
+                          {{
+                            getNameFormatLabel(policyForm.get('nameFormat')?.value) ||
+                              'Select Name Format'
+                          }}
+                        </div>
+
+                        <div class="custom-select-icon">
+                          <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+
+                        @if (nameFormatDropdownOpen()) {
+                          <div class="custom-dropdown">
+                            @for (format of nameFormats; track format.value) {
+                              <div
+                                class="custom-option"
+                                [class.active]="
+                                  policyForm.get('nameFormat')?.value === format.value
+                                "
+                                (click)="selectNameFormat(format.value, $event)"
+                              >
+                                {{ format.label }}
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="modern-form-box">
+                      <div class="modern-form-label">
+                        <div class="setting-icon blue small">
+                          <i class="fa-regular fa-calendar"></i>
+                        </div>
+
+                        <div>
+                          <div class="setting-title">Date format</div>
+                          <div class="setting-subtitle">Configure default date display format</div>
+                        </div>
+                      </div>
+
+                      <div
+                        class="hrms-select custom-select"
+                        [class.open]="dateFormatDropdownOpen()"
+                        (click)="toggleDateFormatDropdown()"
+                      >
+                        <div class="custom-select-value">
+                          {{
+                            getDateFormatLabel(policyForm.get('dateFormat')?.value) ||
+                              'Select Date Format'
+                          }}
+                        </div>
+
+                        <div class="custom-select-icon">
+                          <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+
+                        @if (dateFormatDropdownOpen()) {
+                          <div class="custom-dropdown">
+                            @for (format of dateFormats; track format.value) {
+                              <div
+                                class="custom-option"
+                                [class.active]="
+                                  policyForm.get('dateFormat')?.value === format.value
+                                "
+                                (click)="selectDateFormat(format.value, $event)"
+                              >
+                                {{ format.label }}
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- TIME FORMAT -->
+                  <div class="modern-time-format">
+                    <div class="time-format-title">Time Display Format</div>
+
+                    <div class="time-format-options">
+                      <label class="modern-radio">
+                        <input type="radio" value="TWELVE_HOUR" formControlName="timeFormat" />
+
+                        <span class="radio-ui"></span>
+
+                        <div>
+                          <div class="radio-title">12 Hour</div>
+                          <div class="radio-sub">AM / PM format</div>
+                        </div>
+                      </label>
+
+                      <label class="modern-radio">
+                        <input type="radio" value="TWENTY_FOUR_HOUR" formControlName="timeFormat" />
+
+                        <span class="radio-ui"></span>
+
+                        <div>
+                          <div class="radio-title">24 Hour</div>
+                          <div class="radio-sub">Military format</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

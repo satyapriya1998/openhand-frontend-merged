@@ -1,0 +1,106 @@
+:host {
+  display: block;
+  height: 100dvh;
+}
+
+/* =========================================
+   LAYOUT CONTAINER
+========================================= */
+
+.layout-container {
+  display: flex;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* =========================================
+   SIDENAV
+========================================= */
+
+.layout-sidenav {
+  width: var(--hrms-sidenav-w);
+
+  flex-shrink: 0;
+
+  border-right: 1px solid var(--hrms-border);
+
+  background: var(--hrms-surface);
+
+  transition:
+    width 0.25s ease,
+    transform 0.25s ease;
+
+  overflow-x: hidden;
+
+  z-index: 1000;
+
+  box-shadow:
+    inset -1px 0 9px rgba(96, 165, 250, 0.4),
+    8px 0 25px rgba(59, 130, 246, 0.12);
+
+  &.collapsed {
+    width: var(--hrms-sidenav-w-collapsed);
+  }
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.layout-content {
+  flex: 1;
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  background: var(--hrms-bg);
+
+  overflow: hidden;
+}
+
+/* =========================================
+   MAIN
+========================================= */
+
+.layout-main {
+  flex: 1;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  min-width: 0;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+  .layout-sidenav {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 280px !important;
+
+    transform: translateX(-100%);
+
+    z-index: 1200;
+  }
+
+  .layout-sidenav.mobile-open {
+    transform: translateX(0);
+  }
+
+  .layout-content {
+    width: 100%;
+  }
+}

@@ -1,0 +1,34 @@
+<div class="confirm-dlg" [class.danger]="data.variant === 'danger'">
+
+  <div class="icon-wrap">
+    <span class="icon">
+      {{ data.variant === 'danger' ? '⚠' : '?' }}
+    </span>
+  </div>
+
+  <h2>{{ data.title }}</h2>
+
+  <p>{{ data.message }}</p>
+
+  <div class="dialog-actions">
+    
+    <button
+      type="button"
+      class="btn-cancel"
+      (click)="onCancel()">
+      {{ data.cancelLabel || 'Cancel' }}
+    </button>
+
+    <button
+      type="button"
+      class="btn-confirm"
+      [class.btn-danger]="data.variant === 'danger'"
+      [class.btn-primary]="data.variant !== 'danger'"
+      (click)="onConfirm()">
+
+      {{ data.confirmLabel || 'Confirm' }}
+
+    </button>
+
+  </div>
+</div>

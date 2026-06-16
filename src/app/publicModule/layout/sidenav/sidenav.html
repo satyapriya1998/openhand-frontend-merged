@@ -1,0 +1,85 @@
+
+
+<aside class="sidenav-root" [class.collapsed]="collapsed" [class.mobile-open]="mobileOpen">
+
+    <!-- Animated circles background -->
+  <ul class="circles">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+
+    
+    
+  </ul>
+  
+  <!-- BRAND -->
+  <div class="brand">
+    <div class="brand-mark"><fa-icon [icon]="faIdCard"></fa-icon></div>
+    <div class="brand-label" *ngIf="!collapsed">
+      <span class="name">KNODTEC</span>
+      <!-- <span class="tag">People Platform</span> -->
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <ng-container *ngFor="let item of menuItems">
+      <!-- Single -->
+      <a
+        *ngIf="!item.children"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="nav-item"
+      >
+        <span class="icon"> <fa-icon [icon]="iconMap[item.id]"></fa-icon> </span>
+        <span class="label" *ngIf="!collapsed">{{ item.name }}</span>
+      </a>
+
+      <!-- Group -->
+      <div *ngIf="item.children">
+        <button
+          class="nav-item group-trigger"
+          (click)="toggleMenu.emit(item.id)"
+          [class.open]="expandedMenus.includes(item.id) && !collapsed"
+        >
+          <span class="icon">
+            <fa-icon [icon]="iconMap[item.id]"></fa-icon>
+          </span>
+          <span class="label" *ngIf="!collapsed">{{ item.name }}</span>
+          <fa-icon *ngIf="!collapsed" class="chev" [icon]="faChevronDown"> </fa-icon>
+          <!-- <span class="chev" *ngIf="!collapsed">⌄</span> -->
+        </button>
+
+        <div class="subgroup" [class.open]="expandedMenus.includes(item.id) && !collapsed">
+          <a
+            *ngFor="let c of item.children"
+            [routerLink]="c.route"
+            routerLinkActive="active"
+            class="nav-item sub"
+          >
+            <span class="dot"></span>
+            <span class="label">{{ c.name }}</span>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </nav>
+
+  <!-- FOOTER -->
+  <!-- <div class="nav-footer" *ngIf="!collapsed">
+    <div class="promo">
+      <div class="icon">✨</div>
+      <div>
+        <div class="p-title">Need assistance?</div>
+        <div class="p-sub">Check our help center</div>
+      </div>
+    </div>
+  </div> -->
+</aside>

@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+.hrms-breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--hrms-text-muted);
+  margin-bottom: 12px;
+
+  .crumb-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--hrms-text-muted);
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--hrms-transition);
+
+    &:hover {
+      color: var(--hrms-primary);
+    }
+  }
+
+  .home-icon {
+    font-size: 14px;
+    color: var(--hrms-text-muted);
+  }
+
+  .crumb-current {
+    color: var(--hrms-text);
+    font-weight: 700;
+  }
+
+  .sep-icon {
+    font-size: 11px;
+    color: var(--hrms-text-soft);
+    margin: 0 4px;
+  }
+}

@@ -1,0 +1,15 @@
+<div class="stats-grid">
+  @for (card of cards(); track card.title) {
+    <div class="stat-card">
+      <div class="stat-icon" [class]="card.color">
+        <fa-icon [icon]="card.icon"></fa-icon>
+      </div>
+
+      <div class="stat-content">
+        <span>{{ card.title }}</span>
+        <h2>{{ card.value }}</h2>
+        <p>{{ card.subtitle }}</p>
+      </div>
+    </div>
+  }
+</div>

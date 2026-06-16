@@ -1,0 +1,75 @@
+<section class="relative py-12 sm:py-16" id="testimonials">
+  <div class="pointer-events-none absolute inset-0 aurora-soft opacity-40 -z-10"></div>
+  <div class="relative mx-auto max-w-4xl px-6">
+    <app-section-heading
+      eyebrow="Testimonials"
+      title="Loved by Teams Building the Future"
+      description="HR leaders, founders, and operators trust Knodtecone to run their most important asset — their people."
+    />
+
+    <div class="relative mt-14" appReveal="up" [delay]="100">
+      <div class="glass-strong relative overflow-hidden rounded-2xl p-8 sm:p-12 testimonial-card backdrop-blur-xl">
+        <div class="cta-blob cta-blob--a" aria-hidden="true"></div>
+        <div class="cta-blob cta-blob--b" aria-hidden="true"></div>
+        <div class="cta-grid" aria-hidden="true"></div>
+
+        <div class="relative flex gap-1 text-chart-5">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+            <i class="fa-solid fa-star text-lg"></i>
+          }
+        </div>
+        <blockquote
+          class="relative mt-6 text-balance text-xl font-medium leading-relaxed text-foreground sm:text-2xl testimonial-enter"
+          [attr.data-key]="index()"
+        >
+          &ldquo;{{ current().quote }}&rdquo;
+        </blockquote>
+        <div class="relative mt-8 flex items-center gap-4">
+          <div class="flex size-12 items-center justify-center rounded-full bg-gradient-to-br from-aurora-1 to-aurora-3 text-sm font-bold text-white shadow-lg shadow-primary/30">
+            {{ current().initials }}
+          </div>
+          <div>
+            <div class="font-semibold text-foreground">{{ current().name }}</div>
+            <div class="text-sm text-muted-foreground">{{ current().role }}</div>
+          </div>
+          <div class="ml-auto hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
+            <span class="flex size-1.5 rounded-full bg-chart-4"></span> verified customer
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 flex items-center justify-center gap-4">
+        <button
+          type="button"
+          (click)="go(-1)"
+          aria-label="Previous testimonial"
+          class="glass flex size-10 items-center justify-center rounded-full text-foreground transition-all hover:-translate-x-0.5 hover:bg-card"
+        >
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="flex gap-2">
+          @for (t of testimonials; track t.name; let i = $index) {
+            <button
+              type="button"
+              (click)="goTo(i)"
+              [attr.aria-label]="'Go to testimonial ' + (i + 1)"
+              class="h-2 rounded-full transition-all"
+              [class.w-8]="i === index()"
+              [class.bg-primary]="i === index()"
+              [class.w-2]="i !== index()"
+              [class.bg-border]="i !== index()"
+            ></button>
+          }
+        </div>
+        <button
+          type="button"
+          (click)="go(1)"
+          aria-label="Next testimonial"
+          class="glass flex size-10 items-center justify-center rounded-full text-foreground transition-all hover:translate-x-0.5 hover:bg-card"
+        >
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

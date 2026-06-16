@@ -1,0 +1,8 @@
+.dept-donut {
+  mask: radial-gradient(circle at center, transparent 45%, black 46%);
+  -webkit-mask: radial-gradient(circle at center, transparent 45%, black 46%);
+}
+
+:host {
+  display: block;
+}

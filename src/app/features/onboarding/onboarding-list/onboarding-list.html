@@ -1,0 +1,185 @@
+<div class="hrms-page page-container">
+  <!-- BREADCRUMBS -->
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <!-- PAGE HEADER -->
+  <app-page-header
+    title="Employee Onboarding"
+    subtitle="Track and manage new employee onboarding process"
+    [icon]="faClipboardList"
+  >
+    <button class="page-header-btn">
+      <fa-icon [icon]="faFilter"></fa-icon>
+      Filter
+    </button>
+
+    <button class="page-header-btn primary" (click)="openAddEmployeeModal()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      Add Employee
+    </button>
+  </app-page-header>
+
+  <div class="hrms-fade-in">
+    <!-- Stats Cards -->
+    <app-stats-cards [cards]="statsCards()"> </app-stats-cards>
+<app-page-layout>
+<!-- Onboarding Table -->
+      <app-management-table main title="Onboarding Employees" subtitle="Track progress of new hires">
+        <div table-actions>
+          <div class="search-box">
+            <fa-icon [icon]="faSearch"></fa-icon>
+
+            <input type="text" placeholder="Search by name or department..." />
+          </div>
+        </div>
+
+        <table table-content>
+          <thead>
+            <tr>
+              <th>Employee Name</th>
+              <th>Department</th>
+              <th>Joining Date</th>
+              <th>Progress</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (employee of onboardingEmployees(); track employee.id) {
+              <tr>
+                <td>
+                  <div class="employee-cell">
+                    <div class="employee-avatar">
+                      {{ employee.name.charAt(0)
+                      }}{{ employee.name.split(' ')[1]?.charAt(0) || '' }}
+                    </div>
+
+                    <div>
+                      <h4>{{ employee.name }}</h4>
+                      <span>{{ employee.email }}</span>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="dept-badge">
+                    <fa-icon [icon]="faBuilding"></fa-icon>
+                    <span>{{ employee.department }}</span>
+                  </div>
+                </td>
+
+                <td>
+                  {{ employee.joiningDate | date: 'MMM dd, yyyy' }}
+                </td>
+
+                <td>
+                  <div class="progress-cell">
+                    <div class="progress-wrapper">
+                      <div class="progress-bar">
+                        <div
+                          class="progress-fill"
+                          [class]="getProgressClass(employee.progress)"
+                          [style.width.%]="employee.progress"
+                        ></div>
+                      </div>
+
+                      <span class="progress-value"> {{ employee.progress }}% </span>
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <span class="status" [class]="getStatusClass(employee.status)">
+                    {{ employee.status }}
+                  </span>
+                </td>
+
+                <td>
+                  <button class="open-btn" (click)="openEmployeeDetail(employee.id)">
+                    <fa-icon [icon]="faUserCheck"></fa-icon>
+                    Open
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </app-management-table>
+     <!-- Quick Actions -->
+       <app-quick-actions sidebar
+  title="Quick Actions"
+  subtitle="Onboarding shortcuts"
+    [icon]="faBolt"
+  [actions]="quickActions()"
+  (actionClick)="handleQuickAction($event)"
+>
+</app-quick-actions>
+
+</app-page-layout>
+  
+  </div>
+
+  <app-modal
+    [isOpen]="isAddEmployeeModalOpen"
+    title="Add New Employee"
+    width="550px"
+    (onClose)="closeAddEmployeeModal()"
+    (onConfirm)="saveEmployee()"
+  >
+    <form [formGroup]="addEmployeeForm" class="modal-form">
+      <!-- <div class="form-group">
+      <label>Full Name</label>
+      <input 
+        type="text" 
+   
+        placeholder="Enter full name"
+        class="form-control"
+      />
+    </div> -->
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" class="form-control" formControlName="firstName" />
+      </div>
+
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" formControlName="lastName" />
+      </div>
+      <div class="form-group">
+        <label>Mobile Number</label>
+        <input type="text" class="form-control" formControlName="mobileNumber" />
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input
+          type="email"
+          class="form-control"
+          formControlName="email"
+          placeholder="employee@company.com"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Department</label>
+
+        <select class="form-control" formControlName="departmentId">
+          <option value="">Select Department</option>
+
+          @for (department of departments(); track department.id) {
+            <option [value]="department.id">
+              {{ department.name }}
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Joining Date</label>
+
+        <input type="date" class="form-control" formControlName="joiningDate" />
+      </div>
+    </form>
+  </app-modal>
+ 
+</div>

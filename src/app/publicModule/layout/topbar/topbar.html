@@ -1,0 +1,42 @@
+<header class="topbar">
+  <!-- LEFT -->
+  <div class="left">
+    <!-- <button class="icon-btn" (click)="toggleMobile.emit()">☰</button> -->
+    <button class="icon-btn" (click)="onMenuClick()">☰</button>
+    <!-- <div class="breadcrumbs">
+      <ng-container *ngFor="let b of breadcrumbs; let last = last">
+        <span>{{ b.label }}</span>
+        <span *ngIf="!last"> / </span>
+      </ng-container>
+    </div> -->
+    <!-- <app-breadcrumbs></app-breadcrumbs> -->
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="icon">🔍</span>
+    <input type="text" placeholder="Search…" />
+    <kbd>⌘K</kbd>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="top-actions">
+    <button class="icon-btn">❓</button>
+
+    <button class="icon-btn bell" (click)="toggleNotif.emit()">
+      🔔
+      <span *ngIf="unread > 0" class="badge">{{ unread }}</span>
+    </button>
+
+    <button class="user-btn" (click)="toggleProfile.emit()">
+      <div class="avatar">{{ userInitials }}</div>
+      <div class="u-info">
+        <div class="u-name">User</div>
+        <div class="u-role">Admin</div>
+      </div>
+      <span>⌄</span>
+    </button>
+
+    <button class="icon-btn" (click)="logout.emit()">⎋</button>
+  </div>
+</header>

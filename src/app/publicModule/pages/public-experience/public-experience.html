@@ -1,0 +1,491 @@
+<!-- public-experience.html -->
+
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Experience Details"
+    subtitle="Manage your professional experience and employment records"
+    [icon]="faBriefcase"
+  >
+  </app-page-header>
+
+  <div class="mt-6">
+    <div class="organization-page">
+      <div class="organization-grid">
+        <!-- LEFT -->
+        <div class="organization-form-card">
+          <app-page-sub-header
+            title="Professional Information"
+            subtitle="Manage your work experience and employment details"
+            [icon]="faBriefcase"
+          >
+            @if (isSaved() && !isEditMode()) {
+              <button
+                class="page-header-btn warning"
+                type="button"
+                (click)="enableEdit()"
+              >
+                <fa-icon [icon]="faPen"></fa-icon>
+                Edit
+              </button>
+            }
+
+            @if (isSaved() && isEditMode()) {
+              <button
+                class="page-header-btn danger"
+                type="button"
+                (click)="cancelEdit()"
+              >
+                <fa-icon [icon]="faXmark"></fa-icon>
+                Cancel
+              </button>
+            }
+          </app-page-sub-header>
+
+          <form
+            [formGroup]="experienceForm"
+            class="organization-form"
+            (ngSubmit)="saveExperience()"
+          >
+            <!-- COMPANY -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Company Name
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="companyName"
+                  placeholder="Enter company name"
+                  [class.invalid]="isInvalid('companyName')"
+                />
+
+                @if (isInvalid('companyName')) {
+                  <div class="field-error">
+                    {{ getError('companyName') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Designation
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="designation"
+                  placeholder="Enter designation"
+                  [class.invalid]="isInvalid('designation')"
+                />
+
+                @if (isInvalid('designation')) {
+                  <div class="field-error">
+                    {{ getError('designation') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- EMPLOYMENT TYPE -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Employment Type
+                  <span>*</span>
+                </label>
+
+                <div
+                  class="hrms-select custom-select"
+                  [class.open]="employmentDropdownOpen()"
+                  [class.invalid]="isInvalid('employmentType')"
+                  (click)="toggleEmploymentDropdown()"
+                >
+                  <div class="custom-select-value">
+                    {{
+                      getEmploymentLabel(
+                        experienceForm.get('employmentType')?.value
+                      )
+                    }}
+                  </div>
+
+                  <div class="custom-select-icon">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+
+                  @if (employmentDropdownOpen()) {
+                    <div class="custom-dropdown">
+                      @for (
+                        employment of employmentTypes;
+                        track employment.value
+                      ) {
+                        <div
+                          class="custom-option"
+                          [class.active]="
+                            experienceForm.get('employmentType')?.value ===
+                            employment.value
+                          "
+                          (click)="
+                            selectEmployment(
+                              employment.value,
+                              $event
+                            )
+                          "
+                        >
+                          {{ employment.label }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                @if (isInvalid('employmentType')) {
+                  <div class="field-error">
+                    {{ getError('employmentType') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Technologies / Skills Used
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="technologies"
+                  placeholder="Angular, .NET, SQL, Docker..."
+                  [class.invalid]="isInvalid('technologies')"
+                />
+
+                @if (isInvalid('technologies')) {
+                  <div class="field-error">
+                    {{ getError('technologies') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- DATES -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Start Date
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="date"
+                  class="hrms-input"
+                  formControlName="startDate"
+                  [class.invalid]="isInvalid('startDate')"
+                />
+
+                @if (isInvalid('startDate')) {
+                  <div class="field-error">
+                    {{ getError('startDate') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  End Date
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="date"
+                  class="hrms-input"
+                  formControlName="endDate"
+                  [class.invalid]="isInvalid('endDate')"
+                />
+
+                @if (isInvalid('endDate')) {
+                  <div class="field-error">
+                    {{ getError('endDate') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- SALARY -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Current CTC
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="currentCtc"
+                  placeholder="Enter current CTC"
+                  [class.invalid]="isInvalid('currentCtc')"
+                />
+
+                @if (isInvalid('currentCtc')) {
+                  <div class="field-error">
+                    {{ getError('currentCtc') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Last Drawn Salary
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="lastDrawnSalary"
+                  placeholder="Enter last drawn salary"
+                  [class.invalid]="isInvalid('lastDrawnSalary')"
+                />
+
+                @if (isInvalid('lastDrawnSalary')) {
+                  <div class="field-error">
+                    {{ getError('lastDrawnSalary') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- ACTIONS -->
+            @if (isEditMode()) {
+              <div class="form-actions">
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  (click)="resetForm()"
+                >
+                  Reset
+                </button>
+
+                <button
+                  type="submit"
+                  class="primary-btn"
+                >
+                  {{
+                    isSaved()
+                      ? 'Update Changes'
+                      : 'Save Changes'
+                  }}
+                </button>
+              </div>
+            }
+          </form>
+        </div>
+
+     
+      <!-- RIGHT -->
+<div class="organization-right-section">
+  <div class="organization-brand-card">
+    <app-page-sub-header
+      title="Supporting Documents"
+      subtitle="Upload employment related documents"
+      [icon]="faFileArrowUp"
+    >
+    </app-page-sub-header>
+
+    <!-- MAIN MULTI UPLOAD -->
+    <label
+      class="logo-upload-box"
+      [class.invalid]="documentError()"
+    >
+      <input
+        type="file"
+        hidden
+        multiple
+        accept=".pdf,.png,.jpg,.jpeg"
+        (change)="onDocumentUpload($event, 'General')"
+      />
+
+      <div class="logo-empty">
+        <div class="empty-icon">
+          <fa-icon [icon]="faFileArrowUp"></fa-icon>
+        </div>
+
+        <div class="upload-title">
+          Upload Experience Documents
+        </div>
+
+        <div class="upload-sub">
+          Experience Letter, Relieving Letter,
+          Salary Slips and other supporting documents
+        </div>
+      </div>
+    </label>
+
+    @if (documentError()) {
+      <div class="field-error logo-error-text">
+        {{ documentError() }}
+      </div>
+    }
+
+    <!-- QUICK DOCUMENT BADGES -->
+    <div class="document-upload-badges mt-4">
+      <!-- EXPERIENCE LETTER -->
+      <label class="upload-badge">
+        <input
+          type="file"
+          hidden
+          multiple
+          accept=".pdf,.png,.jpg,.jpeg"
+          (change)="
+            onDocumentUpload(
+              $event,
+              'Experience Letter'
+            )
+          "
+        />
+
+        <fa-icon [icon]="faFileArrowUp"></fa-icon>
+
+        <span>Experience Letter</span>
+      </label>
+
+      <!-- RELIEVING LETTER -->
+      <label class="upload-badge">
+        <input
+          type="file"
+          hidden
+          multiple
+          accept=".pdf,.png,.jpg,.jpeg"
+          (change)="
+            onDocumentUpload(
+              $event,
+              'Relieving Letter'
+            )
+          "
+        />
+
+        <fa-icon [icon]="faFileArrowUp"></fa-icon>
+
+        <span>Relieving Letter</span>
+      </label>
+
+      <!-- SALARY SLIPS -->
+      <label class="upload-badge">
+        <input
+          type="file"
+          hidden
+          multiple
+          accept=".pdf,.png,.jpg,.jpeg"
+          (change)="
+            onDocumentUpload(
+              $event,
+              'Salary Slip'
+            )
+          "
+        />
+
+        <fa-icon [icon]="faFileArrowUp"></fa-icon>
+
+        <span>Salary Slips</span>
+      </label>
+    </div>
+
+    <!-- DOCUMENT LIST -->
+    @if (uploadedDocuments().length > 0) {
+      <div class="uploaded-documents-list mt-4">
+        @for (
+          doc of uploadedDocuments();
+          track doc.name;
+          let i = $index
+        ) {
+          <div class="uploaded-document-item">
+            <div class="document-info">
+              <div class="document-icon">
+                <fa-icon [icon]="faFile"></fa-icon>
+              </div>
+
+              <div class="document-meta">
+                <div class="document-name">
+                  {{ doc.name }}
+                </div>
+
+                <div class="document-size">
+                  {{ doc.size }}
+                </div>
+
+                @if (doc.category !== 'General') {
+                  <div class="document-tag">
+                    {{ doc.category }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="document-actions">
+              <button
+                type="button"
+                class="icon-btn"
+                (click)="viewDocument(doc.url)"
+              >
+                <fa-icon [icon]="faEye"></fa-icon>
+              </button>
+
+              <button
+                type="button"
+                class="icon-btn danger"
+                (click)="removeDocument(i)"
+              >
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- RULES -->
+    <div class="document-rules-card">
+      <div class="rules-title">
+        Upload Guidelines
+      </div>
+
+      <ul class="rules-list">
+        <li>
+          Upload valid employment and salary related
+          documents only
+        </li>
+
+        <li>
+          Only PDF, PNG, JPG and JPEG files are
+          allowed
+        </li>
+
+        <li>
+          Maximum allowed file size is 5MB per
+          document
+        </li>
+
+        <li>
+          Multiple supporting documents can be
+          uploaded
+        </li>
+
+        <li>
+          Ensure uploaded documents are clear and
+          readable
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,118 @@
+<section id="product" class="relative px-4 py-20 sm:px-6 lg:px-8">
+  <div class="pointer-events-none absolute inset-0 -z-10 aurora-soft opacity-60"></div>
+
+  <div class="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+    <div appReveal="right">
+      <span class="text-eyebrow text-primary">{{ locale.t().aiCopilot.eyebrow }}</span>
+      <h2 class="mt-3 text-balance text-display-lg text-foreground">
+        {{ locale.t().aiCopilot.title.split('HR AI')[0] }}<span class="text-gradient">HR AI Copilot</span>
+      </h2>
+      <p class="mt-5 max-w-lg text-body-lg text-muted-foreground">
+        {{ locale.t().aiCopilot.description }}
+      </p>
+      <div class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        @for (cap of capabilities; track cap.text; let i = $index) {
+          <div
+            appSpotlight
+            class="flex items-center gap-3 rounded-xl border border-border/60 glass p-3 text-sm backdrop-blur-md"
+            appReveal="up"
+            [delay]="120 + i * 60"
+          >
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/15 text-primary">
+              <i class="fa-solid {{ cap.icon }} text-sm"></i>
+            </span>
+            <span class="text-foreground">{{ cap.text }}</span>
+          </div>
+        }
+      </div>
+      <div class="mt-7 inline-flex items-center gap-2 rounded-xl border border-border bg-card/40 px-4 py-2.5 text-sm">
+        <i class="fa-solid fa-wand-magic-sparkles text-base text-accent"></i>
+        Powered by our proprietary <span class="font-semibold text-foreground">Workforce-LM</span>
+      </div>
+    </div>
+
+    <div
+      appSpotlight
+      appReveal="left"
+      [delay]="150"
+      class=" glass-strong relative overflow-hidden rounded-2xl border border-border p-4 shadow-2xl"
+    >
+   <!-- Background Glow Effects -->
+    <div class="absolute inset-0 -z-10">
+      <div
+        class="absolute -right-12 -top-12 size-32 rounded-full bg-primary/15 blur-3xl"
+      ></div>
+      <div
+        class="absolute -left-12 -bottom-12 size-32 rounded-full bg-accent/10 blur-3xl"
+      ></div>
+    </div>
+
+      <div class="relative flex items-center gap-2 border-b border-border pb-3">
+        <span class="relative flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-aurora-1 to-aurora-3 text-white">
+          <i class="fa-solid fa-robot text-sm"></i>
+        </span>
+        <div>
+          <p class="text-sm font-semibold text-foreground">HR Copilot</p>
+          <p class="flex items-center gap-1 text-[11px] text-muted-foreground">
+            <span class="relative flex size-1.5">
+              <span class="absolute inset-0 animate-ping rounded-full bg-chart-4/60"></span>
+              <span class="relative inline-flex size-1.5 rounded-full bg-chart-4"></span>
+            </span>
+            Online · GPT-Workforce
+          </p>
+        </div>
+        <i class="fa-solid fa-wand-magic-sparkles ml-auto text-base text-accent"></i>
+      </div>
+
+        <div class="relative flex max-h-[32rem] flex-col gap-2.5 overflow-y-auto py-4 scrollbar-none">
+        @for (message of messages(); track $index) {
+          @if (message.thinking) {
+            <div class="flex w-fit max-w-[85%] items-center gap-2 rounded-2xl rounded-bl-sm bg-secondary px-3.5 py-2.5 text-sm text-muted-foreground">
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="typing-dot"></span>
+              <span class="ml-1 text-xs">Copilot is thinking…</span>
+            </div>
+          } @else {
+            <div
+              class="max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm animate-slide-up"
+              [class.ml-auto]="message.role === 'user'"
+              [class.rounded-br-sm]="message.role === 'user'"
+              [class.bg-primary]="message.role === 'user'"
+              [class.text-primary-foreground]="message.role === 'user'"
+              [class.rounded-bl-sm]="message.role === 'bot'"
+              [class.bg-secondary]="message.role === 'bot'"
+              [class.text-foreground]="message.role === 'bot'"
+            >
+              {{ message.text }}
+            </div>
+          }
+        }
+      </div>
+
+      <div class="relative grid grid-cols-1 gap-2 border-t border-border pt-3 sm:grid-cols-2">
+        @for (question of suggestions; track question) {
+          <button
+            type="button"
+            (click)="ask(question)"
+            class="flex items-center justify-center gap-1.5 rounded-lg border border-border bg-card/40 px-3 py-2 text-center text-xs leading-snug text-muted-foreground transition-all hover:border-primary/50 hover:bg-secondary hover:text-foreground"
+          >
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-primary/70"></i>
+            <span class="line-clamp-2">{{ question }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="relative mt-3 flex items-center gap-2 rounded-xl border border-border bg-card/50 px-3 py-2.5">
+        <input
+          disabled
+          placeholder="Ask your HR Copilot anything…"
+          class="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+        />
+        <span class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,124 @@
+<section class="relative px-4 py-12 sm:px-6 lg:px-8" id="solutions">
+  <div class="pointer-events-none absolute inset-0 -z-10 dot-pattern opacity-30"></div>
+
+  <div class="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+    <div
+          appSpotlight
+          class="glass-strong relative overflow-hidden rounded-2xl border border-border p-6 shadow-2xl backdrop-blur-xl"
+      appReveal="right"
+    >
+      <div class="relative mb-5 flex items-center gap-2 overflow-hidden text-xs text-muted-foreground">
+  <div class="absolute inset-0 -z-10">
+    <div class="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-primary/15 blur-3xl"></div>
+  </div>
+        <i class="fa-solid fa-table-cells-large text-base text-primary"></i>
+        <span class="font-semibold text-foreground">Dashboard Builder</span>
+        <span class="ml-auto flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[10px]">
+          <i class="fa-solid fa-arrow-pointer text-[10px]"></i> Drag widgets
+        </span>
+      </div>
+
+      <div class="relative grid grid-cols-3 gap-3">
+        @for (widget of palette(); track trackByIndex($index); let i = $index) {
+          <div
+            class="widget-card flex h-24 cursor-grab select-none items-center justify-center gap-2 rounded-xl border border-border bg-gradient-to-br to-transparent text-sm font-medium active:cursor-grabbing"
+            [class]="widget.span + ' ' + widget.tint"
+            [class.dragging]="draggingId === widget.id"
+            [class.drag-over]="hoverId === widget.id"
+            draggable="true"
+            (dragstart)="onDragStart($event, widget)"
+            (dragend)="onDragEnd()"
+            (dragenter)="hoverId = widget.id"
+            (dragleave)="hoverId = null"
+            (click)="activate(widget)"
+            (keydown.enter)="activate(widget)"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="'Add ' + widget.label + ' widget to dashboard'"
+          >
+            <i class="fa-solid {{ widget.icon }} text-base text-foreground/70"></i>
+            <span>{{ widget.label }}</span>
+          </div>
+        }
+
+        @if (palette().length === 0 && dropped().length === 0) {
+          <div class="col-span-3 h-2"></div>
+        }
+      </div>
+
+      <div
+        class="drop-zone relative mt-4 flex min-h-[6rem] flex-col items-stretch gap-2 rounded-xl border-2 border-dashed border-border p-3"
+        [class.drop-zone-active]="dropZoneActive"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)"
+        (drop)="onDrop($event)"
+        role="region"
+        aria-label="Dashboard canvas"
+      >
+        @if (dropped().length === 0) {
+          <div class="flex h-16 items-center justify-center text-xs text-muted-foreground">
+            <i class="fa-solid fa-hand-pointer mr-2"></i>
+            + Drop a widget here (or click one above)
+          </div>
+        } @else {
+          <div class="mb-1 flex items-center justify-between text-[11px] text-muted-foreground">
+            <span class="font-semibold text-foreground">Your dashboard</span>
+            <button
+              type="button"
+              class="rounded-md px-2 py-0.5 text-[10px] uppercase tracking-wide transition-colors hover:bg-secondary hover:text-foreground"
+              (click)="resetCanvas()"
+            >
+              Reset
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            @for (widget of dropped(); track trackByIndex($index)) {
+              <div
+                class="dropped-widget flex items-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-3 py-2 text-xs text-foreground"
+              >
+                <i class="fa-solid {{ widget.icon }} text-primary"></i>
+                <span>{{ widget.label }}</span>
+                <button
+                  type="button"
+                  class="ml-1 text-muted-foreground transition-colors hover:text-foreground"
+                  (click)="removeFromCanvas(widget)"
+                  [attr.aria-label]="'Remove ' + widget.label"
+                >
+                  <i class="fa-solid fa-xmark text-[10px]"></i>
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div appReveal="left" [delay]="200">
+      <span class="text-eyebrow text-primary">No-code customization</span>
+      <h2 class="mt-3 text-balance text-display-lg text-foreground">
+        Build Your HRMS <span class="text-gradient">Your Way</span>
+      </h2>
+      <p class="mt-5 max-w-lg text-body-lg text-muted-foreground">
+        Assemble dashboards, forms, and modules with a fully visual builder. No engineering required.
+      </p>
+      <div class="mt-7 grid gap-2.5 sm:grid-cols-2">
+        @for (point of points; track point; let i = $index) {
+          <div
+            class="flex items-center gap-2.5 rounded-lg border border-border/40 bg-card/30 p-3 text-sm"
+            appReveal="up"
+            [delay]="300 + i * 80"
+          >
+            <span class="flex size-6 shrink-0 items-center justify-center rounded-md bg-primary/15 text-primary">
+              <i class="fa-solid fa-check text-[10px]"></i>
+            </span>
+            {{ point }}
+          </div>
+        }
+      </div>
+      <div class="mt-7 inline-flex items-center gap-2 rounded-xl border border-border bg-card/40 px-4 py-2.5 text-sm">
+        <i class="fa-solid fa-wand-magic-sparkles text-base text-accent"></i>
+        AI suggests the best layout for your team
+      </div>
+    </div>
+  </div>
+</section>

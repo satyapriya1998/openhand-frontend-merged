@@ -1,0 +1,513 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Personal Information"
+    subtitle="Manage your personal details and identity verification"
+    [icon]="faUser"
+  >
+  </app-page-header>
+
+  <div class="mt-6">
+    <div class="organization-page">
+      <!-- MAIN GRID -->
+      <div class="organization-grid">
+        <!-- LEFT : FORM CARD -->
+        <div class="organization-form-card">
+          <!-- HEADER -->
+          <app-page-sub-header
+            title="Personal Details"
+            subtitle="Manage your basic personal information"
+            [icon]="faUser"
+          >
+            @if (isSaved() && !isEditMode()) {
+              <button class="page-header-btn warning" type="button" (click)="enableEdit()">
+                <fa-icon [icon]="faPen"></fa-icon>
+                Edit
+              </button>
+            }
+
+            @if (isSaved() && isEditMode()) {
+              <button class="page-header-btn danger" type="button" (click)="cancelEdit()">
+                <fa-icon [icon]="faXmark"></fa-icon>
+                Cancel
+              </button>
+            }
+          </app-page-sub-header>
+
+          <!-- FORM -->
+          <form [formGroup]="personalForm" class="organization-form" (ngSubmit)="savePersonalInfo()">
+            <!-- ROW: First Name & Last Name -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  First Name
+                  <span>*</span>
+                </label>
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="firstName"
+                  placeholder="Enter first name"
+                  [class.invalid]="isInvalid('firstName')"
+                />
+
+                @if (isInvalid('firstName')) {
+                  <div class="field-error">
+                    {{ getError('firstName') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Last Name
+                  <span>*</span>
+                </label>
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="lastName"
+                  placeholder="Enter last name"
+                  [class.invalid]="isInvalid('lastName')"
+                />
+
+                @if (isInvalid('lastName')) {
+                  <div class="field-error">
+                    {{ getError('lastName') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- ROW: Personal Email & Phone Number -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Personal Email
+                  <span>*</span>
+                </label>
+                <input
+                  type="email"
+                  class="hrms-input"
+                  formControlName="personalEmail"
+                  placeholder="Enter personal email"
+                  [class.invalid]="isInvalid('personalEmail')"
+                />
+
+                @if (isInvalid('personalEmail')) {
+                  <div class="field-error">
+                    {{ getError('personalEmail') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Phone Number
+                  <span>*</span>
+                </label>
+                <input
+                  type="tel"
+                  class="hrms-input"
+                  formControlName="phoneNumber"
+                  placeholder="Enter phone number"
+                  [class.invalid]="isInvalid('phoneNumber')"
+                />
+
+                @if (isInvalid('phoneNumber')) {
+                  <div class="field-error">
+                    {{ getError('phoneNumber') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- ROW: Date of Birth & Gender -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Date of Birth
+                  <span>*</span>
+                </label>
+                <input
+                  type="date"
+                  class="hrms-input"
+                  formControlName="dateOfBirth"
+                  [class.invalid]="isInvalid('dateOfBirth')"
+                />
+
+                @if (isInvalid('dateOfBirth')) {
+                  <div class="field-error">
+                    {{ getError('dateOfBirth') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Gender
+                  <span>*</span>
+                </label>
+
+                <div
+                  class="hrms-select custom-select"
+                  [class.open]="genderDropdownOpen()"
+                  [class.invalid]="isInvalid('gender')"
+                  (click)="toggleGenderDropdown()"
+                >
+                  <div class="custom-select-value">
+                    {{ getGenderLabel(personalForm.get('gender')?.value) }}
+                  </div>
+
+                  <div class="custom-select-icon">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+
+                  @if (genderDropdownOpen()) {
+                    <div class="custom-dropdown">
+                      @for (gender of genders; track gender.value) {
+                        <div
+                          class="custom-option"
+                          [class.active]="personalForm.get('gender')?.value === gender.value"
+                          (click)="selectGender(gender.value, $event)"
+                        >
+                          {{ gender.label }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                @if (isInvalid('gender')) {
+                  <div class="field-error">
+                    {{ getError('gender') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- ROW: Marital Status & Nationality -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Marital Status
+                  <span>*</span>
+                </label>
+
+                <div
+                  class="hrms-select custom-select"
+                  [class.open]="maritalStatusDropdownOpen()"
+                  [class.invalid]="isInvalid('maritalStatus')"
+                  (click)="toggleMaritalStatusDropdown()"
+                >
+                  <div class="custom-select-value">
+                    {{ getMaritalStatusLabel(personalForm.get('maritalStatus')?.value) }}
+                  </div>
+
+                  <div class="custom-select-icon">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+
+                  @if (maritalStatusDropdownOpen()) {
+                    <div class="custom-dropdown">
+                      @for (status of maritalStatuses; track status.value) {
+                        <div
+                          class="custom-option"
+                          [class.active]="personalForm.get('maritalStatus')?.value === status.value"
+                          (click)="selectMaritalStatus(status.value, $event)"
+                        >
+                          {{ status.label }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                @if (isInvalid('maritalStatus')) {
+                  <div class="field-error">
+                    {{ getError('maritalStatus') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Nationality
+                  <span>*</span>
+                </label>
+
+                <div
+                  class="hrms-select custom-select"
+                  [class.open]="nationalityDropdownOpen()"
+                  [class.invalid]="isInvalid('nationality')"
+                  (click)="toggleNationalityDropdown()"
+                >
+                  <div class="custom-select-value">
+                    {{ getNationalityLabel(personalForm.get('nationality')?.value) }}
+                  </div>
+
+                  <div class="custom-select-icon">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+
+                  @if (nationalityDropdownOpen()) {
+                    <div class="custom-dropdown">
+                      @for (nation of nationalities; track nation.value) {
+                        <div
+                          class="custom-option"
+                          [class.active]="personalForm.get('nationality')?.value === nation.value"
+                          (click)="selectNationality(nation.value, $event)"
+                        >
+                          {{ nation.label }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                @if (isInvalid('nationality')) {
+                  <div class="field-error">
+                    {{ getError('nationality') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- FORM ACTIONS -->
+            @if (isEditMode()) {
+              <div class="form-actions">
+                <button type="button" class="secondary-btn" (click)="resetForm()">Reset</button>
+                <button type="submit" class="primary-btn">
+                  {{ isSaved() ? 'Update Changes' : 'Save Changes' }}
+                </button>
+              </div>
+            }
+          </form>
+        </div>
+
+        <!-- RIGHT SECTION -->
+        <div class="organization-right-section">
+          <!-- PHOTO CARD -->
+          <div class="organization-brand-card">
+            <app-page-sub-header
+              title="Profile Photo"
+              subtitle="Upload your profile picture"
+              [icon]="faUser"
+            >
+            </app-page-sub-header>
+
+            <!-- PHOTO UPLOAD -->
+            <label class="logo-upload-box" [class.invalid]="photoError()">
+              <input type="file" accept="image/*" hidden (change)="onPhotoChange($event)" />
+
+              <!-- IMAGE PREVIEW -->
+              @if (photoPreview() !== null) {
+                <img [src]="photoPreview()" class="logo-image" alt="Profile Photo" />
+              }
+
+              <!-- EMPTY STATE -->
+              @if (photoPreview() === null) {
+                <div class="logo-empty">
+                  <div class="empty-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                  </div>
+
+                  <div class="upload-title">Upload Photo</div>
+
+                  <div class="upload-sub">PNG, JPG, JPEG supported (Max 2MB)</div>
+                </div>
+              }
+
+              <!-- OVERLAY -->
+              <div class="logo-overlay">
+                <button type="button" class="edit-logo-btn">
+                  <i class="fa-solid fa-camera"></i>
+                  Change Photo
+                </button>
+              </div>
+            </label>
+
+            @if (photoError()) {
+              <div class="field-error logo-error-text">
+                {{ photoError() }}
+              </div>
+            }
+          </div>
+
+          <!-- IDENTITY VERIFICATION CARD -->
+          <div class="organization-theme-card">
+            <app-page-sub-header
+              title="Identity Verification"
+              subtitle="Verify your identity with government IDs"
+              [icon]="faIdCard"
+            >
+              @if (isIdentityVerified() && !isEditMode()) {
+                <span class="verification-badge verified">
+                  <i class="fa-solid fa-check-circle"></i>
+                  Verified
+                </span>
+              }
+            </app-page-sub-header>
+
+            <form [formGroup]="personalForm">
+              <!-- Aadhar Number -->
+              <div class="field">
+                <label>Aadhar Number</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-id-card"></i>
+                  <input
+                    type="text"
+                    class="hrms-input"
+                    formControlName="aadharNumber"
+                    placeholder="1234 5678 9012"
+                    maxlength="12"
+                    [class.invalid]="isInvalid('aadharNumber')"
+                    (input)="
+                      personalForm
+                        .get('aadharNumber')
+                        ?.setValue($any($event.target).value.replace(/[^0-9]/g, ''), {
+                          emitEvent: false,
+                        })
+                    "
+                  />
+                </div>
+                @if (isInvalid('aadharNumber')) {
+                  <div class="field-error">
+                    {{ getError('aadharNumber') }}
+                  </div>
+                }
+                @if (!isInvalid('aadharNumber') && personalForm.get('aadharNumber')?.value) {
+                  <div class="field-hint">12-digit unique identification number</div>
+                }
+              </div>
+
+              <!-- PAN Number -->
+              <div class="field">
+                <label>PAN Number</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-file-invoice"></i>
+                  <input
+                    type="text"
+                    class="hrms-input"
+                    formControlName="panNumber"
+                    placeholder="ABCDE1234F"
+                    maxlength="10"
+                    [class.invalid]="isInvalid('panNumber')"
+                    (input)="
+                      personalForm
+                        .get('panNumber')
+                        ?.setValue($any($event.target).value.toUpperCase(), {
+                          emitEvent: false,
+                        })
+                    "
+                  />
+                </div>
+                @if (isInvalid('panNumber')) {
+                  <div class="field-error">
+                    {{ getError('panNumber') }}
+                  </div>
+                }
+                @if (!isInvalid('panNumber') && personalForm.get('panNumber')?.value) {
+                  <div class="field-hint">10-character alphanumeric PAN</div>
+                }
+              </div>
+
+              <!-- Passport Number -->
+              <div class="field">
+                <label>Passport Number</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-passport"></i>
+                  <input
+                    type="text"
+                    class="hrms-input"
+                    formControlName="passportNumber"
+                    placeholder="Enter passport number"
+                    maxlength="9"
+                    [class.invalid]="isInvalid('passportNumber')"
+                    (input)="
+                      personalForm
+                        .get('passportNumber')
+                        ?.setValue($any($event.target).value.toUpperCase(), {
+                          emitEvent: false,
+                        })
+                    "
+                  />
+                </div>
+                @if (isInvalid('passportNumber')) {
+                  <div class="field-error">
+                    {{ getError('passportNumber') }}
+                  </div>
+                }
+              </div>
+
+              <!-- Driving License Number -->
+              <div class="field">
+                <label>Driving License Number</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-id-card"></i>
+                  <input
+                    type="text"
+                    class="hrms-input"
+                    formControlName="drivingLicenseNumber"
+                    placeholder="Enter driving license number"
+                    maxlength="16"
+                    [class.invalid]="isInvalid('drivingLicenseNumber')"
+                  />
+                </div>
+                @if (isInvalid('drivingLicenseNumber')) {
+                  <div class="field-error">
+                    {{ getError('drivingLicenseNumber') }}
+                  </div>
+                }
+              </div>
+
+              <!-- Voter ID Number -->
+              <div class="field">
+                <label>Voter ID Number</label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-check-circle"></i>
+                  <input
+                    type="text"
+                    class="hrms-input"
+                    formControlName="voterIdNumber"
+                    placeholder="Enter voter ID number"
+                    maxlength="10"
+                    [class.invalid]="isInvalid('voterIdNumber')"
+                    (input)="
+                      personalForm
+                        .get('voterIdNumber')
+                        ?.setValue($any($event.target).value.toUpperCase(), {
+                          emitEvent: false,
+                        })
+                    "
+                  />
+                </div>
+                @if (isInvalid('voterIdNumber')) {
+                  <div class="field-error">
+                    {{ getError('voterIdNumber') }}
+                  </div>
+                }
+              </div>
+
+           
+            </form>
+
+            <!-- Verification Status Footer -->
+            <div class="theme-footer">
+              <div class="footer-dot" [class.verified]="isIdentityVerified()"></div>
+              Verification Status:
+              <strong>
+                @if (isIdentityVerified()) {
+                  <span class="status-verified">✓ Verified</span>
+                } @else {
+                  <span class="status-pending">Pending Verification</span>
+                }
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

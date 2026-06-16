@@ -1,0 +1,7 @@
+[
+  {"id":"1","name":"John Smith","email":"john@company.com","employeeId":"EMP001","department":"Engineering","designation":"Senior Developer","status":"active","joinDate":"2023-01-15"},
+  {"id":"2","name":"Sarah Johnson","email":"sarah@company.com","employeeId":"EMP002","department":"HR","designation":"HR Manager","status":"active","joinDate":"2022-06-20"},
+  {"id":"3","name":"Mike Davis","email":"mike@company.com","employeeId":"EMP003","department":"Sales","designation":"Sales Lead","status":"inactive","joinDate":"2021-03-10"},
+  {"id":"4","name":"Emily Wilson","email":"emily@company.com","employeeId":"EMP004","department":"Marketing","designation":"Marketing Specialist","status":"active","joinDate":"2024-01-05"},
+  {"id":"5","name":"Robert Brown","email":"robert@company.com","employeeId":"EMP005","department":"Engineering","designation":"Junior Developer","status":"active","joinDate":"2024-06-15"}
+]

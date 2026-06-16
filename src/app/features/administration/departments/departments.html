@@ -1,0 +1,240 @@
+<div class="hrms-page page-container">
+  <!-- BREADCRUMBS -->
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <!-- PAGE HEADER -->
+  <app-page-header
+    title="Departments"
+    subtitle="Manage and organize your company departments"
+    [icon]="faSitemap"
+  >
+    <button class="page-header-btn primary" (click)="openAddDepartmentModal()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      Add Department
+    </button>
+  </app-page-header>
+
+  <div class="hrms-fade-in">
+    <!-- Stats -->
+
+    <app-stats-cards [cards]="statsCards()"> </app-stats-cards>
+
+    <!-- Main Layout -->
+    <app-page-layout>
+      <app-management-table main title="All Departments" subtitle="Overview of all departments">
+        <div table-actions>
+          <div class="search-box">
+            <fa-icon [icon]="faSearch"></fa-icon>
+
+            <input
+              type="text"
+              placeholder="Search departments..."
+              (input)="searchTerm.set($any($event.target).value)"
+            />
+          </div>
+        </div>
+
+        <table table-content>
+          <thead>
+            <tr>
+              <th>Department</th>
+              <th>Employees</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @if (departments().length > 0) {
+              @for (department of departments(); track $index) {
+                <tr>
+                  <td>
+                    <div class="dept-cell">
+                      <div class="dept-icon">
+                        <fa-icon [icon]="faBuilding"></fa-icon>
+                      </div>
+
+                      <div>
+                        <h4>{{ department.name }}</h4>
+                        <!-- <span>{{ department.type }}</span> -->
+                      </div>
+                    </div>
+                  </td>
+
+                  <!-- <td>
+                    <div class="head-cell">
+                      <div class="avatar">
+                        {{ department.head[0] }}
+                      </div>
+
+                      <span>{{ department.head }}</span>
+                    </div>
+                  </td> -->
+
+                  <td>{{ department.employees }}</td>
+
+                  <!-- <td>{{ department.location }}</td> -->
+
+                  <td>
+                    <span class="status active">
+                      {{ department.status }}
+                    </span>
+                  </td>
+
+                  <td class="actions-cell">
+                    <button
+                      class="action-btn edit-btn"
+                      title="Edit Department"
+                      (click)="editDepartment(department)"
+                    >
+                      <fa-icon [icon]="faEdit"></fa-icon>
+                    </button>
+
+                    <button
+                      class="action-btn delete-btn"
+                      title="Delete Department"
+                      (click)="confirmDeleteDepartment(department)"
+                    >
+                      <fa-icon [icon]="faDelete"></fa-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="4" class="empty-state">No departments found</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </app-management-table>
+      <!-- Quick Actions -->
+      <app-quick-actions
+        sidebar
+        title="Quick Actions"
+        subtitle="Department shortcuts"
+          [icon]="faBolt"
+        [actions]="quickActions()"
+        (actionClick)="handleQuickAction($event)"
+      >
+      </app-quick-actions>
+    </app-page-layout>
+  </div>
+</div>
+
+<app-modal
+  [isOpen]="isAddDepartmentModalOpen"
+  [title]="selectedDepartment() ? 'Edit Department' : 'Add Department'"
+  width="580px"
+  (onClose)="closeAddDepartmentModal()"
+  (onConfirm)="saveDepartment()"
+>
+  <form [formGroup]="departmentForm" class="department-form">
+    <!-- Department Name -->
+    <div class="field">
+      <label>
+        Department Name
+        <span>*</span>
+      </label>
+
+      <input
+        type="text"
+        class="department-input"
+        formControlName="name"
+        placeholder="Enter department name"
+        [class.invalid]="isInvalid('name')"
+        [class.valid]="isValid('name')"
+      />
+
+      @if (isInvalid('name')) {
+        <div class="field-error">
+          {{ getError('name') }}
+        </div>
+      }
+    </div>
+
+    <!-- Status -->
+    <div class="field">
+      <label>
+        Status
+        <span>*</span>
+      </label>
+
+      <div
+        class="department-select custom-select"
+        [class.open]="statusDropdownOpen()"
+        [class.invalid]="isInvalid('status')"
+        [class.valid]="isValid('status')"
+        (click)="toggleStatusDropdown()"
+      >
+        <div class="custom-select-value">
+          {{ departmentForm.get('status')?.value || 'Select Status' }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (statusDropdownOpen()) {
+          <div class="custom-dropdown">
+            <div
+              class="custom-option"
+              [class.active]="departmentForm.get('status')?.value === 'Active'"
+              (click)="selectStatus('Active', $event)"
+            >
+              Active
+            </div>
+
+            <div
+              class="custom-option"
+              [class.active]="departmentForm.get('status')?.value === 'Inactive'"
+              (click)="selectStatus('Inactive', $event)"
+            >
+              Inactive
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (isInvalid('status')) {
+        <div class="field-error">
+          {{ getError('status') }}
+        </div>
+      }
+    </div>
+
+    <!-- Description -->
+    <div class="field">
+      <label>Description</label>
+
+      <textarea
+        rows="4"
+        class="department-textarea"
+        formControlName="description"
+        placeholder="Department description..."
+        [class.invalid]="isInvalid('description')"
+        [class.valid]="isValid('description')"
+      ></textarea>
+
+      @if (isInvalid('description')) {
+        <div class="field-error">
+          {{ getError('description') }}
+        </div>
+      }
+    </div>
+  </form>
+</app-modal>
+
+<app-modal
+  [isOpen]="isDeleteDepartmentModalOpen"
+  title="Delete Department"
+  width="500px"
+  (onClose)="closeDeleteDepartmentModal()"
+  (onConfirm)="deleteDepartment()"
+>
+  <div class="delete-content">
+    <h4>Delete "{{ selectedDepartment()?.name }}"?</h4>
+
+    <p>This action cannot be undone.</p>
+  </div>
+</app-modal>

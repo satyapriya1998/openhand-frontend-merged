@@ -1,0 +1,30 @@
+<section appSpotlight appReveal="up" class="relative border-y border-border py-8 glass-subtle backdrop-blur-sm">
+  <div class="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-background via-transparent to-background"></div>
+  <p appReveal="up" [delay]="120" class="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+    Trusted by startups, enterprises & technology teams worldwide
+  </p>
+  <div class="relative overflow-hidden">
+    <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent"></div>
+    <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent"></div>
+    <div class="flex w-max animate-marquee items-center gap-12 pr-12">
+      @for (name of logos; track $index) {
+        <span class="group flex items-center gap-2 whitespace-nowrap text-xl font-semibold tracking-tight text-muted-foreground/60 transition-colors hover:text-foreground">
+          <i class="fa-solid fa-cube text-base opacity-60 transition-opacity group-hover:opacity-100"></i>
+          {{ name }}
+        </span>
+      }
+    </div>
+  </div>
+  <div class="relative mt-6 overflow-hidden">
+    <div class="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-background to-transparent"></div>
+    <div class="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-background to-transparent"></div>
+    <div class="flex w-max animate-marquee-slow items-center gap-12 pr-12" style="animation-direction: reverse">
+      @for (name of logos.slice().reverse(); track $index) {
+        <span class="group flex items-center gap-2 whitespace-nowrap text-xl font-semibold tracking-tight text-muted-foreground/40 transition-colors hover:text-foreground">
+          <i class="fa-solid fa-hexagon-nodes text-base opacity-60 transition-opacity group-hover:opacity-100"></i>
+          {{ name }}
+        </span>
+      }
+    </div>
+  </div>
+</section>

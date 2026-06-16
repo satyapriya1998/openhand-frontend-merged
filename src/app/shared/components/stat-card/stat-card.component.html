@@ -1,0 +1,13 @@
+<div class="stat-card hrms-fade-in" [class]="'tone-' + color">
+  <div class="icon-wrap">
+    <i class="icon">{{ icon }}</i>
+  </div>
+  <div class="content">
+    <div class="label">{{ label }}</div>
+    <div class="value">{{ value }}</div>
+    <div *ngIf="trend" class="trend" [class.up]="trendUp" [class.down]="!trendUp">
+      <i class="trend-icon">{{ trendUp ? '↑' : '↓' }}</i>
+      <span>{{ trend }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="tabs-wrapper">
+  <nav class="tab-bar hrms-card hrms-fade-in" aria-label="Tabs">
+    <div class="tabs-inner">
+      <!-- Active Indicator -->
+      <div
+        class="tab-indicator"
+        [style.width.px]="indicatorWidth"
+        [style.transform]="
+          'translateX(' + indicatorLeft + 'px)'
+        "
+      ></div>
+
+      <!-- Tabs -->
+      <button
+        #tabButton
+        *ngFor="let tab of tabs"
+        type="button"
+        class="tab"
+        [class.active]="activeTab === tab.id"
+        [disabled]="tab.disabled"
+        (click)="selectTab(tab)"
+      >
+        <fa-icon *ngIf="tab.icon" [icon]="tab.icon"></fa-icon>
+
+        <span>{{ tab.label }}</span>
+      </button>
+    </div>
+  </nav>
+</div>

@@ -1,0 +1,33 @@
+.empty-state {
+  padding: 48px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+
+  .icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--hrms-primary-light);
+    color: var(--hrms-primary);
+    display: grid;
+    place-items: center;
+    margin-bottom: 8px;
+
+    .icon {
+      font-size: 32px;
+      height: 32px;
+      width: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-style: normal;
+    }
+  }
+
+  h3 { margin: 0; font-size: 16px; font-weight: 600; }
+  p  { margin: 0; color: var(--hrms-text-muted); font-size: 13px; max-width: 420px; }
+}

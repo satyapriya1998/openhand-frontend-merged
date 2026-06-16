@@ -1,0 +1,394 @@
+@use "sass:map";
+/* ===================================================== */
+/* 0. Landing Page Styles */
+/* ===================================================== */
+@import './styles-landing.scss';
+
+/* ===================================================== */
+/* 1. Tailwind */
+/* ===================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===================================================== */
+/* 2. Palette (SCSS Source of Truth) */
+/* ===================================================== */
+html,
+body {
+  overflow-x: hidden;
+}
+
+* {
+  min-width: 0;
+}
+$hrms-blue: (
+  50: #e8f0fe,
+  100: #c6d9fc,
+  200: #a0c0fa,
+  300: #7aa7f7,
+  400: #5d94f5,
+  500: #3f81f3,
+  600: #3979f1,
+  700: #316eef,
+  800: #2964ed,
+  900: #1b51ea,
+);
+
+$hrms-accent: (
+  50: #e0f7ee,
+  100: #b3ebd4,
+  200: #80deb8,
+  300: #4dd19b,
+  400: #26c685,
+  500: #00bc70,
+  600: #00ac64,
+  700: #009957,
+  800: #00874b,
+  900: #006635,
+);
+
+/* Helper function */
+@function color($palette, $shade) {
+  @return map.get($palette, $shade);
+}
+
+/* ===================================================== */
+/* 3. Design Tokens (CSS Variables) */
+/* ===================================================== */
+
+:root {
+  /* Primary */
+  --hrms-primary: #{color($hrms-blue, 600)};
+  --hrms-primary-light: #{color($hrms-blue, 100)};
+  --hrms-primary-dark: #{color($hrms-blue, 800)};
+
+  /* Accent */
+  --hrms-accent: #{color($hrms-accent, 500)};
+
+  /* Status */
+  --hrms-success: #10b981;
+  --hrms-warning: #f59e0b;
+  --hrms-danger: #ef4444;
+  --hrms-info: #0ea5e9;
+  --hrms-success-light: #22c55e;
+
+  /* Warning */
+  --hrms-warning-bg: rgba(245, 158, 11, 0.14);
+  --hrms-warning-bg-hover: rgba(245, 158, 11, 0.22);
+
+  --hrms-warning-border: rgba(245, 158, 11, 0.3);
+  --hrms-warning-border-hover: rgba(245, 158, 11, 0.45);
+
+  /* Danger */
+  --hrms-danger-bg: rgba(239, 68, 68, 0.14);
+  --hrms-danger-bg-hover: rgba(239, 68, 68, 0.22);
+
+  --hrms-danger-border: rgba(239, 68, 68, 0.3);
+  --hrms-danger-border-hover: rgba(239, 68, 68, 0.45);
+
+  /* Surfaces */
+  --hrms-bg: #edf0f7;
+  --hrms-surface: #ffffff;
+  --hrms-surface-2: #f9fafc;
+  --hrms-primary-soft-gradient: linear-gradient(135deg, #dbeafe, #bfdbfe);
+  --hrms-success-soft-gradient: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  --hrms-warning-soft-gradient: linear-gradient(135deg, #ffedd5, #fed7aa);
+  --hrms-violet-soft-gradient: linear-gradient(135deg, #ede9fe, #ddd6fe);
+  --hrms-danger-soft-gradient: linear-gradient(135deg, #fee2e2, #fecaca);
+  --hrms-surface-gradient: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+
+  /* Soft Gradients */
+  --hrms-primary-soft-gradient: linear-gradient(135deg, #dbeafe, #bfdbfe);
+
+  --hrms-purple-soft-gradient: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+
+  --hrms-success-soft-gradient: linear-gradient(135deg, #dcfce7, #bbf7d0);
+
+  --hrms-warning-soft-gradient: linear-gradient(135deg, #ffedd5, #fed7aa);
+
+  --hrms-violet-soft-gradient: linear-gradient(135deg, #ede9fe, #ddd6fe);
+
+  --hrms-danger-soft-gradient: linear-gradient(135deg, #fee2e2, #fecaca);
+
+  --hrms-primary-gradient: linear-gradient(135deg, var(--hrms-primary), #4f46e5);
+  --hrms-primary-rich-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+  /* Borders */
+  --hrms-border: #e5e9f2;
+  --hrms-border-strong: #d3d8e3;
+  --hrms-border-dashed: #bfd2f7;
+  --hrms-border-dashed-soft: #dbe7f5;
+  /* Text */
+  --hrms-text: #1f2937;
+  --hrms-text-muted: #6b7280;
+  --hrms-text-soft: #9ca3af;
+  --hrms-text-hard: white;
+
+  /* Radius */
+  --hrms-radius-sm: 6px;
+  --hrms-radius: 14px;
+  --hrms-radius-lg: 16px;
+  --hrms-radius-md: 18px;
+  --hrms-radius-xl: 20px;
+  --hrms-radius-2xl: 24px;
+  --hrms-radius-3xl: 28px;
+
+  /* Shadows */
+  --hrms-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --hrms-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  --hrms-shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.08);
+  --hrms-focus-ring: 0 0 0 4px color-mix(in srgb, var(--hrms-primary) 18%, transparent);
+  --hrms-shadow-primary: 0 10px 20px color-mix(in srgb, var(--hrms-primary) 22%, transparent);
+  --hrms-shadow-primary-soft: 0 6px 18px rgba(37, 99, 235, 0.12);
+  --hrms-shadow-primary-hover: 0 14px 28px color-mix(in srgb, var(--hrms-primary) 28%, transparent);
+  --hrms-shadow-soft: 0 2px 8px rgba(15, 23, 42, 0.03), 0 12px 30px rgba(15, 23, 42, 0.04);
+  --hrms-shadow-hover-lg: 0 10px 30px rgba(15, 23, 42, 0.06), 0 24px 50px rgba(15, 23, 42, 0.08);
+  --hrms-shadow-elevated:
+    0 10px 30px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --hrms-shadow-primary-elevated:
+    0 8px 18px rgba(37, 99, 235, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+
+  /* Layout */
+  --hrms-sidenav-w: 260px;
+  --hrms-sidenav-w-collapsed: 72px;
+  --hrms-topbar-h: 55px;
+
+  --hrms-sidebar-gradient: radial-gradient(
+    1200px 600px at 0% 0%,
+    #3b82f6 0%,
+    #1e3a8a 40%,
+    #0f172a 100%
+  );
+  --hrms-sidebar-float: rgba(93, 173, 226, 0.2);
+  --hrms-sidebar-float-strong: rgba(93, 173, 226, 0.3);
+
+  --hrms-sidebar-float-danger: rgba(231, 76, 60, 0.2);
+  --hrms-sidebar-float-success: rgba(46, 204, 113, 0.2);
+  --hrms-sidebar-float-warning: rgba(241, 196, 15, 0.2);
+
+  --hrms-sidebar-float-violet: rgba(155, 89, 182, 0.2);
+  /* Motion */
+  --hrms-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // form
+  --hrms-field-bg: #edf0f7;
+  --hrms-field-bg-focus: #eef6ff;
+  --hrms-label: rgb(2, 2, 83);
+  --hrms-field-border: #cdddf2;
+  --hrms-field-placeholder: #8ea3bc;
+
+  /* Card */
+  --hrms-card-bg: #ffffff;
+  --hrms-card-soft-bg: #f8fbff;
+  --hrms-card-soft-bg-2: #eef5ff;
+
+  /* Text */
+  --hrms-heading: #0f172a;
+  --hrms-subtitle: #64748b;
+  --hrms-text-secondary: #334155;
+
+  /* Input */
+  --hrms-input-border: #dbe4f0;
+
+  /* Soft Borders */
+  --hrms-soft-border: #edf2f7;
+  --hrms-soft-border-2: #e8eef7;
+
+  /* Soft Blue */
+  --hrms-soft-blue: #eff6ff;
+
+  /* Hover */
+  --hrms-hover-border: #d7e5fb;
+
+  /* Theme */
+  --hrms-theme-border: #e5edf8;
+  --hrms-theme-hover: #c8daf7;
+
+  /* Scrollbar */
+  --hrms-scrollbar: #cbd5e1;
+  --hrms-scrollbar-hover: #94a3b8;
+
+  /* Overlay */
+  --hrms-overlay: rgba(15, 23, 42, 0.45);
+
+  /* Status Colors */
+  --hrms-purple: #9333ea;
+  --hrms-orange: #ea580c;
+  --hrms-red: #dc2626;
+  --hrms-green: #16a34a;
+  --hrms-violet: #7c3aed;
+
+  // tab
+  --hrms-tab-bg: #dfeaff;
+  --hrms-tab-text: #3264ee;
+
+  // cards
+  --hrms-soft-gradient: linear-gradient(180deg, #f8fbff 0%, #eef5ff 100%);
+}
+
+/* ===================================================== */
+/* 4. Base Styles */
+/* ===================================================== */
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html,
+  body {
+    @apply h-full m-0 p-0;
+  }
+
+  body {
+    font-family: 'Inter', 'Roboto', 'Helvetica Neue', sans-serif;
+    background: var(--hrms-bg);
+    color: var(--hrms-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: var(--hrms-primary);
+    text-decoration: none;
+    transition: var(--hrms-transition);
+  }
+
+  a:hover {
+    color: var(--hrms-primary-dark);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+    margin-bottom: 8px;
+    color: var(--hrms-text);
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    margin-bottom: 8px;
+    color: var(--hrms-text-muted);
+  }
+}
+
+/* ===================================================== */
+/* 5. Components (Reusable UI) */
+/* ===================================================== */
+@layer components {
+  /* Page */
+  .hrms-page {
+    @apply max-w-[1600px] mx-auto;
+    padding: 10px 24px 28px 40px;
+  }
+
+  @media (max-width: 768px) {
+    .hrms-page {
+      @apply p-4;
+    }
+  }
+
+  /* Card */
+  .hrms-card {
+    background: var(--hrms-surface);
+    border: 1px solid var(--hrms-border);
+    border-radius: var(--hrms-radius);
+    box-shadow: var(--hrms-shadow-sm);
+    padding: 20px;
+    transition: var(--hrms-transition);
+  }
+
+  .hrms-card:hover {
+    box-shadow: var(--hrms-shadow);
+  }
+
+  /* Text */
+  .hrms-muted {
+    color: var(--hrms-text-muted);
+  }
+
+  /* Chip */
+  .hrms-chip {
+    @apply inline-flex items-center gap-1 text-xs font-semibold rounded-full;
+    padding: 4px 10px;
+    background: var(--hrms-primary-light);
+    color: var(--hrms-primary);
+  }
+
+  .hrms-chip.success {
+    @apply bg-green-100 text-green-700;
+  }
+
+  .hrms-chip.danger {
+    @apply bg-red-100 text-red-700;
+  }
+
+  .hrms-chip.warning {
+    @apply bg-yellow-100 text-yellow-700;
+  }
+
+  .hrms-chip.info {
+    @apply bg-blue-100 text-blue-700;
+  }
+
+  .hrms-chip.neutral {
+    @apply bg-gray-100 text-gray-600;
+  }
+
+  /* Button Row */
+  .hrms-btn-row {
+    @apply flex gap-3 flex-wrap;
+  }
+}
+
+/* ===================================================== */
+/* 6. Scrollbar */
+/* ===================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ===================================================== */
+/* 7. Animations */
+/* ===================================================== */
+
+@keyframes hrms-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hrms-fade-in {
+  animation: hrms-fade-in 0.25s ease-out;
+}
+
+@keyframes hrms-skeleton {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}

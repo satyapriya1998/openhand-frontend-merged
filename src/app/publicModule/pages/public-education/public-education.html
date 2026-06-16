@@ -1,0 +1,376 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Education Details"
+    subtitle="Manage your educational qualifications and academic records"
+    [icon]="faGraduationCap"
+  >
+  </app-page-header>
+
+  <div class="mt-6">
+    <div class="organization-page">
+      <div class="organization-grid">
+        <!-- LEFT -->
+        <div class="organization-form-card">
+          <app-page-sub-header
+            title="Academic Information"
+            subtitle="Manage your education and qualification details"
+            [icon]="faGraduationCap"
+          >
+            @if (isSaved() && !isEditMode()) {
+              <button class="page-header-btn warning" type="button" (click)="enableEdit()">
+                <fa-icon [icon]="faPen"></fa-icon>
+                Edit
+              </button>
+            }
+
+            @if (isSaved() && isEditMode()) {
+              <button class="page-header-btn danger" type="button" (click)="cancelEdit()">
+                <fa-icon [icon]="faXmark"></fa-icon>
+                Cancel
+              </button>
+            }
+          </app-page-sub-header>
+
+          <form
+            [formGroup]="educationForm"
+            class="organization-form"
+            (ngSubmit)="saveEducation()"
+          >
+            <!-- QUALIFICATION LEVEL -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Qualification Level
+                  <span>*</span>
+                </label>
+
+                <div
+                  class="hrms-select custom-select"
+                  [class.open]="qualificationDropdownOpen()"
+                  [class.invalid]="isInvalid('qualificationLevel')"
+                  (click)="toggleQualificationDropdown()"
+                >
+                  <div class="custom-select-value">
+                    {{
+                      getQualificationLabel(
+                        educationForm.get('qualificationLevel')?.value
+                      )
+                    }}
+                  </div>
+
+                  <div class="custom-select-icon">
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+
+                  @if (qualificationDropdownOpen()) {
+                    <div class="custom-dropdown">
+                      @for (
+                        qualification of qualificationLevels;
+                        track qualification.value
+                      ) {
+                        <div
+                          class="custom-option"
+                          [class.active]="
+                            educationForm.get('qualificationLevel')?.value ===
+                            qualification.value
+                          "
+                          (click)="
+                            selectQualification(qualification.value, $event)
+                          "
+                        >
+                          {{ qualification.label }}
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+
+                @if (isInvalid('qualificationLevel')) {
+                  <div class="field-error">
+                    {{ getError('qualificationLevel') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Degree Name
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="degreeName"
+                  placeholder="Enter degree name"
+                  [class.invalid]="isInvalid('degreeName')"
+                />
+
+                @if (isInvalid('degreeName')) {
+                  <div class="field-error">
+                    {{ getError('degreeName') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- INSTITUTION -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Institution Name
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="institutionName"
+                  placeholder="Enter institution name"
+                  [class.invalid]="isInvalid('institutionName')"
+                />
+
+                @if (isInvalid('institutionName')) {
+                  <div class="field-error">
+                    {{ getError('institutionName') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  University / Board
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="universityBoard"
+                  placeholder="Enter university or board"
+                  [class.invalid]="isInvalid('universityBoard')"
+                />
+
+                @if (isInvalid('universityBoard')) {
+                  <div class="field-error">
+                    {{ getError('universityBoard') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- SPECIALIZATION -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Specialization
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="specialization"
+                  placeholder="Enter specialization"
+                  [class.invalid]="isInvalid('specialization')"
+                />
+
+                @if (isInvalid('specialization')) {
+                  <div class="field-error">
+                    {{ getError('specialization') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Percentage / CGPA
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="percentageCgpa"
+                  placeholder="Enter percentage or CGPA"
+                  [class.invalid]="isInvalid('percentageCgpa')"
+                />
+
+                @if (isInvalid('percentageCgpa')) {
+                  <div class="field-error">
+                    {{ getError('percentageCgpa') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- YEARS -->
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Start Year
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="startYear"
+                  maxlength="4"
+                  placeholder="e.g. 2018"
+                  [class.invalid]="isInvalid('startYear')"
+                />
+
+                @if (isInvalid('startYear')) {
+                  <div class="field-error">
+                    {{ getError('startYear') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  End Year
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="endYear"
+                  maxlength="4"
+                  placeholder="e.g. 2022"
+                  [class.invalid]="isInvalid('endYear')"
+                />
+
+                @if (isInvalid('endYear')) {
+                  <div class="field-error">
+                    {{ getError('endYear') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- ACTIONS -->
+            @if (isEditMode()) {
+              <div class="form-actions">
+                <button
+                  type="button"
+                  class="secondary-btn"
+                  (click)="resetForm()"
+                >
+                  Reset
+                </button>
+
+                <button type="submit" class="primary-btn">
+                  {{ isSaved() ? 'Update Changes' : 'Save Changes' }}
+                </button>
+              </div>
+            }
+          </form>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="organization-right-section">
+          <div class="organization-brand-card">
+            <app-page-sub-header
+              title="Supporting Documents"
+              subtitle="Upload educational certificates and supporting documents"
+              [icon]="faFileArrowUp"
+            >
+            </app-page-sub-header>
+
+            <!-- UPLOAD -->
+            <label class="logo-upload-box" [class.invalid]="documentError()">
+              <input
+                type="file"
+                hidden
+                multiple
+                accept=".pdf,.png,.jpg,.jpeg"
+                (change)="onDocumentUpload($event)"
+              />
+
+              <div class="logo-empty">
+                <div class="empty-icon">
+                  <fa-icon [icon]="faFileArrowUp"></fa-icon>
+                </div>
+
+                <div class="upload-title">Upload Documents</div>
+
+                <div class="upload-sub">
+                  PDF, PNG, JPG, JPEG supported (Max 5MB)
+                </div>
+              </div>
+            </label>
+
+            @if (documentError()) {
+              <div class="field-error logo-error-text">
+                {{ documentError() }}
+              </div>
+            }
+
+            <!-- DOCUMENT LIST -->
+            @if (uploadedDocuments().length > 0) {
+              <div class="uploaded-documents-list mt-4">
+                @for (doc of uploadedDocuments(); track doc.name; let i = $index) {
+                  <div class="uploaded-document-item">
+                    <div class="document-info">
+                      <div class="document-icon">
+                        <fa-icon [icon]="faFile"></fa-icon>
+                      </div>
+
+                      <div class="document-meta">
+                        <div class="document-name">
+                          {{ doc.name }}
+                        </div>
+
+                        <div class="document-size">
+                          {{ doc.size }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="document-actions">
+                      <button
+                        type="button"
+                        class="icon-btn"
+                        (click)="viewDocument(doc.url)"
+                      >
+                        <fa-icon [icon]="faEye"></fa-icon>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="icon-btn danger"
+                        (click)="removeDocument(i)"
+                      >
+                        <fa-icon [icon]="faTrash"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- DOCUMENT RULES -->
+<div class="document-rules-card">
+  <div class="rules-title">
+    Upload Guidelines
+  </div>
+
+  <ul class="rules-list">
+    <li>Only PDF, PNG, JPG and JPEG files are allowed</li>
+    <li>Maximum allowed file size is 5MB per document</li>
+    <li>Ensure uploaded documents are clear and readable</li>
+    <li>Multiple supporting documents can be uploaded</li>
+
+  </ul>
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

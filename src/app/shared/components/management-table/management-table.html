@@ -1,0 +1,65 @@
+<!-- <div class="table-card">
+
+  <div class="table-header">
+
+    <div>
+      <h3>{{ title() }}</h3>
+      <p>{{ subtitle() }}</p>
+    </div>
+
+    <div class="table-actions">
+      <ng-content select="[table-actions]"></ng-content>
+    </div>
+
+  </div>
+
+  <div class="table-wrapper">
+    <ng-content select="[table-content]"></ng-content>
+  </div>
+
+</div> -->
+
+
+
+
+
+
+<div class="table-card">
+  <app-page-sub-header
+    class="table-header"
+    [title]="title()"
+    [subtitle]="subtitle()"
+    [icon]="icon()"
+    variant="card"
+  >
+    <ng-content select="[table-actions]"></ng-content>
+  </app-page-sub-header>
+
+  <div class="table-wrapper">
+    <ng-content select="[table-content]"></ng-content>
+  </div>
+
+<div class="table-footer">
+  <div class="footer-info">
+    <fa-icon [icon]="faList"></fa-icon>
+    <span>Showing 1–10 of 100 records</span>
+  </div>
+
+  <div class="pagination">
+    <button class="page-btn">
+      <fa-icon [icon]="faChevronLeft"></fa-icon>
+  
+    </button>
+
+    <div class="page-indicator">
+      Page 1 of 10
+    </div>
+
+    <button class="page-btn">
+    
+      <fa-icon [icon]="faChevronRight"></fa-icon>
+    </button>
+  </div>
+</div>
+
+</div>  

@@ -1,0 +1,333 @@
+<div class="leave-page">
+  <!-- Info Bar -->
+
+<!-- INFO BAR -->
+
+<div class="info-bar">
+  <!-- Total -->
+
+  <button
+    class="info-pill total"
+    [class.active]="statusFilter() === 'All'"
+    (click)="statusFilter.set('All')"
+  >
+    <div class="pill-glow"></div>
+
+    <div class="pill-content">
+      <div class="pill-top">
+        <span class="pill-label">
+          Total Requests
+        </span>
+
+        <span class="pill-badge">
+          {{ total() }}
+        </span>
+      </div>
+
+      <div class="pill-value">
+        {{ total() }}
+      </div>
+    </div>
+  </button>
+
+  <!-- Approved -->
+
+  <button
+    class="info-pill approved"
+    [class.active]="
+      statusFilter() === 'Approved'
+    "
+    (click)="statusFilter.set('Approved')"
+  >
+    <div class="pill-glow"></div>
+
+    <div class="pill-dot"></div>
+
+    <div class="pill-content">
+      <div class="pill-top">
+        <span class="pill-label">
+          Approved
+        </span>
+
+        <span class="pill-badge success">
+          {{ approved() }}
+        </span>
+      </div>
+
+      <div class="pill-value">
+        {{ approved() }}
+      </div>
+    </div>
+  </button>
+
+  <!-- Pending -->
+
+  <button
+    class="info-pill pending"
+    [class.active]="
+      statusFilter() === 'Pending'
+    "
+    (click)="statusFilter.set('Pending')"
+  >
+    <div class="pill-glow"></div>
+
+    <div class="pill-dot"></div>
+
+    <div class="pill-content">
+      <div class="pill-top">
+        <span class="pill-label">
+          Pending
+        </span>
+
+        <span class="pill-badge warning">
+          {{ pending() }}
+        </span>
+      </div>
+
+      <div class="pill-value">
+        {{ pending() }}
+      </div>
+    </div>
+  </button>
+
+  <!-- Rejected -->
+
+  <button
+    class="info-pill rejected"
+    [class.active]="
+      statusFilter() === 'Rejected'
+    "
+    (click)="statusFilter.set('Rejected')"
+  >
+    <div class="pill-glow"></div>
+
+    <div class="pill-dot"></div>
+
+    <div class="pill-content">
+      <div class="pill-top">
+        <span class="pill-label">
+          Rejected
+        </span>
+
+        <span class="pill-badge danger">
+          {{ rejected() }}
+        </span>
+      </div>
+
+      <div class="pill-value">
+        {{ rejected() }}
+      </div>
+    </div>
+  </button>
+</div>
+
+  <!-- Table -->
+
+  <div class="table-card">
+    <!-- Header -->
+
+    <div class="table-header">
+      <div>
+        <h3>Leave Requests</h3>
+        <p>
+          Manage employee leave applications
+        </p>
+      </div>
+
+      <div class="table-actions">
+        <!-- Search -->
+
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Search employee or reason..."
+            [ngModel]="search()"
+            (ngModelChange)="search.set($event)"
+          />
+        </div>
+
+        <!-- Type -->
+
+        <select
+          class="filter-select"
+          [ngModel]="typeFilter()"
+          (ngModelChange)="typeFilter.set($event)"
+        >
+          <option value="All">
+            All Types
+          </option>
+
+          <option value="Casual">
+            Casual
+          </option>
+
+          <option value="Earned">
+            Earned
+          </option>
+
+          <option value="Comp Off">
+            Comp Off
+          </option>
+
+          <option value="Special">
+            Special
+          </option>
+
+          <option value="Sick">
+            Sick
+          </option>
+        </select>
+
+        <!-- Status -->
+
+        <select
+          class="filter-select"
+          [ngModel]="statusFilter()"
+          (ngModelChange)="statusFilter.set($event)"
+        >
+          <option value="All">
+            All Status
+          </option>
+
+          <option value="Approved">
+            Approved
+          </option>
+
+          <option value="Pending">
+            Pending
+          </option>
+
+          <option value="Rejected">
+            Rejected
+          </option>
+
+          <option value="Cancelled">
+            Cancelled
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table -->
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Employee</th>
+            <th>Request Date</th>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Requested</th>
+            <th>Status</th>
+            <th>Reason</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (leave of filteredLeaves(); track leave.id;
+          let i = $index) {
+
+          <tr>
+            <td>
+              {{ i + 1 }}
+            </td>
+
+            <td>
+              <div class="employee-cell">
+                <div class="employee-avatar">
+                  {{
+                    leave.employee.charAt(0)
+                  }}
+                </div>
+
+                <div>
+                  <h4>
+                    {{ leave.employee }}
+                  </h4>
+
+                  <span>
+                    {{ leave.employeeId }}
+                  </span>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              {{ leave.requestDate }}
+            </td>
+
+            <td>
+              <span class="leave-badge">
+                {{ leave.type }}
+              </span>
+            </td>
+
+            <td>
+              {{ leave.startDate }}
+            </td>
+
+            <td>
+              {{ leave.endDate }}
+            </td>
+
+            <td>
+              {{ leave.requestedDays }}
+              day(s)
+            </td>
+
+            <td>
+              <span
+                class="status"
+                [class]="
+                  getStatusClass(
+                    leave.status
+                  )
+                "
+              >
+                {{ leave.status }}
+              </span>
+            </td>
+
+            <td class="reason">
+              {{ leave.reason }}
+            </td>
+
+            <td>
+              <div class="action-group">
+                <button
+                  class="approve-btn"
+                  (click)="approveLeave(leave.id)"
+                >
+                  Accept
+                </button>
+
+                <button
+                  class="reject-btn"
+                  (click)="rejectLeave(leave.id)"
+                >
+                  Reject
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          }
+
+          @if (filteredLeaves().length === 0) {
+          <tr>
+            <td colspan="10">
+              <div class="empty-state">
+                No leave requests found
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,155 @@
+  <div class="leave-details">
+      <!-- Loading Skeleton -->
+      <div *ngIf="loading" class="skeleton-container">
+        <div *ngFor="let i of [1,2,3,4]" class="skeleton-card">
+          <div class="skeleton-icon"></div>
+          <div class="skeleton-text"></div>
+          <div class="skeleton-progress"></div>
+        </div>
+      </div>
+
+      <ng-container *ngIf="!loading">
+        <!-- Balance Grid -->
+        <div class="balance-grid">
+          <div class="balance-card" *ngFor="let b of balances" [style.--card-color]="b.color">
+            <div class="animated-border"></div>
+            <div class="bc-top">
+              <div class="bc-icon" [style.background]="b.color">
+                <fa-icon [icon]="b.icon"></fa-icon>
+              </div>
+              <div>
+                <div class="bc-type">{{ b.type }}</div>
+                <div class="bc-sub">{{ b.remaining }} of {{ b.total }} left</div>
+              </div>
+            </div>
+
+            <div class="bc-progress">
+              <div class="bc-track">
+                <div class="bc-fill" [style.width.%]="percentUsed(b)" [style.background]="b.color"></div>
+              </div>
+              <div class="bc-stats">
+                <div>
+                  <span class="stat-value">{{ b.total }}</span>
+                  <span class="stat-label">Total</span>
+                </div>
+                <div>
+                  <span class="stat-value">{{ b.used }}</span>
+                  <span class="stat-label">Used</span>
+                </div>
+                <div class="remaining-stats">
+                  <span class="stat-value remaining-value">{{ b.remaining }}</span>
+                  <span class="stat-label">Remaining</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Holiday Calendar -->
+        <div class="holiday-card">
+          <div class="card-header">
+            <div>
+              <h3>Holiday Calendar 2025</h3>
+              <p>Official holidays observed by the organization</p>
+            </div>
+            <div class="header-actions">
+              <div class="filter-group">
+                <button class="filter-chip" [class.active]="selectedFilter === 'all'" (click)="selectedFilter = 'all'">
+                  All
+                </button>
+                <button class="filter-chip" [class.active]="selectedFilter === 'national'" (click)="selectedFilter = 'national'">
+                  <fa-icon [icon]="faGlobe" size="xs"></fa-icon>
+                  National
+                </button>
+                <button class="filter-chip" [class.active]="selectedFilter === 'festival'" (click)="selectedFilter = 'festival'">
+                  <fa-icon [icon]="faStar" size="xs"></fa-icon>
+                  Festival
+                </button>
+                <button class="filter-chip" [class.active]="selectedFilter === 'regional'" (click)="selectedFilter = 'regional'">
+                  <fa-icon [icon]="faMapMarkerAlt" size="xs"></fa-icon>
+                  Regional
+                </button>
+              </div>
+              <button class="download-btn">
+                <fa-icon [icon]="faDownload"></fa-icon>
+                <span>Export</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="holiday-table-wrap">
+            <table class="holiday-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Holiday</th>
+                  <th>Type</th>
+                  <th>Day</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let h of filteredHolidays">
+                  <td>
+                    <div class="date-cell">
+                      <div class="mini-calendar">
+                        <span class="month">{{ h.date | date:'MMM' }}</span>
+                        <span class="day">{{ h.date | date:'d' }}</span>
+                      </div>
+                      <span class="full-date">{{ h.date | date:'EEE, MMM d' }}</span>
+                    </div>
+                   </td>
+                   <td>
+                    <div class="holiday-name">
+                      <fa-icon [icon]="getHolidayIcon(h.type)" [style.color]="getHolidayColor(h.type)"></fa-icon>
+                      <span>{{ h.name }}</span>
+                      <span class="location-badge" *ngIf="h.location">
+                        <fa-icon [icon]="faMapMarkerAlt" size="xs"></fa-icon>
+                        {{ h.location }}
+                      </span>
+                    </div>
+                   </td>
+                   <td>
+                    <span class="type-badge" [class]="h.type">
+                      {{ h.type | titlecase }}
+                    </span>
+                   </td>
+                   <td>
+                    <span class="day-badge" [class.weekend]="isWeekend(h.day)">
+                      {{ h.day }}
+                    </span>
+                   </td>
+                 </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Holiday Stats Bar -->
+          <div class="stats-bar">
+            <div class="stat">
+              <span class="stat-number">{{ holidays.length }}</span>
+              <span class="stat-text">Total Holidays</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-number">{{ getHolidayCount('national') }}</span>
+              <span class="stat-text">National</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-number">{{ getHolidayCount('festival') }}</span>
+              <span class="stat-text">Festival</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-number">{{ getHolidayCount('regional') }}</span>
+              <span class="stat-text">Regional</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+              <span class="stat-number">{{ getWeekendCount() }}</span>
+              <span class="stat-text">Weekend Holidays</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>

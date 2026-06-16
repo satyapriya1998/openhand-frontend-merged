@@ -1,0 +1,344 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Roles"
+    subtitle="Manage roles and access control permissions"
+    [icon]="faUserShield"
+  >
+   
+
+    <button class="page-header-btn primary" (click)="openAddRoleModal()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      Create Role
+    </button>
+  </app-page-header>
+
+  <div class="hrms-fade-in">
+        <!-- Stats -->
+
+    <app-stats-cards
+  [cards]="statsCards()">
+</app-stats-cards>
+   
+
+<app-page-layout>
+     <!-- Table -->
+     <app-management-table main
+  title="All Roles"
+  subtitle="Overview of all organization roles"
+  [icon]="faUserShield"
+>
+  <div table-actions>
+    <div class="search-box">
+      <fa-icon [icon]="faSearch"></fa-icon>
+
+      <input
+        type="text"
+        placeholder="Search roles..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+      />
+    </div>
+  </div>
+
+  <table table-content>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Description</th>
+        <th>Users</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (role of filteredRoles(); track role.id) {
+        <tr>
+          <td>
+            <div class="role-cell">
+              <div class="role-avatar">
+                {{ role.name[0] }}
+              </div>
+
+              <div>
+                <h4>{{ role.name }}</h4>
+                <span>{{ role.type }}</span>
+              </div>
+            </div>
+          </td>
+
+          <td>{{ role.description }}</td>
+
+          <td>{{ role.users }}</td>
+
+          <td>
+            <span class="status active">
+              {{ role.status }}
+            </span>
+          </td>
+
+          <td>
+            <div class="action-buttons">
+              <button
+                class="action-btn edit"
+                (click)="editRole(role)"
+                title="Edit Role"
+              >
+                <fa-icon [icon]="faPenToSquare"></fa-icon>
+              </button>
+
+              <button
+                class="action-btn delete"
+                (click)="deleteRole(role)"
+                title="Delete Role"
+              >
+                <fa-icon [icon]="faTrashCan"></fa-icon>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+
+      @if (isLoading()) {
+        <tr>
+          <td colspan="5" class="text-center">
+            Loading roles...
+          </td>
+        </tr>
+      } @else if (filteredRoles().length === 0) {
+        <tr>
+          <td colspan="5" class="text-center">
+            No roles found
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</app-management-table>
+<app-quick-actions sidebar
+  title="Quick Actions"
+  subtitle="Role shortcuts"
+    [icon]="faBolt"
+  [actions]="quickActions"
+  (actionClick)="handleQuickAction($event)"
+>
+</app-quick-actions>
+
+</app-page-layout>
+
+    
+  </div>
+</div>
+
+<app-modal
+  [isOpen]="isAddRoleModalOpen"
+  title="Create Role"
+  width="580px"
+  (onClose)="closeAddRoleModal()"
+  (onConfirm)="saveRole()"
+>
+  <form class="modal-form">
+    <div class="form-group">
+      <label>Role Name <span>*</span></label>
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Enter role name"
+        [(ngModel)]="newRole.name"
+        name="roleName"
+        [class.invalid]="isRoleInvalid('name')"
+        [class.valid]="!isRoleInvalid('name') && newRole.name?.trim()"
+      />
+      @if (isRoleInvalid('name')) {
+        <div class="field-error">
+          {{ getRoleError('name') }}
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Status <span>*</span></label>
+
+      <!-- <select
+        class="form-control"
+        [(ngModel)]="newRole.status"
+        name="roleStatus"
+        [class.invalid]="isRoleInvalid('status')"
+        [class.valid]="!isRoleInvalid('status') && newRole.status?.trim()"
+      >
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select> -->
+
+      <div
+        class="form-control custom-select"
+        [class.open]="statusDropdownOpen()"
+        [class.invalid]="isRoleInvalid('status')"
+        [class.valid]="!isRoleInvalid('status') && newRole.status"
+        (click)="toggleStatusDropdown()"
+      >
+        <div class="custom-select-value">
+          {{ newRole.status || 'Select Status' }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (statusDropdownOpen()) {
+          <div class="custom-dropdown">
+            <div
+              class="custom-option"
+              [class.active]="newRole.status === 'Active'"
+              (click)="selectStatus('Active', $event)"
+            >
+              Active
+            </div>
+
+            <div
+              class="custom-option"
+              [class.active]="newRole.status === 'Inactive'"
+              (click)="selectStatus('Inactive', $event)"
+            >
+              Inactive
+            </div>
+          </div>
+        }
+      </div>
+      @if (isRoleInvalid('status')) {
+        <div class="field-error">
+          {{ getRoleError('status') }}
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Description <span>*</span></label>
+
+      <textarea
+        rows="4"
+        class="form-control"
+        placeholder="Role description..."
+        [(ngModel)]="newRole.description"
+        name="roleDescription"
+        [class.invalid]="isRoleInvalid('description')"
+        [class.valid]="!isRoleInvalid('description') && newRole.description.trim()"
+      ></textarea>
+      @if (isRoleInvalid('description')) {
+        <div class="field-error">
+          {{ getRoleError('description') }}
+        </div>
+      }
+    </div>
+  </form>
+</app-modal>
+
+<app-modal
+  [isOpen]="isEditRoleModalOpen"
+  title="Edit Role"
+  width="580px"
+  (onClose)="isEditRoleModalOpen.set(false)"
+  (onConfirm)="updateRole()"
+>
+  <form class="modal-form">
+    <div class="form-group">
+      <label>Role Name</label>
+
+      <input
+        type="text"
+        class="form-control"
+        [(ngModel)]="newRole.name"
+        name="editRoleName"
+        [class.invalid]="isRoleInvalid('name')"
+        [class.valid]="!isRoleInvalid('name') && newRole.name?.trim()"
+      />
+      @if (isRoleInvalid('name')) {
+        <div class="field-error">
+          {{ getRoleError('name') }}
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+
+      <div
+        class="form-control custom-select"
+        [class.open]="statusDropdownOpen()"
+        [class.invalid]="isRoleInvalid('status')"
+        [class.valid]="!isRoleInvalid('status') && newRole.status"
+        (click)="toggleStatusDropdown()"
+      >
+        <div class="custom-select-value">
+          {{ newRole.status || 'Select Status' }}
+        </div>
+
+        <div class="custom-select-icon">
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+        @if (statusDropdownOpen()) {
+          <div class="custom-dropdown">
+            <div
+              class="custom-option"
+              [class.active]="newRole.status === 'Active'"
+              (click)="selectStatus('Active', $event)"
+            >
+              Active
+            </div>
+
+            <div
+              class="custom-option"
+              [class.active]="newRole.status === 'Inactive'"
+              (click)="selectStatus('Inactive', $event)"
+            >
+              Inactive
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- <select class="form-control" [(ngModel)]="newRole.status" name="editRoleStatus">
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select> -->
+    </div>
+
+    <div class="form-group">
+      <label>Description</label>
+
+      <textarea
+        rows="4"
+        class="form-control"
+        [(ngModel)]="newRole.description"
+        name="editRoleDescription"
+        [class.invalid]="isRoleInvalid('description')"
+        [class.valid]="!isRoleInvalid('description') && newRole.description?.trim()"
+      ></textarea>
+      @if (isRoleInvalid('description')) {
+        <div class="field-error">
+          {{ getRoleError('description') }}
+        </div>
+      }
+    </div>
+  </form>
+</app-modal>
+<app-modal
+  [isOpen]="isDeleteRoleModalOpen"
+  title="Delete Role"
+  width="420px"
+  (onClose)="isDeleteRoleModalOpen.set(false)"
+  (onConfirm)="confirmDeleteRole()"
+>
+  <div class="delete-content">
+    <h3>Delete Role?</h3>
+
+    <p>
+      Are you sure you want to delete
+      <strong>{{ selectedRole?.name }}</strong> ?
+    </p>
+  </div>
+</app-modal>

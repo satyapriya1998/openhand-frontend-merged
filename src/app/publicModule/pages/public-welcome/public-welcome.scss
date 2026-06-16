@@ -1,0 +1,751 @@
+/* public-welcome.scss */
+
+.welcome-page {
+  min-height: 100vh;
+
+  padding: 24px;
+
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.05), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.05), transparent 30%),
+    #f8fafc;
+}
+
+/* HERO */
+
+.hero-card {
+  display: grid;
+  grid-template-columns: 1.5fr 320px;
+  gap: 32px;
+
+  padding: 32px;
+
+  margin-bottom: 24px;
+
+  border-radius: 28px;
+
+  background:
+      radial-gradient(circle at top left, rgba(59, 130, 246, 0.5), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.4), transparent 30%),
+      linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+  
+
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.15);
+}
+
+.hero-badge {
+  width: fit-content;
+
+  margin-bottom: 18px;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  color: #cbd5e1;
+
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.hero-content h1 {
+  margin: 0;
+
+  color: white;
+
+  font-size: 2.6rem;
+  font-weight: 800;
+}
+
+.hero-content h1 span {
+  color: #93c5fd;
+}
+
+.hero-content p {
+  margin:
+    16px 0
+    28px;
+
+  color: #94a3b8;
+
+  line-height: 1.7;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.hero-item {
+  padding: 16px;
+
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hero-item label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #94a3b8;
+
+  font-size: 0.75rem;
+}
+
+.hero-item strong {
+  color: white;
+
+  font-size: 0.95rem;
+}
+
+.hero-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+
+/* SMALLER CIRCLE */
+
+.progress-circle {
+  position: relative;
+
+  width: 180px;
+  height: 180px;
+
+  flex-shrink: 0;
+}
+
+.progress-circle svg {
+  width: 180px;
+  height: 180px;
+
+  transform: rotate(-90deg);
+}
+
+.progress-circle circle {
+  fill: none;
+  stroke-width: 10;
+}
+
+.track {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.progress {
+  stroke: #60a5fa;
+
+  stroke-linecap: round;
+
+  stroke-dasharray: 327;
+}
+
+.circle-content {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-content h2 {
+  margin: 0;
+
+  color: white;
+
+  font-size: 2.2rem;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+.circle-content span {
+  margin-top: 6px;
+
+  color: #94a3b8;
+
+  font-size: 0.82rem;
+}
+
+/* GLASS DATE CARD */
+
+.joining-date-card {
+  position: relative;
+
+  width: 100%;
+  max-width: 190px;
+
+  padding: 14px 16px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(96, 165, 250, 0.18),
+      rgba(59, 130, 246, 0.08)
+    );
+
+  border:
+    1px solid rgba(147, 197, 253, 0.18);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  overflow: hidden;
+
+  text-align: center;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: '';
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+      radial-gradient(
+        circle at top left,
+        rgba(255, 255, 255, 0.08),
+        transparent 60%
+      );
+
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+
+    border-color:
+      rgba(147, 197, 253, 0.3);
+
+    box-shadow:
+      0 14px 32px rgba(15, 23, 42, 0.24);
+  }
+
+  label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    color: #93c5fd;
+  }
+
+  strong {
+    display: block;
+
+    color: white;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+}
+
+/* CONTENT */
+
+.content-grid {
+  display: grid;
+grid-template-columns: 1.8fr 0.8fr;
+  gap: 24px;
+}
+
+.modern-card {
+  padding: 24px;
+
+  border-radius: 26px;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+/* CARD HEADER */
+
+.card-header {
+  margin-bottom: 32px;
+}
+
+.card-header h2 {
+  margin: 0 0 8px;
+
+  color: #0f172a;
+
+  font-size: 1.4rem;
+}
+
+.card-header p {
+  margin: 0;
+
+  color: #64748b;
+}
+
+/* PROGRESS TABS */
+
+.progress-tabs-wrapper {
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 8px;
+
+  margin-bottom: 25px;
+
+  overflow-x: auto;
+  padding-top: 6px;
+}
+
+.progress-line {
+  position: absolute;
+
+  top: 22px;
+  left: 80px;
+  right: 80px;
+
+  height: 3px;
+
+  background: #e2e8f0;
+}
+
+.progress-step {
+  position: relative;
+
+  z-index: 2;
+
+  flex: 1;
+  min-width: 120px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.progress-step:hover {
+  // transform: translateY(-1px);
+}
+
+.progress-step.active .step-circle {
+  // transform: scale(1.08);
+
+  box-shadow:
+    0 0 0 6px rgba(59, 130, 246, 0.2);
+}
+
+/* STEP CIRCLE */
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  color: white;
+
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.step-circle.completed {
+  background:
+    linear-gradient(
+      135deg,
+      #22c55e,
+      #16a34a
+    );
+}
+
+.step-circle.pending {
+  background:
+    linear-gradient(
+      135deg,
+      #f59e0b,
+      #d97706
+    );
+}
+
+.step-circle.rejected {
+  background:
+    linear-gradient(
+      135deg,
+      #ef4444,
+      #dc2626
+    );
+}
+
+/* STEP CONTENT */
+
+.step-content h3 {
+  margin: 0 0 6px;
+
+  color: #0f172a;
+
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.step-content p {
+  margin: 0;
+
+  font-size: 0.78rem;
+
+  font-weight: 600;
+}
+
+.step-content p.completed {
+  color: #15803d;
+}
+
+.step-content p.pending {
+  color: #b45309;
+}
+
+.step-content p.rejected {
+  color: #b91c1c;
+}
+
+/* DETAILS CARD */
+
+.step-details-card {
+  padding: 28px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f8fafc
+    );
+
+  border: 1px solid #e2e8f0;
+}
+
+.details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.details-status {
+  width: fit-content;
+
+  margin-bottom: 14px;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  font-size: 0.76rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.details-status.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.details-status.pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.details-status.rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.details-header h2 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 1.6rem;
+}
+
+.updated-date {
+  color: #64748b;
+
+  font-size: 0.85rem;
+}
+
+.details-description {
+  margin-bottom: 26px;
+
+  color: #475569;
+
+  line-height: 1.8;
+}
+
+/* DOCUMENTS */
+
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 18px;
+
+  border-radius: 18px;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+}
+
+.doc-icon {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eff6ff;
+}
+
+.document-item h4 {
+  margin: 0 0 4px;
+
+  color: #0f172a;
+
+  font-size: 0.92rem;
+}
+
+.document-item span {
+  color: #64748b;
+
+  font-size: 0.75rem;
+}
+
+/* COMMENTS */
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  max-height: 620px;
+
+  overflow-y: auto;
+
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.comment-item {
+  display: flex;
+  gap: 12px;
+}
+
+.comment-item.user {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #8b5cf6
+    );
+
+  color: white;
+
+  font-weight: 700;
+}
+
+.comment-content {
+  flex: 1;
+
+  padding: 12px;
+
+  border-radius: 18px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+}
+
+.comment-item.user .comment-content {
+  background: #eff6ff;
+}
+
+.comment-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.comment-top h4 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 0.9rem;
+}
+
+.comment-top span {
+  color: #94a3b8;
+
+  font-size: 0.74rem;
+}
+
+.comment-content p {
+  margin: 0;
+
+  color: #475569;
+
+  line-height: 1.7;
+}
+
+/* COMMENT INPUT */
+
+.comment-input textarea {
+  width: 100%;
+  min-height: 120px;
+
+  resize: none;
+
+  padding: 16px;
+
+  border-radius: 18px;
+
+  border: 1px solid #dbe2ea;
+
+  outline: none;
+
+  margin-bottom: 14px;
+}
+
+.comment-input button {
+  border: none;
+
+  padding: 14px 22px;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3b82f6,
+      #8b5cf6
+    );
+
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1200px) {
+
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .hero-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .documents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .details-header {
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+
+  .welcome-page {
+    padding: 16px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .progress-step {
+    min-width: 180px;
+  }
+}

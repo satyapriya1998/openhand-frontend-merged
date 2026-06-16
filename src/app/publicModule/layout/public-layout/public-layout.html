@@ -1,0 +1,40 @@
+
+
+<div class="layout-container">
+  <!-- Sidebar -->
+  <app-sidenav
+    class="layout-sidenav"
+    [class.collapsed]="sidebarCollapsed()"
+    [menuItems]="menuItems().modules"
+    [expandedMenus]="expandedMenus()"
+    (toggleMenu)="toggleMenu($event)"
+    [collapsed]="sidebarCollapsed()"
+    [mobileOpen]="mobileMenuOpen()"
+  ></app-sidenav>
+
+  <!-- Content (same as mat-sidenav-content) -->
+  <div class="layout-content">
+    <app-topbar
+      [breadcrumbs]="breadcrumbs()"
+      [userInitials]="userInitials()"
+      [user]="publicAuthService.authUser()"
+      [notifications]="notificationService.allNotifications()"
+      [unread]="notificationService.unreadCount()"
+      (toggleSidebar)="toggleSidebar()"
+      (toggleMobile)="toggleMobileMenu()"
+      (toggleNotif)="toggleNotifications()"
+      (toggleProfile)="toggleProfile()"
+      (logout)="logout()"
+    ></app-topbar>
+
+    <main class="layout-main ">
+       <div class="liquid-wrapper">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+      <router-outlet></router-outlet>
+   
+    </main>
+  </div>
+</div>

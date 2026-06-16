@@ -1,0 +1,149 @@
+:host {
+  display: block;
+}
+/* Page Header */
+.hrms-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.hrms-page-header h1 {
+  font-size: 22px;
+  margin: 0;
+}
+
+.hrms-page-header p {
+  font-size: 13px;
+  margin-top: 4px;
+}
+.titles {
+  min-width: 0;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .hdr-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--hrms-primary-light);
+    color: var(--hrms-primary);
+
+    border-radius: 10px;
+
+ 
+
+    width: 37px;
+    height: 36px;
+    min-width: 36px;
+
+    font-size: 21px;
+    line-height: 1;
+
+    animation: headerIconFloat 2s ease-in-out infinite;
+
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+}
+
+@keyframes headerIconFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.title-row h1 {
+  font-weight: 400;
+  line-height: 32px;
+  font-family: Roboto, sans-serif;
+  letter-spacing: normal;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* projected buttons */
+:host ::ng-deep .page-header-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+
+  background: var(--hrms-surface);
+  border: 1px solid var(--hrms-border);
+  border-radius: 10px;
+
+  color: var(--hrms-text);
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: var(--hrms-transition);
+
+  &:hover {
+    background: var(--hrms-surface-2);
+    border-color: var(--hrms-border-strong);
+  }
+
+  &.primary {
+    background: var(--hrms-primary);
+    border-color: var(--hrms-primary);
+    color: var(--hrms-text-hard);
+
+    &:hover {
+      background: var(--hrms-primary-dark);
+      border-color: var(--hrms-primary-dark);
+    }
+  }
+  &.warning {
+    background: var(--hrms-warning-bg);
+    border-color: var(--hrms-warning-border);
+    color: var(--hrms-warning);
+
+    &:hover {
+      background: var(--hrms-warning-bg-hover);
+      border-color: var(--hrms-warning-border-hover);
+    }
+  }
+
+  &.danger {
+    background: var(--hrms-danger-bg);
+    border-color: var(--hrms-danger-border);
+    color: var(--hrms-danger);
+
+    &:hover {
+      background: var(--hrms-danger-bg-hover);
+      border-color: var(--hrms-danger-border-hover);
+    }
+  }
+
+  .fa-icon,
+  fa-icon {
+    font-size: 14px;
+
+    width: 14px;
+    height: 14px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

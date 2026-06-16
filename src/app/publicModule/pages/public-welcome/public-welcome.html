@@ -1,0 +1,301 @@
+<!-- public-welcome.html -->
+
+<div class="welcome-page">
+
+  <!-- HERO -->
+<section class="hero-card">
+
+  <div class="hero-content">
+
+    <div class="hero-badge">
+      Employee Onboarding Portal
+    </div>
+
+    <h1>
+      Welcome back,
+      <span>{{ employeeName }}</span>
+    </h1>
+
+    <p>
+      Complete your onboarding process and track each step in real-time.
+    </p>
+
+    <div class="hero-grid">
+
+      <div class="hero-item">
+        <label>Employee ID</label>
+        <strong>{{ employeeId }}</strong>
+      </div>
+
+      <div class="hero-item">
+        <label>Role</label>
+        <strong>{{ employeeRole }}</strong>
+      </div>
+
+      <div class="hero-item">
+        <label>Department</label>
+        <strong>{{ department }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="hero-progress">
+
+    <div class="progress-circle">
+
+      <svg viewBox="0 0 120 120">
+
+        <circle
+          class="track"
+          cx="60"
+          cy="60"
+          r="52">
+        </circle>
+
+        <circle
+          class="progress"
+          cx="60"
+          cy="60"
+          r="52"
+          [style.strokeDashoffset]="327 - ((327 * onboardingProgress) / 100)">
+        </circle>
+
+      </svg>
+
+      <div class="circle-content">
+        <h2>{{ onboardingProgress }}%</h2>
+        <span>Completed</span>
+      </div>
+
+    </div>
+
+    <div class="joining-date-card">
+
+      <label>Joining Date</label>
+
+      <strong>
+        {{ joiningDate }}
+      </strong>
+
+    </div>
+
+  </div>
+
+</section>
+
+  <!-- CONTENT -->
+
+  <section class="content-grid">
+
+    <!-- LEFT -->
+
+    <div class="left-section">
+
+      <!-- PROGRESS CARD -->
+
+      <div class="modern-card onboarding-progress-card">
+
+        <div class="card-header">
+
+          <div>
+            <h2>Onboarding Progress</h2>
+
+            <p>
+              Click a step to view onboarding details
+            </p>
+          </div>
+
+        </div>
+
+        <!-- TABS -->
+
+        <div class="progress-tabs-wrapper">
+
+          <div class="progress-line"></div>
+
+          <div
+            *ngFor="let step of onboardingSteps"
+            class="progress-step"
+            [class.active]="selectedStepId === step.id"
+            (click)="selectStep(step.id)">
+
+            <div
+              class="step-circle"
+              [class.completed]="step.status === 'completed'"
+              [class.pending]="step.status === 'pending'"
+              [class.rejected]="step.status === 'rejected'">
+
+              <span *ngIf="step.status === 'completed'">
+                ✓
+              </span>
+
+              <span *ngIf="step.status === 'pending'">
+                •
+              </span>
+
+              <span *ngIf="step.status === 'rejected'">
+                !
+              </span>
+
+            </div>
+
+            <div class="step-content">
+
+              <h3>
+                {{ step.title }}
+              </h3>
+
+              <p
+                [class.completed]="step.status === 'completed'"
+                [class.pending]="step.status === 'pending'"
+                [class.rejected]="step.status === 'rejected'">
+
+                {{ step.shortText }}
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- DETAILS -->
+
+        <div class="step-details-card">
+
+          <div class="details-header">
+
+            <div>
+
+              <div
+                class="details-status"
+                [class.completed]="selectedStep.status === 'completed'"
+                [class.pending]="selectedStep.status === 'pending'"
+                [class.rejected]="selectedStep.status === 'rejected'">
+
+                {{ getStatusLabel(selectedStep.status) }}
+
+              </div>
+
+              <h2>
+                {{ selectedStep.title }}
+              </h2>
+
+            </div>
+
+            <div class="updated-date">
+              Updated {{ selectedStep.updatedOn }}
+            </div>
+
+          </div>
+
+          <p class="details-description">
+            {{ selectedStep.description }}
+          </p>
+
+          <div class="documents-grid">
+
+            <div
+              *ngFor="let doc of selectedStep.documents"
+              class="document-item">
+
+              <div class="doc-icon">
+                📄
+              </div>
+
+              <div>
+
+                <h4>{{ doc }}</h4>
+
+                <span>
+                  Uploaded Document
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="right-section">
+
+      <div class="modern-card comments-card">
+
+        <div class="card-header">
+
+          <div>
+            <h2>HR Comments</h2>
+
+            <p>
+              Stay updated with HR communication
+            </p>
+          </div>
+
+        </div>
+
+        <div class="comments-list">
+
+          <div
+            *ngFor="let comment of hrComments"
+            class="comment-item"
+            [class.user]="!comment.isAdmin">
+
+            <div class="avatar">
+              {{ comment.author.charAt(0) }}
+            </div>
+
+            <div class="comment-content">
+
+              <div class="comment-top">
+
+                <h4>
+                  {{ comment.author }}
+                </h4>
+
+                <span>
+                  {{ formatDate(comment.date) }}
+                </span>
+
+              </div>
+
+              <p>
+                {{ comment.comment }}
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="comment-input">
+
+          <textarea
+            [(ngModel)]="newComment"
+            placeholder="Type your message...">
+          </textarea>
+
+          <button (click)="addComment()">
+            Send Message
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>

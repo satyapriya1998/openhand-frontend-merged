@@ -1,0 +1,12 @@
+<div class="hrms-page-header">
+  <div class="titles">
+    <div class="title-row">
+      <fa-icon *ngIf="icon" [icon]="icon" class="hdr-icon"></fa-icon>
+      <h1 style="font-weight: 700;">{{ title }}</h1>
+    </div>
+    <p *ngIf="subtitle">{{ subtitle }}</p>
+  </div>
+  <div class="actions">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -1,0 +1,249 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Levels"
+    subtitle="Manage organization hierarchy levels"
+    [icon]="faSitemap"
+  >
+    <button class="page-header-btn primary" (click)="openAddLevelModal()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      Add Level
+    </button>
+  </app-page-header>
+
+  <div class="hrms-fade-in">
+    <!-- Stats -->
+    <app-stats-cards [cards]="statsCards()"></app-stats-cards>
+<app-page-layout >
+   <!-- Table -->
+     <app-management-table main
+  title="All Levels"
+  subtitle="Overview of organizational hierarchy levels"
+  [icon]=" faChartBar"
+>
+  <div table-actions>
+    <div class="search-box">
+      <fa-icon [icon]="faSearch"></fa-icon>
+
+      <input
+        type="text"
+        placeholder="Search levels..."
+        (input)="searchTerm.set($any($event.target).value)"
+      />
+    </div>
+  </div>
+
+  <table table-content>
+    <thead>
+      <tr>
+        <th>Level</th>
+        <th>Order</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (level of levels(); track level.id) {
+        <tr>
+          <td>
+            <div class="dept-cell">
+              <div class="dept-icon">
+                <fa-icon [icon]="faSitemap"></fa-icon>
+              </div>
+
+              <div>
+                <h4>{{ level.name }}</h4>
+                <span>{{ level.description }}</span>
+              </div>
+            </div>
+          </td>
+
+          <td>
+            <span class="level-order">
+              {{ level.levelOrder }}
+            </span>
+          </td>
+
+          <td class="actions-cell">
+            <button
+              class="action-btn edit-btn"
+              title="Edit Level"
+              (click)="editLevel(level)"
+            >
+              <fa-icon [icon]="faEdit"></fa-icon>
+            </button>
+
+            <button
+              class="action-btn delete-btn"
+              title="Delete Level"
+              (click)="confirmDeleteLevel(level)"
+            >
+              <fa-icon [icon]="faDelete"></fa-icon>
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</app-management-table>
+<div sidebar>
+   <div class="side-card">
+          
+ <app-page-sub-header
+                title="Hierarchy Preview"
+                subtitle="Organization structure"
+                [icon]="faSitemap"
+              >
+                </app-page-sub-header>
+          <div class="hierarchy-timeline">
+            @for (item of hierarchyLevels(); track item.order; let last = $last) {
+              <div class="timeline-item">
+                <div class="timeline-left">
+                  <div class="timeline-dot"></div>
+
+                  @if (!last) {
+                    <div class="timeline-line"></div>
+                  }
+                </div>
+
+                <div class="timeline-card">
+                  <div class="timeline-level">Level {{ item.order }}</div>
+
+                  <div class="timeline-name">
+                    {{ item.name }}
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+</div>
+
+ <!-- Quick Actions -->
+                <app-quick-actions sidebar
+  title="Quick Actions"
+  subtitle="Level shortcuts"
+    [icon]="faBolt"
+  [actions]="quickActions()"
+  (actionClick)="handleQuickAction($event)"
+>
+</app-quick-actions>
+</app-page-layout>
+    
+  </div>
+</div>
+
+<!-- ADD / EDIT LEVEL MODAL -->
+
+<app-modal
+  [isOpen]="isAddLevelModalOpen"
+  [title]="selectedLevel() ? 'Edit Level' : 'Add Level'"
+  width="580px"
+  (onClose)="closeAddLevelModal()"
+  (onConfirm)="saveLevel()"
+>
+  <form [formGroup]="levelForm" class="department-form">
+    <!-- LEVEL NAME -->
+
+    <div class="field">
+      <label>
+        Level Name
+        <span>*</span>
+      </label>
+
+      <input
+        type="text"
+        class="department-input"
+        formControlName="name"
+        placeholder="Executive"
+        [class.invalid]="isInvalid('name')"
+        [class.valid]="isValid('name')"
+      />
+
+      @if (isInvalid('name')) {
+        <div class="field-error">
+          {{ getError('name') }}
+        </div>
+      }
+    </div>
+
+    <!-- LEVEL ORDER -->
+
+    <div class="field">
+      <label>
+        Level Order
+        <span>*</span>
+      </label>
+
+      <input
+        type="number"
+        class="department-input"
+        formControlName="levelOrder"
+        min="1"
+        [class.invalid]="isInvalid('levelOrder')"
+        [class.valid]="isValid('levelOrder')"
+      />
+
+      @if (isInvalid('levelOrder')) {
+        <div class="field-error">
+          {{ getError('levelOrder') }}
+        </div>
+      }
+    </div>
+
+    <!-- STATUS -->
+
+    <!-- <div class="field">
+      <label>
+        Status
+        <span>*</span>
+      </label>
+
+      <select
+        class="department-select"
+        formControlName="status"
+        [class.invalid]="isInvalid('status')"
+        [class.valid]="isValid('status')"
+      >
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+
+      @if (isInvalid('status')) {
+        <div class="field-error">
+          {{ getError('status') }}
+        </div>
+      }
+    </div> -->
+
+    <!-- DESCRIPTION -->
+
+    <div class="field">
+      <label>Description</label>
+
+      <textarea
+        rows="4"
+        class="department-textarea"
+        formControlName="description"
+        placeholder="Level description..."
+      ></textarea>
+    </div>
+  </form>
+</app-modal>
+
+<!-- DELETE MODAL -->
+
+<app-modal
+  [isOpen]="isDeleteLevelModalOpen"
+  title="Delete Level"
+  width="500px"
+  (onClose)="closeDeleteLevelModal()"
+  (onConfirm)="deleteLevel()"
+>
+  <div class="delete-content">
+    <h4>Delete "{{ selectedLevel()?.name }}"?</h4>
+
+    <p>This action cannot be undone.</p>
+  </div>
+</app-modal>

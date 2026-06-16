@@ -1,0 +1,184 @@
+:host {
+  display: block;
+}
+
+/* Wrapper */
+
+.tabs-wrapper {
+  width: 100%;
+}
+
+/* Main Bar */
+
+.tab-bar {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 6px;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.95),
+      rgba(248, 250, 252, 0.96)
+    );
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Inner */
+
+.tabs-inner {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  width: max-content;
+}
+
+/* Sliding Indicator */
+
+.tab-indicator {
+  position: absolute;
+
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+
+  border-radius: 14px;
+
+  background: var(--hrms-primary-rich-gradient);
+
+  box-shadow:
+    0 10px 20px rgba(59, 130, 246, 0.28),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+  z-index: 1;
+}
+
+/* Tab Button */
+
+.tab {
+  position: relative;
+
+  z-index: 2;
+
+  height: 48px;
+
+  border: none;
+
+  background: transparent;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 0 22px;
+
+  border-radius: 14px;
+
+  white-space: nowrap;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: var(--hrms-text-muted);
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    transform 0.16s ease,
+    opacity 0.2s ease;
+
+  fa-icon {
+    font-size: 14px;
+  }
+
+  &:hover:not(:disabled):not(.active) {
+    color: var(--hrms-text);
+
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &.active {
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+/* Content Outlet */
+
+.tab-outlet {
+  animation: fadeIn 0.25s ease;
+}
+
+/* Mobile */
+
+@media (max-width: 640px) {
+  .tab {
+    height: 46px;
+
+    padding: 0 18px;
+
+    font-size: 13px;
+  }
+
+  .tab-bar {
+    border-radius: 18px;
+  }
+}
+
+/* Animation */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

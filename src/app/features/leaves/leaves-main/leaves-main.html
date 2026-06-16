@@ -1,0 +1,23 @@
+<section class="hrms-page page-container">
+      <app-breadcrumbs></app-breadcrumbs>
+
+       <app-page-header
+        title="Leave Details"
+        subtitle="Manage your time off, approvals, and team availability."
+        [icon]="faCalendarDays"
+      >
+        <!-- <button class="page-header-btn"><fa-icon [icon]="faDownload"></fa-icon> Export</button> -->
+      </app-page-header>
+
+  <app-tabs
+    [tabs]="tabs"
+    [activeTab]="activeTab()"
+    (tabChange)="onTabChange($event)"
+  >
+  </app-tabs>
+    
+  <div class="mt-6">
+    <router-outlet></router-outlet>
+  </div>
+
+</section>

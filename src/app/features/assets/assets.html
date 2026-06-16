@@ -1,0 +1,504 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Asset Inventory"
+    subtitle="Manage and track all company assets"
+    [icon]="faBoxArchive"
+  >
+    <button class="page-header-btn">
+      <fa-icon [icon]="faFileExport"></fa-icon>
+      Export
+    </button>
+
+    <button class="page-header-btn primary" (click)="openAddAssetModal()">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      Add Asset
+    </button>
+  </app-page-header>
+
+  <div class="hrms-fade-in">
+    <!-- KPI CARDS -->
+
+   <app-stats-cards
+  [cards]="statsCards()">
+</app-stats-cards>
+
+    <!-- MAIN CONTENT -->
+
+    <app-page-layout>
+      <!-- LEFT -->
+
+      <div main class="assets-panel">
+        <!-- Toolbar -->
+
+        <div class="assets-toolbar">
+          <div class="toolbar-left">
+            <app-page-sub-header
+              title="Assets"
+              subtitle="{{ assets().length }} assets found"
+              [icon]="faDesktop"
+            ></app-page-sub-header>
+          
+          </div>
+
+          <div class="view-switch">
+            <button [class.active]="viewMode() === 'grid'" (click)="setView('grid')">
+              <fa-icon [icon]="faTableCells"></fa-icon>
+            </button>
+
+            <button [class.active]="viewMode() === 'list'" (click)="setView('list')">
+              <fa-icon [icon]="faList"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARDS -->
+        @if (viewMode() === 'grid') {
+          <div class="asset-grid">
+            @for (asset of assets(); track asset.code) {
+              <div class="asset-card">
+                <span
+                  class="status-badge"
+                  [class.available]="asset.status === 'Available'"
+                  [class.assigned]="asset.status === 'Assigned'"
+                  [class.maintenance]="asset.status === 'Maintenance'"
+                >
+                  {{ asset.status }}
+                </span>
+
+                <div class="asset-icon">
+                  <fa-icon [icon]="asset.icon"></fa-icon>
+                </div>
+
+                <h4>{{ asset.name }}</h4>
+
+                <div class="asset-code">
+                  {{ asset.code }}
+                </div>
+
+                <div class="asset-info-box">
+                  <div class="info-row">
+                    <span>Brand/Model</span>
+                    <strong>{{ asset.model }}</strong>
+                  </div>
+
+                  <div class="info-row">
+                    <span>Location</span>
+                    <strong>{{ asset.location }}</strong>
+                  </div>
+
+                  <div class="info-row">
+                    <span>Warranty</span>
+
+                    <div class="warranty-wrap">
+                      <strong>{{ asset.warranty }}</strong>
+
+                      <span
+                        class="warranty-chip"
+                        [class.expiring]="asset.warrantyStatus === 'Expiring'"
+                      >
+                        {{ asset.warrantyStatus }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="info-row">
+                    <span>Value</span>
+                    <strong>{{ asset.value }}</strong>
+                  </div>
+                </div>
+
+                <div class="employee-row">
+                  <div class="employee-avatar">
+                    {{ asset.employeeInitials }}
+                  </div>
+
+                  <span>
+                    {{ asset.employee }}
+                  </span>
+                </div>
+
+                <div class="asset-actions">
+                  <button>Assign</button>
+                  <button (click)="viewAsset(asset)">Details</button>
+                </div>
+              </div>
+            }
+          </div>
+        } @else{
+  <app-management-table
+    title="Assets"
+    subtitle="{{ assets().length }} assets found"
+    [icon]="faDesktop"
+  >
+    <table table-content>
+    <div class="table-card asset-table-card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Asset</th>
+                    <th>Tag</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Location</th>
+                    <th>Warranty</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (asset of assets(); track asset.code) {
+                    <tr>
+                      <td>
+                        <div class="asset-cell">
+                          <div class="asset-table-icon">
+                            <fa-icon [icon]="asset.icon"></fa-icon>
+                          </div>
+
+                          <div>
+                            <h4>{{ asset.name }}</h4>
+                            <span>{{ asset.model }}</span>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>{{ asset.code }}</td>
+
+                      <td>
+                        @if (asset.icon === faLaptop) {
+                          Laptop
+                        } @else if (asset.icon === faMobileScreen) {
+                          Phone
+                        } @else {
+                          Monitor
+                        }
+                      </td>
+
+                      <td>
+                        <span
+                          class="status-badge table-status"
+                          [class.available]="asset.status === 'Available'"
+                          [class.assigned]="asset.status === 'Assigned'"
+                          [class.maintenance]="asset.status === 'Maintenance'"
+                        >
+                          {{ asset.status }}
+                        </span>
+                      </td>
+
+                      <td>
+                        <div class="employee-cell">
+                          <div class="employee-avatar">
+                            {{ asset.employeeInitials }}
+                          </div>
+
+                          <span>{{ asset.employee }}</span>
+                        </div>
+                      </td>
+
+                      <td>{{ asset.location }}</td>
+
+                      <td>{{ asset.warranty }}</td>
+
+                      <td>{{ asset.value }}</td>
+
+                      <td class="table-actions">
+                        <button>Assign</button>
+                        <button>Details</button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+    </table>
+  </app-management-table>
+}
+      </div>
+
+      <!-- RIGHT PANEL -->
+
+      <div sidebar>
+        <!-- FILTERS -->
+
+        <div class="hrms-card side-card filters-card">
+          <div class="filter-header">
+            <app-page-sub-header
+              title="Filters"
+              subtitle="Refine your search"
+              [icon]="faDesktop"
+            ></app-page-sub-header>
+
+            <!-- <h3></h3>
+            <span>Refine your search</span> -->
+          </div>
+
+          <div class="filter-group">
+            <label>Search</label>
+
+            <div class="search-input">
+              <fa-icon [icon]="faSearch"></fa-icon>
+              <input placeholder="Tag, name, serial..." />
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label>Status</label>
+
+            <select>
+              <option>All Statuses</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Category</label>
+
+            <select>
+              <option>All Categories</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Location</label>
+
+            <select>
+              <option>All Locations</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label>Warranty</label>
+
+            <select>
+              <option>All</option>
+            </select>
+          </div>
+
+          <button class="reset-filter-btn">Reset Filters</button>
+        </div>
+
+        <!-- QUICK FILTERS -->
+
+       <app-quick-actions
+  title="Quick Filters"
+  subtitle="Asset shortcuts"
+  [actions]="quickActions()"
+    [icon]="faBolt"
+  (actionClick)="handleQuickAction($event)"
+>
+</app-quick-actions>
+      </div>
+
+    </app-page-layout>
+  </div>
+</div>
+
+<app-modal
+  [isOpen]="isAddAssetModalOpen"
+  title="Add Asset"
+  width="950px"
+  (onClose)="closeAddAssetModal()"
+  (onConfirm)="submitAsset()"
+>
+  <div class="asset-form-modal">
+    <form [formGroup]="assetForm" class="asset-form" (ngSubmit)="submitAsset()">
+      <!-- BASIC -->
+
+      <div class="form-section">
+        <h3>Basic Information</h3>
+
+        <div class="asset-form-grid">
+          <div class="form-group">
+            <label>Asset Tag *</label>
+            <input type="text" formControlName="assetTag" placeholder="AST-0001" />
+          </div>
+
+          <div class="form-group">
+            <label>Category *</label>
+            <select formControlName="category">
+              <option value="">Select Category</option>
+              <option>Laptop</option>
+              <option>Desktop</option>
+              <option>Monitor</option>
+              <option>Mobile</option>
+              <option>Printer</option>
+              <option>Accessory</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Asset Name *</label>
+            <input type="text" formControlName="assetName" placeholder="MacBook Pro M3" />
+          </div>
+
+          <div class="form-group">
+            <label>Brand *</label>
+            <input type="text" formControlName="brand" placeholder="Apple" />
+          </div>
+
+          <div class="form-group">
+            <label>Model *</label>
+            <input type="text" formControlName="model" placeholder="MacBook Pro 14" />
+          </div>
+
+          <div class="form-group">
+            <label>Model Number</label>
+            <input type="text" formControlName="modelNumber" placeholder="A2992" />
+          </div>
+
+          <div class="form-group full-width">
+            <label>Serial Number *</label>
+            <input type="text" formControlName="serialNumber" placeholder="Enter serial number" />
+          </div>
+        </div>
+      </div>
+
+      <!-- PURCHASE -->
+
+      <div class="form-section">
+        <h3>Purchase Information</h3>
+
+        <div class="asset-form-grid">
+          <div class="form-group">
+            <label>Purchase Date</label>
+            <input type="date" formControlName="purchaseDate" />
+          </div>
+
+          <div class="form-group">
+            <label>Purchase Cost</label>
+            <input type="number" formControlName="purchaseCost" placeholder="50000" />
+          </div>
+
+          <div class="form-group">
+            <label>Vendor</label>
+            <input type="text" formControlName="vendor" placeholder="Vendor Name" />
+          </div>
+
+          <div class="form-group">
+            <label>Invoice Number</label>
+            <input type="text" formControlName="invoiceNumber" placeholder="INV-001" />
+          </div>
+        </div>
+      </div>
+
+      <!-- WARRANTY -->
+
+      <div class="form-section">
+        <h3>Warranty & Maintenance</h3>
+
+        <div class="asset-form-grid">
+          <div class="form-group">
+            <label>Warranty Period</label>
+
+            <select formControlName="warrantyPeriod">
+              <option>1 Year</option>
+              <option>2 Years</option>
+              <option>3 Years</option>
+              <option>5 Years</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Warranty End Date</label>
+            <input type="date" formControlName="warrantyEndDate" />
+          </div>
+
+          <div class="form-group">
+            <label>Maintenance Contract</label>
+
+            <select formControlName="maintenanceContract">
+              <option>None</option>
+              <option>AMC</option>
+              <option>Premium AMC</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Next Maintenance Date</label>
+            <input type="date" formControlName="nextMaintenanceDate" />
+          </div>
+        </div>
+      </div>
+
+      <!-- LOCATION -->
+
+      <div class="form-section">
+        <h3>Location & Assignment</h3>
+
+        <div class="asset-form-grid">
+          <div class="form-group">
+            <label>Location *</label>
+
+            <select formControlName="location">
+              <option>Bangalore</option>
+              <option>Mumbai</option>
+              <option>Chennai</option>
+              <option>Hyderabad</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Floor / Building</label>
+            <input type="text" formControlName="floorBuilding" placeholder="Tower A - Floor 3" />
+          </div>
+
+          <div class="form-group">
+            <label>Department</label>
+
+            <select formControlName="department">
+              <option>General Pool</option>
+              <option>Engineering</option>
+              <option>HR</option>
+              <option>Finance</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Initial Status</label>
+
+            <select formControlName="initialStatus">
+              <option>Available</option>
+              <option>Assigned</option>
+              <option>Maintenance</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TECHNICAL -->
+
+      <div class="form-section">
+        <h3>Technical Specifications</h3>
+
+        <div class="form-group">
+          <textarea
+            rows="4"
+            formControlName="specifications"
+            placeholder="Processor, RAM, Storage, OS etc..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- NOTES -->
+
+      <div class="form-section">
+        <h3>Additional Information</h3>
+
+        <div class="form-group">
+          <textarea rows="3" formControlName="notes" placeholder="Additional notes..."></textarea>
+        </div>
+
+        <div class="upload-area">Click or Drag & Drop Documents / Images</div>
+      </div>
+      <div class="asset-form-actions">
+        <button type="button" class="cancel-btn" (click)="closeAddAssetModal()">Cancel</button>
+
+        <button type="submit" class="save-btn">Add Asset</button>
+      </div>
+    </form>
+  </div>
+</app-modal>

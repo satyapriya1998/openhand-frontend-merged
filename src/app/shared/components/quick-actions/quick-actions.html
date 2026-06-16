@@ -1,0 +1,47 @@
+<!-- <div class="side-card">
+  <div class="card-title">
+    <h3>{{ title }}</h3>
+    <p>{{ subtitle }}</p>
+  </div>
+
+  <div class="quick-grid">
+    @for (action of actions; track action.label) {
+      <button
+        class="quick-btn"
+        (click)="onAction(action.action)"
+      >
+        <div class="quick-icon">
+          <fa-icon [icon]="action.icon"></fa-icon>
+        </div>
+
+        <span>{{ action.label }}</span>
+      </button>
+    }
+  </div>
+</div> -->
+
+<div class="side-card">
+  <app-page-sub-header
+    [title]="title"
+    [subtitle]="subtitle"
+    [icon]="faBolt"
+    variant="card"
+    [compact]="true"
+  >
+  </app-page-sub-header>
+
+  <div class="quick-grid">
+    @for (action of actions; track action.label) {
+      <button
+        class="quick-btn"
+        (click)="onAction(action.action)"
+      >
+        <div class="quick-icon">
+          <fa-icon [icon]="action.icon"></fa-icon>
+        </div>
+
+        <span>{{ action.label }}</span>
+      </button>
+    }
+  </div>
+</div>

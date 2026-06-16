@@ -1,0 +1,165 @@
+<!-- public-login.component.html -->
+<div class="auth-container">
+  <!-- LEFT: Simple Info Section (No Carousel) -->
+  <div class="carousel-section">
+    <div class="gradient-overlay"></div>
+
+    <div class="logo">
+      <div class="logo-icon">K</div>
+      <div class="logo-text">KnodTechOne</div>
+    </div>
+
+    <div class="carousel-content">
+      <h2 class="carousel-title">User Self-Service</h2>
+      <p class="carousel-desc">Access your onboarding portal, documents, and personal information</p>
+      
+      <!-- Simple info cards instead of carousel -->
+      <div class="info-cards">
+        <div class="info-card">
+          <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          <h3>Quick Access</h3>
+          <p>View your onboarding status and complete tasks</p>
+        </div>
+        
+        <div class="info-card">
+          <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16v16H4z"/>
+            <path d="M9 9h6v6H9z"/>
+          </svg>
+          <h3>Secure Documents</h3>
+          <p>Access important documents and forms</p>
+        </div>
+        
+        <div class="info-card">
+          <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+          <h3>24/7 Availability</h3>
+          <p>Access your portal anytime, anywhere</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simplified stats grid -->
+    <div class="stats-grid-modern">
+      <div class="stat-card-modern">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        <div class="stat-value">500+</div>
+        <div class="stat-label">Active Users</div>
+      </div>
+      <div class="stat-card-modern">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 6v6l4 2"/>
+        </svg>
+        <div class="stat-value">99.9%</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+      <div class="stat-card-modern">
+        <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <div class="stat-value">Secure</div>
+        <div class="stat-label">Encrypted</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Login Form Only -->
+  <div class="form-section">
+    <ul class="circles">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+    
+    <div class="form-container">
+      <div class="mobile-logo">
+        <div class="mobile-logo-icon">K</div>
+        <div class="mobile-logo-text">KnodTechOne</div>
+      </div>
+
+      <h1 class="form-title">Welcome</h1>
+      <p class="form-subtitle">Sign in to access your onboarding portal</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" class="auth-form" data-testid="auth-form">
+        <div class="form-group">
+          <label class="label">Email address</label>
+          <input
+            class="input"
+            type="email"
+            formControlName="email"
+            placeholder="your@email.com"
+            [class.ng-invalid]="loginEmail?.invalid && loginEmail?.touched"
+            data-testid="auth-email"/>
+          @if (loginEmail?.invalid && loginEmail?.touched) {
+            <div class="error-message">
+              @if (loginEmail?.errors?.['required']) { Email is required }
+              @if (loginEmail?.errors?.['email']) { Please enter a valid email }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="label">Password</label>
+          <div class="password-wrapper">
+            <input
+              class="input"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              [class.ng-invalid]="loginPassword?.invalid && loginPassword?.touched"
+              data-testid="auth-password"/>
+            <button
+              type="button"
+              class="eye-btn"
+              (click)="showPassword = !showPassword"
+            >
+              <i
+                class="fa-solid"
+                [class.fa-eye]="!showPassword"
+                [class.fa-eye-slash]="showPassword"
+              ></i>
+            </button>
+          </div>
+          @if (loginPassword?.invalid && loginPassword?.touched) {
+            <div class="error-message">
+              @if (loginPassword?.errors?.['required']) { Password is required }
+              @if (loginPassword?.errors?.['minlength']) { Password must be at least 6 characters }
+            </div>
+          }
+        </div>
+
+        @if (authService.error()) {
+          <div class="error-alert" data-testid="auth-error">
+            {{ authService.error() }}
+          </div>
+        }
+
+        <button
+          type="submit"
+          class="btn-primary submit-btn"
+          [disabled]="loginForm.invalid || authService.loading()"
+          data-testid="auth-submit"
+        >
+          {{ authService.loading() ? 'Please wait…' : 'Sign in' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

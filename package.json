@@ -1,0 +1,67 @@
+{
+  "name": "hrmsfront-end",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "api:identity": "ng-openapi --config openapi/identity.config.ts",
+    "api:tenant": "ng-openapi --config openapi/tenant.config.ts",
+    "api:subscription": "ng-openapi --config openapi/subscription.config.ts",
+    "api:organization": "ng-openapi --config openapi/organization.config.ts",
+    "api:generate": "npm run api:identity && npm run api:tenant && npm run api:subscription && npm run api:organization",
+    "dev": "concurrently \"ng serve\""
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "packageManager": "npm@11.6.0",
+  "dependencies": {
+    "@angular/animations": "^21.2.11",
+    "@angular/common": "^21.0.0",
+    "@angular/compiler": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@angular/router": "^21.0.0",
+    "@fontsource/inter": "^5.2.8",
+    "@fortawesome/angular-fontawesome": "^4.0.0",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@fortawesome/free-regular-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@tanstack/angular-table": "^8.21.4",
+    "ng-openapi": "^0.2.18",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.0.0",
+    "@angular/cli": "^21.0.0",
+    "@angular/compiler-cli": "^21.0.0",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "^21.3.1",
+    "autoprefixer": "^10.5.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^10.3.0",
+    "jsdom": "^27.1.0",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^3.4.19",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.56.1",
+    "vitest": "^4.0.8"
+  }
+}

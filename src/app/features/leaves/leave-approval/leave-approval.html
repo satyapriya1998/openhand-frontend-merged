@@ -1,0 +1,141 @@
+ <div class="space-y-4">
+      <!-- Summary Stats Row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- Pending stat -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex items-center gap-4">
+          <fa-icon [icon]="faHourglassHalf" class="text-3xl text-indigo-600"></fa-icon>
+          <div>
+            <div class="text-2xl font-bold text-gray-900">{{ pendingRequests().length }}</div>
+            <div class="text-xs text-gray-500">Pending your review</div>
+          </div>
+        </div>
+
+        <!-- Past decisions stat -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex items-center gap-4">
+          <fa-icon [icon]="faCheckCircle" class="text-3xl text-indigo-600"></fa-icon>
+          <div>
+            <div class="text-2xl font-bold text-gray-900">{{ pastDecisionsCount() }}</div>
+            <div class="text-xs text-gray-500">Past decisions</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Requests Section -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+        <div class="mb-4">
+          <h3 class="text-base font-semibold text-gray-900">Pending requests</h3>
+          <p class="text-xs text-gray-500 mt-0.5">Quickly approve or reject time-off requests from your team.</p>
+        </div>
+
+        <!-- Loading Skeleton -->
+        @if (loading()) {
+          <div class="space-y-3">
+            @for (skeleton of [1,2,3,4]; track skeleton) {
+              <div class="animate-pulse">
+                <div class="bg-gray-100 rounded-lg p-4">
+                  <div class="flex flex-wrap gap-4 items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 bg-gray-300 rounded-full"></div>
+                      <div>
+                        <div class="h-4 bg-gray-300 rounded w-32 mb-1"></div>
+                        <div class="h-3 bg-gray-200 rounded w-24"></div>
+                      </div>
+                    </div>
+                    <div class="h-8 bg-gray-300 rounded w-28"></div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Pending Requests List -->
+        @if (!loading() && pendingRequests().length > 0) {
+          <div class="space-y-3">
+            @for (request of pendingRequests(); track request.id) {
+              <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md hover:border-gray-300 transition-all duration-200">
+                <div class="flex flex-wrap lg:flex-nowrap gap-4 items-start">
+                  <!-- Employee Info -->
+                  <div class="flex items-center gap-3 min-w-[180px]">
+                    <div class="w-9 h-9 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-sm">
+                      {{ request.employee.charAt(0) }}
+                    </div>
+                    <div>
+                      <div class="font-semibold text-sm text-gray-900">{{ request.employee }}</div>
+                      <div class="text-xs text-gray-500">{{ request.employeeId }} · {{ request.type }} leave</div>
+                    </div>
+                  </div>
+
+                  <!-- Date Info -->
+                  <div class="flex items-start gap-3 min-w-[200px]">
+                    <fa-icon [icon]="faCalendarAlt" class="text-gray-400 text-base mt-0.5"></fa-icon>
+                    <div>
+                      <div class="text-sm text-gray-800">{{ request.startDate }} → {{ request.endDate }}</div>
+                      <small class="text-xs text-gray-500">{{ request.days }} day(s) · Applied on {{ request.appliedOn }}</small>
+                    </div>
+                  </div>
+
+                  <!-- Reason -->
+                  <div class="flex items-start gap-3 flex-1">
+                    <fa-icon [icon]="faStickyNote" class="text-gray-400 text-base mt-0.5"></fa-icon>
+                    <span class="text-sm text-gray-600">{{ request.reason }}</span>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="flex gap-2 ml-auto">
+                    <button
+                      (click)="rejectRequest(request)"
+                      class="px-3 py-1.5 rounded-lg border border-red-300 text-red-700 text-sm font-medium hover:bg-red-50 transition-colors flex items-center gap-1.5"
+                    >
+                      <fa-icon [icon]="faTimesCircle" class="text-sm"></fa-icon>
+                      Reject
+                    </button>
+                    <button
+                      (click)="approveRequest(request)"
+                      class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm flex items-center gap-1.5"
+                    >
+                      <fa-icon [icon]="faCheck" class="text-sm"></fa-icon>
+                      Approve
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Empty State -->
+        @if (!loading() && pendingRequests().length === 0) {
+          <div class="text-center py-12">
+            <fa-icon [icon]="faCheckCircle" class="text-5xl text-green-500 mb-3"></fa-icon>
+            <h4 class="text-lg font-medium text-gray-900">All caught up!</h4>
+            <p class="text-sm text-gray-500 mt-1">You have no pending approvals right now.</p>
+          </div>
+        }
+      </div>
+
+      <!-- Recent Decisions Section -->
+      @if (!loading() && pastDecisions().length > 0) {
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+          <div class="mb-4">
+            <h3 class="text-base font-semibold text-gray-900">Recent decisions</h3>
+            <p class="text-xs text-gray-500 mt-0.5">A history of your recent approvals and rejections.</p>
+          </div>
+
+          <ul class="space-y-2">
+            @for (request of pastDecisions(); track request.id) {
+              <li class="flex items-center gap-3 bg-gray-50 rounded-lg px-3 py-2.5 text-sm">
+                <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-semibold text-xs">
+                  {{ request.employee.charAt(0) }}
+                </div>
+                <span class="font-semibold text-gray-800 min-w-[120px]">{{ request.employee }}</span>
+                <span class="text-gray-500 text-xs">{{ request.type }} · {{ request.startDate }} → {{ request.endDate }}</span>
+                <span class="ml-auto text-xs font-medium px-2 py-1 rounded-full" [ngClass]="statusBadgeClass(request.status)">
+                  {{ request.status }}
+                </span>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>

@@ -1,0 +1,72 @@
+<section class="px-4 py-12 sm:px-6 lg:px-8" id="migration">
+  <div class="pointer-events-none absolute inset-0 dot-pattern opacity-30 -z-10"></div>
+  <div class="mx-auto max-w-7xl">
+    <app-section-heading
+      [eyebrow]="locale.t().migration.eyebrow"
+      [title]="locale.t().migration.title"
+      [description]="locale.t().migration.description"
+    />
+
+<div class="mt-14 grid gap-4 md:grid-cols-4">
+  @for (step of steps; track step.title; let i = $index; let last = $last) {
+    <div class="relative" appReveal="up" [delay]="i * 100">
+
+      <div
+        appSpotlight
+        class="glass relative overflow-hidden rounded-2xl border border-border p-5 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl sm:p-6"
+      >
+        <!-- Header -->
+        <div class="flex items-start justify-between">
+          <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+            <i class="fa-solid {{ step.icon }} text-lg"></i>
+          </span>
+
+          <span
+            class="pointer-events-none text-5xl font-bold leading-none text-muted-foreground/10"
+          >
+            {{ i + 1 }}
+          </span>
+        </div>
+
+        <!-- Content -->
+        <div class="mt-4">
+          <p class="text-eyebrow text-muted-foreground">
+            Step {{ i + 1 }}
+          </p>
+
+          <h3 class="mt-1 text-base font-semibold text-foreground">
+            {{ step.title }}
+          </h3>
+
+          <p class="mt-2 text-sm text-muted-foreground">
+            {{ step.desc }}
+          </p>
+        </div>
+      </div>
+
+      @if (!last) {
+        <div class="absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2 md:block">
+          <span
+            class="flex size-10 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/40"
+          >
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </span>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+    <div class="mx-auto mt-10 flex max-w-3xl flex-wrap justify-center gap-2.5">
+      @for (point of points; track point; let i = $index) {
+        <span
+          class="rounded-full border border-border bg-card px-3.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+          appReveal="up"
+          [delay]="400 + i * 40"
+        >
+          {{ point }}
+        </span>
+      }
+    </div>
+  </div>
+</section>

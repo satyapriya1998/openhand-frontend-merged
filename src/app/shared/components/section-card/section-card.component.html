@@ -1,0 +1,25 @@
+<div class="section-card hrms-card hrms-fade-in">
+  <div class="head">
+    <div class="title">
+      <i class="icon">{{ icon }}</i>
+      <h3>{{ title }}</h3>
+    </div>
+    <div class="head-actions" *ngIf="editable">
+      <ng-container *ngIf="!editing; else editingTpl">
+        <button class="btn-outline" type="button" (click)="onEdit()">
+          <i class="btn-icon">✏️</i> Edit
+        </button>
+      </ng-container>
+      <ng-template #editingTpl>
+        <button class="btn-text" type="button" (click)="onCancel()">Cancel</button>
+        <button class="btn-primary" type="button" (click)="onSave()">
+          <i class="btn-icon">✓</i> Save
+        </button>
+      </ng-template>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="body">
+    <ng-content></ng-content>
+  </div>
+</div>

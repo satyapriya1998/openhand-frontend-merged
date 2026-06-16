@@ -1,0 +1,267 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <!-- Header -->
+  <app-page-header
+    title="MacBook Pro 14 M3"
+    subtitle="AST-1045
+•
+S/N: C02X1234ABCD
+•
+Laptop Assigned"
+    [icon]="faLaptop"
+  >
+    <button class="page-header-btn">
+      <fa-icon [icon]="faLaptop"></fa-icon>
+      Edit Asset
+    </button>
+
+    <button class="page-header-btn primary">
+      <fa-icon [icon]="faLaptop"></fa-icon>
+      Print Label
+    </button>
+  </app-page-header>
+
+  <!-- Summary Cards -->
+<div class="asset-summary-grid">
+  @for (card of assetInfoCards; track card.title) {
+    <div class="summary-card">
+      <div class="summary-icon" [class]="card.color">
+        <fa-icon [icon]="card.icon"></fa-icon>
+      </div>
+
+      <div class="summary-content">
+        <span>{{ card.title }}</span>
+        <h2>{{ card.value }}</h2>
+        <p>{{ card.subtitle }}</p>
+      </div>
+    </div>
+  }
+</div>
+
+  <!-- Tabs -->
+
+  <div class="asset-tabs">
+    <button class="active">Overview</button>
+    <button>Assignment</button>
+    <button>History</button>
+    <button>Maintenance</button>
+    <button>Documents</button>
+    <button>Procurement</button>
+    <button>Warranty</button>
+    <button>Location</button>
+  </div>
+
+  <!-- Content -->
+
+  <div class="asset-content-grid">
+    <!-- LEFT -->
+
+    <div class="asset-main">
+      <!-- Asset Overview -->
+
+      <div class="side-card">
+        <div class="card-title">
+          <h3>Asset Overview</h3>
+        </div>
+
+        <div class="overview-grid">
+          <div class="overview-item">
+            <span>ASSET TAG</span>
+            <strong>AST-1045</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>SERIAL NUMBER</span>
+            <strong>C02X1234ABCD</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>CATEGORY</span>
+            <strong>Laptop</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>BRAND</span>
+            <strong>Apple</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>MODEL</span>
+            <strong>MacBook Pro 14" M3</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>STATUS</span>
+            <strong>Assigned</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>CONDITION</span>
+            <strong>Good</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>PURCHASE DATE</span>
+            <strong>Mar 15, 2025</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>PURCHASE COST</span>
+            <strong>₹195,000</strong>
+          </div>
+
+          <div class="overview-item">
+            <span>SUPPLIER</span>
+            <strong>Apple India Pvt Ltd</strong>
+          </div>
+
+          <div class="overview-item full-width">
+            <span>NOTES</span>
+            <strong>
+              Primary work laptop for IT Asset Manager. Upgraded from MacBook Air M1.
+            </strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Specifications -->
+
+      <div class="side-card">
+        <div class="card-title">
+          <h3>Specifications</h3>
+        </div>
+
+        <div class="spec-grid">
+          <div class="spec-card">
+            <span>Processor</span>
+            <strong>Apple M3 Pro, 11-core CPU</strong>
+          </div>
+
+          <div class="spec-card">
+            <span>RAM</span>
+            <strong>18GB Unified Memory</strong>
+          </div>
+
+          <div class="spec-card">
+            <span>Storage</span>
+            <strong>512GB SSD</strong>
+          </div>
+
+          <div class="spec-card">
+            <span>Display</span>
+            <strong>14.2" Liquid Retina XDR</strong>
+          </div>
+
+          <div class="spec-card">
+            <span>OS</span>
+            <strong>macOS Sonoma 14</strong>
+          </div>
+
+          <div class="spec-card">
+            <span>Color</span>
+            <strong>Space Black</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="right-panel">
+      <!-- Assignment -->
+
+      <div class="side-card">
+        <div class="card-title">
+          <h3>Assignment Information</h3>
+        </div>
+
+        <div class="employee-row">
+          <div class="employee-avatar">NS</div>
+
+          <div>
+            <strong>Nisha Sharma</strong>
+            <p>EMP-2007</p>
+            <span>Information Technology</span>
+          </div>
+        </div>
+
+        <div class="summary-item">
+          <span>Assigned Date</span>
+          <strong>Mar 15, 2025</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Expected Return</span>
+          <strong>Mar 15, 2027</strong>
+        </div>
+
+        <button class="page-header-btn">Raise Ticket</button>
+      </div>
+
+      <!-- Warranty -->
+
+      <div class="side-card">
+        <div class="card-title">
+          <h3>Warranty Status</h3>
+        </div>
+
+        <div class="warranty-status">
+          <span class="status active"> Active </span>
+        </div>
+
+        <div class="warranty-dates">
+          <div>
+            <span>Start Date</span>
+            <strong>Mar 15, 2025</strong>
+          </div>
+
+          <div>
+            <span>End Date</span>
+            <strong>Mar 14, 2028</strong>
+          </div>
+        </div>
+
+        <div class="warranty-progress">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+
+          <span>644 days remaining</span>
+        </div>
+      </div>
+
+      <!-- Location -->
+
+      <div class="side-card">
+        <div class="card-title">
+          <h3>Location</h3>
+        </div>
+
+        <div class="location-card">
+          <h4>Bangalore</h4>
+
+          <div class="location-chip">Knodtec HQ</div>
+
+          <p>3rd Floor, Desk 24</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+
+      <div class="side-card">
+        <div class="card-title">
+          <h3>Quick Actions</h3>
+        </div>
+
+        <div class="quick-actions-list">
+          <button class="quick-action-row">Raise Ticket</button>
+
+          <button class="quick-action-row">Schedule Maintenance</button>
+
+          <button class="quick-action-row">View History</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+/* The dashboard mockup relies on the global `.bar-animate` keyframe
+   declared in `styles.scss`, which animates `transform: scaleY()` for a
+   smooth grow effect that doesn't fight the inline `height.%` style.
+   We only need component-specific styles here. */
+
+@keyframes copilot-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.copilot-reply {
+  animation: copilot-fade-in 0.4s ease-out 1.4s both;
+}
+
+:host {
+  display: block;
+  height: fit-content !important;
+  min-height: 0 !important;
+}
+
+/* Ensure decorative blobs are removed from document flow */
+:host .glass-strong > .absolute,
+:host .glass-strong > .size-48 {
+  position: absolute !important;
+}
+
+/* Pull the header to the top of the card and compact the inner layout */
+:host .glass-strong > .relative.flex.items-center.justify-between.border-b {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  right: 12px !important;
+  z-index: 2;
+}
+
+:host .glass-strong > .relative.grid.grid-cols-2 {
+  margin-top: 64px !important;
+}

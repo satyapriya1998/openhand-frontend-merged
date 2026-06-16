@@ -1,0 +1,758 @@
+<!-- login.component.html -->
+<div class="auth-container">
+  <!-- LEFT: Feature Carousel -->
+  <div class="carousel-section">
+  <div class="gradient-overlay"></div>
+
+  <div class="logo">
+    <div class="logo-icon">K</div>
+    <div class="logo-text">KnodTechOne</div>
+  </div>
+
+  <div class="carousel-content">
+    <div class="carousel-indicator">Feature {{ activeSlide() + 1 }}/{{ slides.length }}</div>
+    <h2 class="carousel-title">{{ slides[activeSlide()].title }}</h2>
+    <p class="carousel-desc">{{ slides[activeSlide()].desc }}</p>
+
+    <!-- Enhanced feature showcase with icons and descriptions -->
+   <div class="feature-showcase">
+  @for (slide of slides; track $index) {
+    <button
+      class="feature-item"
+      [class.active-feature]="$index === activeSlide()"
+      (click)="activeSlide.set($index)"
+      [attr.data-testid]="'carousel-dot-' + $index">
+      
+      <div class="feature-icon-wrapper">
+        <!--
+          ✅ CORRECTED SVG MARKUP:
+          Each svg element is properly self-closed or explicitly closed.
+          No extra nested svg tags. Added missing SVG paths.
+        -->
+        @if (slide.icon === 'rocket') {
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4.5 16.5c-1.5 1.26-2 3-2 3s1.74-.5 3-2"/>
+            <path d="M9 12c-1.5 1-3 2-4 3.5-.5 1-.5 2.5 0 3.5.5 1 2 1.5 3 .5 1-1 2-2.5 3-4"/>
+          </svg>
+        } @else if (slide.icon === 'analytics') {
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"/>
+            <path d="M18 17V9"/>
+            <path d="M12 17V5"/>
+            <path d="M6 17v-3"/>
+          </svg>
+        } @else if (slide.icon === 'shield') {
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        } @else if (slide.icon === 'users') {
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        } @else if (slide.icon === 'automation') {
+          <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+        }
+        
+        <!-- The green indicator dot -->
+        <div class="feature-indicator"></div>
+      </div>
+      
+      <div class="feature-info">
+        <span class="feature-title">{{ slide.titleShort || slide.title }}</span>
+        <span class="feature-badge" [class.active-badge]="$index === activeSlide()">
+          {{ $index === activeSlide() ? 'Current' : 'Explore' }}
+        </span>
+      </div>
+    </button>
+  }
+</div>
+
+    <!-- Modern carousel dots with labels -->
+    <div class="carousel-dots-modern">
+      @for (slide of slides; track $index) {
+        <button
+          class="dot-modern"
+          [class.active-dot]="$index === activeSlide()"
+          (click)="activeSlide.set($index)">
+          <span class="dot-line"></span>
+          <span class="dot-label">{{ slide.dotLabel || 'Feature ' + ($index + 1) }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Enhanced stats grid with icons -->
+  <div class="stats-grid-modern">
+    <div class="stat-card-modern">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <div class="stat-value">10k+</div>
+      <div class="stat-label">Active Teams</div>
+    </div>
+    <div class="stat-card-modern">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+      <div class="stat-value">99.9%</div>
+      <div class="stat-label">Uptime SLA</div>
+    </div>
+    <div class="stat-card-modern">
+      <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <div class="stat-value">SOC 2</div>
+      <div class="stat-label">Type II Certified</div>
+    </div>
+  </div>
+</div>
+
+  <!-- RIGHT: Form -->
+  <div class="form-section">
+      <!-- Animated Background Circles INSIDE form section -->
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      
+    <div class="form-container">
+      
+      <div class="mobile-logo">
+        <div class="mobile-logo-icon">K</div>
+        <div class="mobile-logo-text">KnodTechOne</div>
+      </div>
+
+      <h1 class="form-title">
+  {{
+    mode() === 'login'
+      ? 'Welcome back'
+      : mode() === 'signup'
+      ? 'Create your account'
+      : 'Create your tenant'
+  }}
+</h1>
+      <p class="form-subtitle">
+  {{
+    mode() === 'login'
+      ? 'Sign in to manage your workforce'
+      : mode() === 'signup'
+      ? 'Get started in under a minute'
+      : 'Set up your organization workspace'
+  }}
+</p>
+
+@if (mode() !== 'createTenant') { 
+      <div class="social-buttons">
+        <button class="btn-secondary" (click)="googleLogin()" data-testid="google-login-btn">
+          <svg class="w-4 h-4" viewBox="0 0 48 48" width="16" height="16">
+            <path fill="#FFC107" d="M43.6 20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C33.9 6 29.2 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-4z"/>
+            <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.2 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C33.9 6 29.2 4 24 4 16.3 4 9.7 8.4 6.3 14.7z"/>
+            <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35 26.7 36 24 36c-5.3 0-9.7-3.4-11.3-8l-6.5 5C9.5 39.5 16.2 44 24 44z"/>
+            <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.8 2.3-2.2 4.3-4.1 5.7l6.2 5.2C40.5 35.4 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/>
+          </svg>
+          Google
+        </button>
+        <button class="btn-secondary" (click)="xLogin()" data-testid="x-login-btn">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+            <path d="M18.244 2h3.308l-7.227 8.26L22.87 22h-6.66l-5.218-6.818L4.99 22H1.68l7.73-8.837L1.13 2h6.828l4.713 6.231L18.244 2Zm-1.161 18h1.833L7.084 4H5.117L17.083 20Z"/>
+          </svg>
+          Continue with X
+        </button>
+      </div>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        OR
+        <div class="divider-line"></div>
+      </div>
+
+      }
+
+      @if (mode() === 'login') {
+        <form [formGroup]="loginForm" (ngSubmit)="submit()" class="auth-form" data-testid="auth-form">
+
+          <div class="form-group">
+            <label class="label">Work email</label>
+            <input
+              class="input"
+              type="email"
+              formControlName="email"
+              placeholder="your@company.com"
+              [class.ng-invalid]="loginEmail?.invalid && loginEmail?.touched"
+              data-testid="auth-email"/>
+            @if (loginEmail?.invalid && loginEmail?.touched) {
+              <div class="error-message">
+                @if (loginEmail?.errors?.['required']) { Email is required }
+                @if (loginEmail?.errors?.['email']) { Please enter a valid email }
+              </div>
+            }
+          </div>
+
+          
+
+          <div class="form-group">
+            <label class="label">Password</label>
+              <div class="password-wrapper">
+
+          
+            <input
+              class="input"
+               [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              [class.ng-invalid]="loginPassword?.invalid && loginPassword?.touched"
+              data-testid="auth-password"/>
+
+                <button
+          type="button"
+          class="eye-btn"
+          (click)="showPassword = !showPassword"
+        >
+          <i
+            class="fa-solid"
+            [class.fa-eye]="!showPassword"
+            [class.fa-eye-slash]="showPassword"
+          ></i>
+        </button>
+
+            </div>
+
+            @if (loginPassword?.invalid && loginPassword?.touched) {
+              <div class="error-message">
+                @if (loginPassword?.errors?.['required']) { Password is required }
+                @if (loginPassword?.errors?.['minlength']) { Password must be at least 6 characters }
+              </div>
+            }
+          </div>
+
+          <div class="checkbox-wrapper">
+            <label class="checkbox-label">
+              <input type="checkbox"  data-testid="auth-remember"/>
+              Remember me
+            </label>
+            <button type="button" class="forgot-link" (click)="forgotOpen.set(true)" data-testid="forgot-password-link">
+              Forgot password?
+            </button>
+          </div>
+
+         @if (authService.error()) {
+  <div class="error-alert" data-testid="auth-error">
+    {{ authService.error() }}
+  </div>
+}
+
+          <button
+  type="submit"
+  class="btn-primary submit-btn"
+  [disabled]="loginForm.invalid || authService.loading()"
+  data-testid="auth-submit"
+>
+  {{
+    authService.loading()
+      ? 'Please wait…'
+      : 'Sign in'
+  }}
+</button>
+        </form>
+      }
+
+      @if (mode() === 'signup') {
+     <form
+  [formGroup]="signupForm"
+  (ngSubmit)="submit()"
+  class="auth-form"
+  data-testid="auth-form"
+>
+
+  <div class="form-grid">
+
+    <!-- FIRST NAME -->
+    <div class="form-group">
+      <label class="label">First name</label>
+
+      <input
+        class="input"
+        formControlName="firstName"
+        placeholder="Jane"
+        [class.ng-invalid]="signupFirstName?.invalid && signupFirstName?.touched"
+        data-testid="signup-name"
+      />
+
+      @if (signupFirstName?.invalid && signupFirstName?.touched) {
+        <div class="error-message">
+
+          @if (signupFirstName?.errors?.['required']) {
+            Name is required
+          }
+
+          @if (signupFirstName?.errors?.['minlength']) {
+            Name must be at least 2 characters
+          }
+
+        </div>
+      }
+    </div>
+
+    <!-- LAST NAME -->
+    <div class="form-group">
+
+      <label class="label">
+        Last name
+      </label>
+
+      <input
+        class="input"
+        formControlName="lastName"
+        placeholder="Doe"
+        [class.ng-invalid]="
+          signupLastName?.invalid &&
+          signupLastName?.touched
+        "
+      />
+
+      @if (
+        signupLastName?.invalid &&
+        signupLastName?.touched
+      ) {
+
+        <div class="error-message">
+
+          @if (
+            signupLastName?.errors?.['required']
+          ) {
+            Last name is required
+          }
+
+          @if (
+            signupLastName?.errors?.['minlength']
+          ) {
+            Minimum 2 characters required
+          }
+
+        </div>
+      }
+
+    </div>
+
+    <!-- EMAIL -->
+    <div class="form-group">
+
+      <label class="label">
+        Work email
+      </label>
+
+      <input
+        class="input"
+        type="email"
+        formControlName="email"
+        placeholder="you@company.com"
+        [class.ng-invalid]="
+          signupEmail?.invalid &&
+          signupEmail?.touched
+        "
+      />
+
+      @if (
+        signupEmail?.invalid &&
+        signupEmail?.touched
+      ) {
+
+        <div class="error-message">
+
+          @if (
+            signupEmail?.errors?.['required']
+          ) {
+            Email is required
+          }
+
+          @if (
+            signupEmail?.errors?.['email']
+          ) {
+            Please enter a valid email
+          }
+
+        </div>
+      }
+
+    </div>
+
+    <!-- PHONE -->
+    <div class="form-group">
+
+      <label class="label">
+        Phone number
+      </label>
+
+      <input
+        class="input"
+        formControlName="phoneNumber"
+        placeholder="9876543210"
+        [class.ng-invalid]="
+          signupPhoneNumber?.invalid &&
+          signupPhoneNumber?.touched
+        "
+      />
+
+      @if (
+        signupPhoneNumber?.errors?.['pattern'] &&
+        signupPhoneNumber?.touched
+      ) {
+
+        <div class="error-message">
+          Enter valid 10 digit phone number
+        </div>
+
+      }
+
+    </div>
+
+    <!-- PASSWORD -->
+    <div class="form-group">
+
+      <label class="label">
+        Password
+      </label>
+
+      <div class="password-wrapper">
+
+        <input
+          class="input"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="••••••••"
+          [class.ng-invalid]="
+            signupPassword?.invalid &&
+            signupPassword?.touched
+          "
+        />
+
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="showPassword = !showPassword"
+        >
+          <i
+            class="fa-solid"
+            [class.fa-eye]="!showPassword"
+            [class.fa-eye-slash]="showPassword"
+          ></i>
+        </button>
+
+      </div>
+
+      @if (
+        signupPassword?.invalid &&
+        signupPassword?.touched
+      ) {
+
+        <div class="error-message">
+
+          @if (
+            signupPassword?.errors?.['required']
+          ) {
+            Password is required
+          }
+
+          @if (
+            signupPassword?.errors?.['minlength']
+          ) {
+            Minimum 6 characters required
+          }
+
+        </div>
+      }
+
+    </div>
+
+    <!-- CONFIRM PASSWORD -->
+    <div class="form-group">
+
+      <label class="label">
+        Confirm password
+      </label>
+
+      <div class="password-wrapper">
+
+        <input
+          class="input"
+          [type]="showConfirmPassword ? 'text' : 'password'"
+          formControlName="confirmPassword"
+          placeholder="••••••••"
+          [class.ng-invalid]="
+            signupConfirm?.invalid &&
+            signupConfirm?.touched
+          "
+        />
+
+        <button
+          type="button"
+          class="eye-btn"
+          (click)="showConfirmPassword = !showConfirmPassword"
+        >
+          <i
+            class="fa-solid"
+            [class.fa-eye]="!showConfirmPassword"
+            [class.fa-eye-slash]="showConfirmPassword"
+          ></i>
+        </button>
+
+      </div>
+
+      @if (
+        signupForm.errors?.['mismatch'] &&
+        signupConfirm?.touched
+      ) {
+
+        <div class="error-message">
+          Passwords do not match
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+ @if (authService.error()) {
+  <div class="error-alert" data-testid="auth-error">
+    {{ authService.error() }}
+  </div>
+}
+
+<button
+  type="submit"
+  class="btn-primary submit-btn"
+  [disabled]="signupForm.invalid || authService.loading()"
+  data-testid="auth-submit"
+>
+  {{
+    authService.loading()
+      ? 'Please wait…'
+      : 'Create account'
+  }}
+</button>
+
+</form>
+      }
+
+      @if (mode() === 'createTenant') {
+
+<form
+  [formGroup]="tenantForm"
+  (ngSubmit)="submit()"
+  class="auth-form"
+>
+
+  <div class="form-grid">
+
+    <!-- TENANT NAME -->
+    <div class="form-group">
+      <label class="label">Tenant name</label>
+
+      <input
+        class="input"
+        formControlName="tenantName"
+        placeholder="Acme HR"
+        [class.ng-invalid]="tenantName?.invalid && tenantName?.touched"
+      />
+
+      @if (tenantName?.invalid && tenantName?.touched) {
+        <div class="error-message">
+
+          @if (tenantName?.errors?.['required']) {
+            Tenant name is required
+          }
+
+          @if (tenantName?.errors?.['minlength']) {
+            Minimum 2 characters required
+          }
+
+        </div>
+      }
+    </div>
+
+    <!-- SUBDOMAIN -->
+    <div class="form-group">
+      <label class="label">Tenant subdomain</label>
+
+      <div class="subdomain-wrapper">
+
+        <input
+          class="input"
+          formControlName="tenantSubdomain"
+          placeholder="acme"
+          [class.ng-invalid]="tenantSubdomain?.invalid && tenantSubdomain?.touched"
+        />
+
+        <span class="subdomain-suffix">
+          .knodtechone.com
+        </span>
+
+      </div>
+
+      @if (tenantSubdomain?.invalid && tenantSubdomain?.touched) {
+
+        <div class="error-message">
+
+          @if (tenantSubdomain?.errors?.['required']) {
+            Subdomain is required
+          }
+
+          @if (tenantSubdomain?.errors?.['pattern']) {
+            Only lowercase letters, numbers and hyphens allowed
+          }
+
+        </div>
+      }
+    </div>
+
+    <!-- SUBSCRIPTION -->
+    <div class="form-group">
+
+      <label class="label">
+        Subscription model
+      </label>
+
+      <select
+        class="input"
+        formControlName="subscriptionModel"
+        [class.ng-invalid]="tenantSubscription?.invalid && tenantSubscription?.touched"
+      >
+
+        <option value="">
+          Select plan
+        </option>
+
+        @for (plan of subscriptionModels; track plan) {
+          <option [value]="plan">
+            {{ plan }}
+          </option>
+        }
+
+      </select>
+
+      @if (tenantSubscription?.invalid && tenantSubscription?.touched) {
+
+        <div class="error-message">
+          Subscription model is required
+        </div>
+
+      }
+    </div>
+
+    <!-- EMPLOYEE COUNT -->
+    <div class="form-group">
+
+      <label class="label">
+        Number of employees
+      </label>
+
+      <input
+        class="input"
+        type="number"
+        formControlName="employeeCount"
+        placeholder="100"
+        [class.ng-invalid]="tenantEmployeeCount?.invalid && tenantEmployeeCount?.touched"
+      />
+
+      @if (tenantEmployeeCount?.invalid && tenantEmployeeCount?.touched) {
+
+        <div class="error-message">
+
+          @if (tenantEmployeeCount?.errors?.['required']) {
+            Employee count is required
+          }
+
+          @if (tenantEmployeeCount?.errors?.['min']) {
+            Minimum 1 employee required
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+@if (authService.error()) {
+  <div class="error-alert" data-testid="auth-error">
+    {{ authService.error() }}
+  </div>
+}
+
+  <button
+  type="submit"
+  class="btn-primary submit-btn"
+  [disabled]="tenantForm.invalid || authService.loading()"
+>
+  {{
+    authService.loading()
+      ? 'Creating tenant...'
+      : 'Create tenant'
+  }}
+</button>
+
+</form>
+
+}
+
+      <p class="switch-mode">
+        {{ mode() === 'login' ? "Don't have an account?" : 'Already have an account?' }}
+        <button class="switch-btn" (click)="switchMode()" data-testid="switch-mode">
+          {{ mode() === 'login' ? 'Sign up' : 'Sign in' }}
+        </button>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Forgot Password Modal -->
+@if (forgotOpen()) {
+  <div class="modal-overlay" (click)="forgotOpen.set(false)">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Reset your password</h3>
+        <button class="modal-close" (click)="forgotOpen.set(false)">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Enter your email and we'll send you a reset link.</p>
+        <input
+          class="input"
+          type="email"
+    
+          placeholder="you@company.com"
+          data-testid="forgot-email"/>
+        @if (forgotEmail?.invalid && forgotEmail?.touched) {
+          <div class="error-message">
+            @if (forgotEmail?.errors?.['required']) { Email is required }
+            @if (forgotEmail?.errors?.['email']) { Please enter a valid email }
+          </div>
+        }
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="forgotOpen.set(false)" data-testid="forgot-cancel">Cancel</button>
+        <button class="btn-primary" (click)="handleForgotPassword()" data-testid="forgot-submit">
+          {{ authService.loading() ? 'Sending...' : 'Send reset link' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

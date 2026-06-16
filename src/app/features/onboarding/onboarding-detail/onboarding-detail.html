@@ -1,0 +1,1024 @@
+<div class="hrms-page page-container">
+  <!-- BREADCRUMBS -->
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <!-- PAGE HEADER -->
+  <app-page-header
+    title="Employee Details"
+    subtitle="Track and manage new employee onboarding process"
+    [icon]="faPlus"
+  >
+    <button class="page-header-btn primary">Back</button>
+  </app-page-header>
+  <div class="employee-summary-card">
+    <div class="employee-profile">
+      <div class="employee-avatar">JD</div>
+
+      <div class="employee-info">
+        <div class="employee-name-row">
+          <h2>John Doe</h2>
+
+          <span class="review-badge"> Pending Review </span>
+        </div>
+
+        <p class="employee-role">Software Engineer</p>
+
+        <p class="employee-department">Engineering Department</p>
+
+        <div class="employee-contact">
+          <span>
+            <fa-icon [icon]="faEnvelope"></fa-icon>
+            john.doe@email.com
+          </span>
+
+          <span>
+            <fa-icon [icon]="faPhone"></fa-icon>
+            +1 (555) 987-6543
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="employee-meta">
+      <div class="meta-item">
+        <div class="meta-icon">
+          <fa-icon [icon]="faCalendarAlt"></fa-icon>
+        </div>
+
+        <div>
+          <label>Joining Date</label>
+          <strong>15 Jun 2024</strong>
+        </div>
+      </div>
+
+      <div class="meta-divider"></div>
+
+      <div class="meta-item">
+        <div class="meta-icon">
+          <fa-icon [icon]="faIdCard"></fa-icon>
+        </div>
+
+        <div>
+          <label>Employee ID</label>
+          <strong>EMP-2024-001</strong>
+        </div>
+      </div>
+
+      <div class="meta-divider"></div>
+
+      <div class="meta-item">
+        <div class="meta-icon">
+          <fa-icon [icon]="faClock"></fa-icon>
+        </div>
+
+        <div>
+          <label>Onboarding Status</label>
+          <strong class="status-text"> In Progress (65%) </strong>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-tabs [tabs]="tabs" [activeTab]="activeTab()" (tabChange)="setActiveTab($event)"></app-tabs>
+ 
+
+<app-page-layout>
+  <div class="details-panel" main>
+      <div class="content-scroll custom-scrollbar">
+        @if (activeTab() === 'personal') {
+          <div class="animate-fadeIn">
+            <div class="section-sticky-header">
+              <app-page-sub-header
+                title="Personal Information"
+                subtitle="Basic details and contact information"
+                [icon]="faUser"
+              >
+                <button class="page-header-btn approve-btn" (click)="approveModule(activeTab())">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                  Approve
+                </button>
+
+                <button
+                  class="page-header-btn correction-btn"
+                  (click)="requestCorrection(activeTab())"
+                >
+                  <fa-icon [icon]="faClock"></fa-icon>
+                  Request Correction
+                </button>
+
+                <button class="page-header-btn reject-btn" (click)="rejectModule(activeTab())">
+                  <fa-icon [icon]="faTimesCircle"></fa-icon>
+                  Reject
+                </button>
+              </app-page-sub-header>
+            </div>
+            <!-- <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                [class]="{
+                  'bg-orange-50 text-orange-600': getModuleStatus('personal').status === 'pending',
+                  'bg-emerald-50 text-emerald-600':
+                    getModuleStatus('personal').status === 'approved',
+                  'bg-red-50 text-red-600': getModuleStatus('personal').status === 'rejected',
+                  'bg-amber-50 text-amber-600': getModuleStatus('personal').status === 'correction',
+                }"
+              >
+                <fa-icon [icon]="getStatusIcon(getModuleStatus('personal').status)"></fa-icon>
+                <span>{{ getModuleStatus('personal').status | uppercase }}</span>
+              </div> -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7 form">
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faUser" class="mr-1.5 text-blue-500"></fa-icon>
+                  Full Name
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">John Michael Doe</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faEnvelope" class="mr-1.5 text-blue-500"></fa-icon>
+                  Email Address
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">john.doe@company.com</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faPhone" class="mr-1.5 text-blue-500"></fa-icon>
+                  Phone Number
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">+1 (555) 123-4567</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faCalendarAlt" class="mr-1.5 text-blue-500"></fa-icon>
+                  Date of Birth
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">May 15, 1990</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faVenusMars" class="mr-1.5 text-blue-500"></fa-icon>
+                  Gender
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">Male</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faHeart" class="mr-1.5 text-blue-500"></fa-icon>
+                  Marital Status
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">Married</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faFlag" class="mr-1.5 text-blue-500"></fa-icon>
+                  Nationality
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">American</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                >
+                  <fa-icon [icon]="faTint" class="mr-1.5 text-blue-500"></fa-icon>
+                  Blood Group
+                </label>
+                <p class="text-sm font-medium text-gray-900 m-0">O+</p>
+              </div>
+            </div>
+
+            <!-- <div class="mt-6 pt-4 border-t border-gray-200">
+            <div class="flex items-center gap-2 mb-3">
+              <fa-icon [icon]="faComment" class="text-blue-500"></fa-icon>
+              <span class="font-semibold text-gray-700">HR Review & Comments</span>
+            </div>
+            <textarea
+              class="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              [(ngModel)]="moduleComments['personal']"
+              placeholder="Add your comments about this section..."
+              rows="3"
+            ></textarea>
+            <div class="flex gap-3 mt-4">
+              <button
+                class="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm"
+                (click)="approveModule('personal')"
+              >
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Approve
+              </button>
+              <button
+                class="flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm"
+                (click)="requestCorrection('personal')"
+              >
+                <fa-icon [icon]="faClock"></fa-icon>
+                Request Correction
+              </button>
+              <button
+                class="flex items-center gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm"
+                (click)="rejectModule('personal')"
+              >
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
+                Reject
+              </button>
+            </div>
+          </div> -->
+          </div>
+        }
+
+        @if (activeTab() === 'address') {
+          <div class="animate-fadeIn">
+            <!-- <div class="flex justify-between items-start mb-6 pb-4 border-b-2 border-gray-100"> -->
+            <div class="section-sticky-header">
+              <app-page-sub-header
+                title="Address Information"
+                subtitle="Current and permanent address details"
+                [icon]="faUser"
+              >
+                <button class="page-header-btn approve-btn" (click)="approveModule(activeTab())">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                  Approve
+                </button>
+
+                <button
+                  class="page-header-btn correction-btn"
+                  (click)="requestCorrection(activeTab())"
+                >
+                  <fa-icon [icon]="faClock"></fa-icon>
+                  Request Correction
+                </button>
+
+                <button class="page-header-btn reject-btn" (click)="rejectModule(activeTab())">
+                  <fa-icon [icon]="faTimesCircle"></fa-icon>
+                  Reject
+                </button>
+              </app-page-sub-header>
+            </div>
+            <!-- <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                [class]="{
+                  'bg-orange-50 text-orange-600': getModuleStatus('address').status === 'pending',
+                  'bg-emerald-50 text-emerald-600':
+                    getModuleStatus('address').status === 'approved',
+                  'bg-red-50 text-red-600': getModuleStatus('address').status === 'rejected',
+                  'bg-amber-50 text-amber-600': getModuleStatus('address').status === 'correction',
+                }"
+              >
+                <fa-icon [icon]="getStatusIcon(getModuleStatus('address').status)"></fa-icon>
+                <span>{{ getModuleStatus('address').status | uppercase }}</span>
+              </div> -->
+            <!-- </div> -->
+
+            <div class="mb-8 form">
+              <h4 class="text-base font-semibold text-blue-600 mb-4 flex items-center gap-2">
+                <fa-icon [icon]="faHome"></fa-icon>
+                Current Address
+              </h4>
+              <div class="address-grid">
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 md:col-span-2">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >
+                    <fa-icon [icon]="faMapPin" class="mr-1.5 text-blue-500"></fa-icon>
+                    Street Address
+                  </label>
+                  <p class="text-sm font-medium text-gray-900 m-0">1234 Maple Avenue, Apt 5B</p>
+                </div>
+                <div class="address-card">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >
+                    <fa-icon [icon]="faCity" class="mr-1.5 text-blue-500"></fa-icon>
+                    City
+                  </label>
+                  <p class="text-sm font-medium text-gray-900 m-0">Brooklyn</p>
+                </div>
+                <div class="address-card">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                    >State</label
+                  >
+                  <p class="text-sm font-medium text-gray-900 m-0">New York</p>
+                </div>
+                <div class="address-card">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                    >ZIP Code</label
+                  >
+                  <p class="text-sm font-medium text-gray-900 m-0">11230</p>
+                </div>
+                <div class="address-card">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >
+                    <fa-icon [icon]="faGlobe" class="mr-1.5 text-blue-500"></fa-icon>
+                    Country
+                  </label>
+                  <p class="text-sm font-medium text-gray-900 m-0">United States</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-7 form">
+              <h4 class="text-base font-semibold text-blue-600 mb-4 flex items-center gap-2">
+                <fa-icon [icon]="faBuildingColumns"></fa-icon>
+                Permanent Address
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 md:col-span-2">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >
+                    <fa-icon [icon]="faMapPin" class="mr-1.5 text-blue-500"></fa-icon>
+                    Street Address
+                  </label>
+                  <p class="text-sm font-medium text-gray-900 m-0">5678 Oak Street</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                    >City</label
+                  >
+                  <p class="text-sm font-medium text-gray-900 m-0">Los Angeles</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                    >State</label
+                  >
+                  <p class="text-sm font-medium text-gray-900 m-0">California</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                    >ZIP Code</label
+                  >
+                  <p class="text-sm font-medium text-gray-900 m-0">90001</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                  <label
+                    class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                    >Country</label
+                  >
+                  <p class="text-sm font-medium text-gray-900 m-0">United States</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (activeTab() === 'education') {
+          <div class="animate-fadeIn">
+                        <div class="section-sticky-header ">
+
+            <app-page-sub-header
+              title="Education Details"
+              subtitle="Academic qualifications and certifications"
+              [icon]="faGraduationCap"
+            >
+              <button class="page-header-btn approve-btn" (click)="approveModule(activeTab())">
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Approve
+              </button>
+
+              <button
+                class="page-header-btn correction-btn"
+                (click)="requestCorrection(activeTab())"
+              >
+                <fa-icon [icon]="faClock"></fa-icon>
+                Request Correction
+              </button>
+
+              <button class="page-header-btn reject-btn" (click)="rejectModule(activeTab())">
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
+                Reject
+              </button>
+              <!-- same 3 buttons -->
+            </app-page-sub-header>
+            </div>
+            <div class="flex justify-between items-start mb-6 pb-4 border-b-2 border-gray-100">
+              <!-- <div>
+                <h3 class="text-xl font-bold text-gray-900 m-0">Education Details</h3>
+                <p class="text-sm text-gray-500 mt-1.5">
+                  Academic qualifications and certifications
+                </p>
+              </div> -->
+              <!-- <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                [class]="{
+                  'bg-orange-50 text-orange-600': getModuleStatus('education').status === 'pending',
+                  'bg-emerald-50 text-emerald-600':
+                    getModuleStatus('education').status === 'approved',
+                  'bg-red-50 text-red-600': getModuleStatus('education').status === 'rejected',
+                  'bg-amber-50 text-amber-600':
+                    getModuleStatus('education').status === 'correction',
+                }"
+              >
+                <fa-icon [icon]="getStatusIcon(getModuleStatus('education').status)"></fa-icon>
+                <span>{{ getModuleStatus('education').status | uppercase }}</span>
+              </div> -->
+            </div>
+
+            <div class="flex flex-col gap-5 mb-7">
+              <div class="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl flex items-center justify-center text-blue-600 text-xl"
+                >
+                  <fa-icon [icon]="faGraduationCap"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-semibold text-gray-900 m-0 mb-1.5">
+                    Master of Science in Computer Science
+                  </h4>
+                  <p class="text-sm text-blue-600 font-medium m-0 mb-1">Stanford University</p>
+                  <p class="text-xs text-gray-500 m-0 mb-2">2012 - 2014</p>
+                  <p class="text-sm text-gray-600 m-0">GPA: 3.8/4.0</p>
+                </div>
+              </div>
+              <div class="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl flex items-center justify-center text-blue-600 text-xl"
+                >
+                  <fa-icon [icon]="faGraduationCap"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-semibold text-gray-900 m-0 mb-1.5">
+                    Bachelor of Engineering in IT
+                  </h4>
+                  <p class="text-sm text-blue-600 font-medium m-0 mb-1">
+                    University of California, Berkeley
+                  </p>
+                  <p class="text-xs text-gray-500 m-0 mb-2">2008 - 2012</p>
+                  <p class="text-sm text-gray-600 m-0">Percentage: 85%</p>
+                </div>
+              </div>
+              <div class="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl flex items-center justify-center text-blue-600 text-xl"
+                >
+                  <fa-icon [icon]="faCertificate"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-semibold text-gray-900 m-0 mb-1.5">
+                    AWS Certified Solutions Architect
+                  </h4>
+                  <p class="text-sm text-blue-600 font-medium m-0 mb-1">Amazon Web Services</p>
+                  <p class="text-xs text-gray-500 m-0 mb-2">2023</p>
+                  <p class="text-sm text-gray-600 m-0">Certification ID: AWS-12345</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (activeTab() === 'experience') {
+          <div class="animate-fadeIn">
+                        <div class="section-sticky-header ">
+
+            <app-page-sub-header
+              title="Work Experience"
+              subtitle="Professional background and employment history"
+              [icon]="faBriefcase"
+            >
+              <button class="page-header-btn approve-btn" (click)="approveModule(activeTab())">
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Approve
+              </button>
+
+              <button
+                class="page-header-btn correction-btn"
+                (click)="requestCorrection(activeTab())"
+              >
+                <fa-icon [icon]="faClock"></fa-icon>
+                Request Correction
+              </button>
+
+              <button class="page-header-btn reject-btn" (click)="rejectModule(activeTab())">
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
+                Reject
+              </button>
+              <!-- same 3 buttons -->
+            </app-page-sub-header>
+            </div>
+            <!-- <div class="flex justify-between items-start mb-6 pb-4 border-b-2 border-gray-100">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 m-0">Work Experience</h3>
+                <p class="text-sm text-gray-500 mt-1.5">
+                  Professional background and employment history
+                </p>
+              </div>
+              <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                [class]="{
+                  'bg-orange-50 text-orange-600':
+                    getModuleStatus('experience').status === 'pending',
+                  'bg-emerald-50 text-emerald-600':
+                    getModuleStatus('experience').status === 'approved',
+                  'bg-red-50 text-red-600': getModuleStatus('experience').status === 'rejected',
+                  'bg-amber-50 text-amber-600':
+                    getModuleStatus('experience').status === 'correction',
+                }"
+              >
+                <fa-icon [icon]="getStatusIcon(getModuleStatus('experience').status)"></fa-icon>
+                <span>{{ getModuleStatus('experience').status | uppercase }}</span>
+              </div>
+            </div> -->
+
+            <div class="flex flex-col gap-5 mb-7 form">
+              <div class="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl flex items-center justify-center text-blue-600 text-xl"
+                >
+                  <fa-icon [icon]="faBriefcase"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-semibold text-gray-900 m-0 mb-1.5">
+                    Senior Software Engineer
+                  </h4>
+                  <p class="text-sm text-blue-600 font-medium m-0 mb-1">Tech Corp Inc.</p>
+                  <p class="text-xs text-gray-500 m-0 mb-2">2021 - Present</p>
+                  <p class="text-sm text-gray-600 m-0">
+                    Leading frontend development team, architecting Angular applications, mentoring
+                    junior developers.
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl flex items-center justify-center text-blue-600 text-xl"
+                >
+                  <fa-icon [icon]="faBriefcase"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-semibold text-gray-900 m-0 mb-1.5">
+                    Software Developer
+                  </h4>
+                  <p class="text-sm text-blue-600 font-medium m-0 mb-1">Digital Solutions Ltd.</p>
+                  <p class="text-xs text-gray-500 m-0 mb-2">2018 - 2021</p>
+                  <p class="text-sm text-gray-600 m-0">
+                    Developed full-stack web applications, implemented RESTful APIs, optimized
+                    database queries.
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div
+                  class="w-12 h-12 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl flex items-center justify-center text-blue-600 text-xl"
+                >
+                  <fa-icon [icon]="faBriefcase"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-base font-semibold text-gray-900 m-0 mb-1.5">
+                    Junior Developer Intern
+                  </h4>
+                  <p class="text-sm text-blue-600 font-medium m-0 mb-1">StartUp Hub</p>
+                  <p class="text-xs text-gray-500 m-0 mb-2">2017 - 2018</p>
+                  <p class="text-sm text-gray-600 m-0">
+                    Assisted in frontend development, bug fixing, and testing.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (activeTab() === 'documents') {
+          <div class="animate-fadeIn">
+                        <div class="section-sticky-header ">
+
+            <app-page-sub-header
+              title="Documents & Attachments"
+              subtitle="Uploaded documents and verification files"
+              [icon]="faFolderOpen"
+            >
+              <button class="page-header-btn approve-btn" (click)="approveModule(activeTab())">
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Approve
+              </button>
+
+              <button
+                class="page-header-btn correction-btn"
+                (click)="requestCorrection(activeTab())"
+              >
+                <fa-icon [icon]="faClock"></fa-icon>
+                Request Correction
+              </button>
+
+              <button class="page-header-btn reject-btn" (click)="rejectModule(activeTab())">
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
+                Reject
+              </button>
+              <!-- same 3 buttons -->
+            </app-page-sub-header>
+            </div>
+            <!-- <div class="flex justify-between items-start mb-6 pb-4 border-b-2 border-gray-100">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 m-0">Documents & Attachments</h3>
+                <p class="text-sm text-gray-500 mt-1.5">
+                  Uploaded documents and verification files
+                </p>
+              </div>
+              <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                [class]="{
+                  'bg-orange-50 text-orange-600': getModuleStatus('documents').status === 'pending',
+                  'bg-emerald-50 text-emerald-600':
+                    getModuleStatus('documents').status === 'approved',
+                  'bg-red-50 text-red-600': getModuleStatus('documents').status === 'rejected',
+                  'bg-amber-50 text-amber-600':
+                    getModuleStatus('documents').status === 'correction',
+                }"
+              >
+                <fa-icon [icon]="getStatusIcon(getModuleStatus('documents').status)"></fa-icon>
+                <span>{{ getModuleStatus('documents').status | uppercase }}</span>
+              </div>
+            </div> -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-7 form">
+              <div
+                class="flex items-center gap-3.5 p-4 bg-gray-50 rounded-xl border border-gray-200"
+              >
+                <div
+                  class="w-11 h-11 bg-white rounded-xl flex items-center justify-center text-blue-600 text-lg shadow-sm"
+                >
+                  <fa-icon [icon]="faIdCard"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-sm font-semibold text-gray-900 m-0">Government ID.pdf</h4>
+                  <p class="text-xs text-gray-500 m-0">Passport • Uploaded: Jan 15, 2024</p>
+                </div>
+                <div class="flex gap-1">
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faEye" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faDownload" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="flex items-center gap-3.5 p-4 bg-gray-50 rounded-xl border border-gray-200"
+              >
+                <div
+                  class="w-11 h-11 bg-white rounded-xl flex items-center justify-center text-blue-600 text-lg shadow-sm"
+                >
+                  <fa-icon [icon]="faGraduationCap"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-sm font-semibold text-gray-900 m-0">Degree Certificate.pdf</h4>
+                  <p class="text-xs text-gray-500 m-0">Master's Degree • Uploaded: Jan 20, 2024</p>
+                </div>
+                <div class="flex gap-1">
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faEye" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faDownload" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="flex items-center gap-3.5 p-4 bg-gray-50 rounded-xl border border-gray-200"
+              >
+                <div
+                  class="w-11 h-11 bg-white rounded-xl flex items-center justify-center text-blue-600 text-lg shadow-sm"
+                >
+                  <fa-icon [icon]="faFileAlt"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-sm font-semibold text-gray-900 m-0">Resume_John_Doe.pdf</h4>
+                  <p class="text-xs text-gray-500 m-0">Resume/CV • Uploaded: Jan 10, 2024</p>
+                </div>
+                <div class="flex gap-1">
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faEye" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faDownload" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="flex items-center gap-3.5 p-4 bg-gray-50 rounded-xl border border-gray-200"
+              >
+                <div
+                  class="w-11 h-11 bg-white rounded-xl flex items-center justify-center text-blue-600 text-lg shadow-sm"
+                >
+                  <fa-icon [icon]="faPassport"></fa-icon>
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-sm font-semibold text-gray-900 m-0">Passport_Scan.pdf</h4>
+                  <p class="text-xs text-gray-500 m-0">Passport • Uploaded: Jan 18, 2024</p>
+                </div>
+                <div class="flex gap-1">
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faEye" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                  <button class="w-8 h-8 rounded-lg hover:bg-gray-200 transition-colors">
+                    <fa-icon [icon]="faDownload" class="text-gray-500 text-sm"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (activeTab() === 'bank') {
+          <div class="animate-fadeIn">
+                        <div class="section-sticky-header ">
+
+            <app-page-sub-header
+              title="Bank Account Details"
+              subtitle="Salary account and banking information"
+              [icon]="faBuildingColumns"
+            >
+              <button class="page-header-btn approve-btn" (click)="approveModule(activeTab())">
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Approve
+              </button>
+
+              <button
+                class="page-header-btn correction-btn"
+                (click)="requestCorrection(activeTab())"
+              >
+                <fa-icon [icon]="faClock"></fa-icon>
+                Request Correction
+              </button>
+
+              <button class="page-header-btn reject-btn" (click)="rejectModule(activeTab())">
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
+                Reject
+              </button>
+              <!-- same 3 buttons -->
+            </app-page-sub-header>
+            </div>
+            <!-- <div class="flex justify-between items-start mb-6 pb-4 border-b-2 border-gray-100">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 m-0">Bank Account Details</h3>
+                <p class="text-sm text-gray-500 mt-1.5">Salary account and banking information</p>
+              </div>
+              <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                [class]="{
+                  'bg-orange-50 text-orange-600': getModuleStatus('bank').status === 'pending',
+                  'bg-emerald-50 text-emerald-600': getModuleStatus('bank').status === 'approved',
+                  'bg-red-50 text-red-600': getModuleStatus('bank').status === 'rejected',
+                  'bg-amber-50 text-amber-600': getModuleStatus('bank').status === 'correction',
+                }"
+              >
+                <fa-icon [icon]="getStatusIcon(getModuleStatus('bank').status)"></fa-icon>
+                <span>{{ getModuleStatus('bank').status | uppercase }}</span>
+              </div>
+            </div> -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7 form">
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Account Holder Name</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">John Michael Doe</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Bank Name</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">Chase Bank</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Account Number</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">****1234</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Routing Number</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">021000021</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Account Type</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">Checking</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >IFSC Code</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">CHASUS33</p>
+              </div>
+            </div>
+          </div>
+        }
+
+        @if (activeTab() === 'emergency') {
+          <div class="animate-fadeIn">
+                        <div class="section-sticky-header ">
+
+            <app-page-sub-header
+              title="Emergency Contact"
+              subtitle="Person to contact in case of emergency"
+              [icon]="faPhone"
+            >
+              <button class="page-header-btn approve-btn" (click)="approveModule(activeTab())">
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Approve
+              </button>
+
+              <button
+                class="page-header-btn correction-btn"
+                (click)="requestCorrection(activeTab())"
+              >
+                <fa-icon [icon]="faClock"></fa-icon>
+                Request Correction
+              </button>
+
+              <button class="page-header-btn reject-btn" (click)="rejectModule(activeTab())">
+                <fa-icon [icon]="faTimesCircle"></fa-icon>
+                Reject
+              </button>
+              <!-- same 3 buttons -->
+            </app-page-sub-header>
+            </div>
+            <!-- <div class="flex justify-between items-start mb-6 pb-4 border-b-2 border-gray-100">
+              <div>
+                <h3 class="text-xl font-bold text-gray-900 m-0">Emergency Contact</h3>
+                <p class="text-sm text-gray-500 mt-1.5">Person to contact in case of emergency</p>
+              </div>
+              <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold"
+                [class]="{
+                  'bg-orange-50 text-orange-600': getModuleStatus('emergency').status === 'pending',
+                  'bg-emerald-50 text-emerald-600':
+                    getModuleStatus('emergency').status === 'approved',
+                  'bg-red-50 text-red-600': getModuleStatus('emergency').status === 'rejected',
+                  'bg-amber-50 text-amber-600':
+                    getModuleStatus('emergency').status === 'correction',
+                }"
+              >
+                <fa-icon [icon]="getStatusIcon(getModuleStatus('emergency').status)"></fa-icon>
+                <span>{{ getModuleStatus('emergency').status | uppercase }}</span>
+              </div>
+            </div> -->
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-7 form">
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Contact Name</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">Jane Doe</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Relationship</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">Spouse</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Phone Number</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">+1 (555) 987-6543</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Alternate Phone</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">+1 (555) 456-7890</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 md:col-span-2">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Email Address</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">jane.doe@email.com</p>
+              </div>
+              <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 md:col-span-2">
+                <label
+                  class="text-xs font-semibold text-gray-500 uppercase tracking-wide block mb-2"
+                  >Address</label
+                >
+                <p class="text-sm font-medium text-gray-900 m-0">
+                  1234 Maple Avenue, Apt 5B, Brooklyn, NY 11230
+                </p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+     <div class="review-panel" sidebar>
+      <!-- Header -->
+      <div class="review-header">
+        <div class="review-icon">
+          <fa-icon [icon]="faComment"></fa-icon>
+        </div>
+
+        <div class="review-title">
+          <h3>HR Review & Actions</h3>
+          <p>Review current onboarding section</p>
+        </div>
+      </div>
+
+      <!-- Status Card -->
+      <div class="status-card">
+        <label class="status-label">Section Status</label>
+
+        <select class="review-status-select" [(ngModel)]="moduleStatuses[activeTab()].status">
+          <option value="pending">Pending Review</option>
+          <option value="approved">Approved</option>
+          <option value="correction">Needs Correction</option>
+          <option value="rejected">Rejected</option>
+        </select>
+      </div>
+
+      <!-- Comments -->
+      <div class="review-section">
+        <label>Review Comments</label>
+
+        <textarea
+          rows="5"
+          [(ngModel)]="moduleComments[activeTab()]"
+          placeholder="Add comments, observations or requested changes..."
+        ></textarea>
+      </div>
+
+      <!-- History -->
+      <div class="review-history">
+        <div class="history-header">Review History</div>
+
+        <div class="history-item">
+          <div class="history-dot"></div>
+
+          <div>
+            <span>Employee onboarding created</span>
+            <small>10 Jun 2026</small>
+          </div>
+        </div>
+
+        @if (getModuleStatus(activeTab()).reviewedDate) {
+          <div class="history-item">
+            <div class="history-dot success"></div>
+
+            <div>
+              <span>Last review completed</span>
+              <small>
+                {{ getModuleStatus(activeTab()).reviewedDate }}
+              </small>
+            </div>
+          </div>
+        }
+      </div>
+      <!-- Actions -->
+      <!-- <div class="action-buttons">
+
+    <button
+      class="action-btn approve-btn"
+      (click)="approveModule(activeTab())">
+      <fa-icon [icon]="faCheckCircle"></fa-icon>
+      <span>Approve</span>
+    </button>
+
+    <button
+      class="action-btn correction-btn"
+      (click)="requestCorrection(activeTab())">
+      <fa-icon [icon]="faClock"></fa-icon>
+      <span>Correction</span>
+    </button>
+
+    <button
+      class="action-btn reject-btn"
+      (click)="rejectModule(activeTab())">
+      <fa-icon [icon]="faTimesCircle"></fa-icon>
+      <span>Reject</span>
+    </button>
+
+  </div> -->
+    </div>
+</app-page-layout>
+
+ 
+</div>

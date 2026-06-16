@@ -1,0 +1,417 @@
+<div class="hrms-page page-container">
+  <app-breadcrumbs></app-breadcrumbs>
+
+  <app-page-header
+    title="Address Information"
+    subtitle="Manage your current and permanent address details"
+    [icon]="faMapLocationDot"
+  >
+  </app-page-header>
+
+  <div class="mt-6">
+    <div class="organization-page">
+      <div class="organization-grid">
+        <!-- LEFT -->
+        <div class="organization-form-card">
+          <app-page-sub-header
+            title="Address Details"
+            subtitle="Manage your address information"
+            [icon]="faMapLocationDot"
+          >
+            @if (isSaved() && !isEditMode()) {
+              <button class="page-header-btn warning" type="button" (click)="enableEdit()">
+                <fa-icon [icon]="faPen"></fa-icon>
+                Edit
+              </button>
+            }
+
+            @if (isSaved() && isEditMode()) {
+              <button class="page-header-btn danger" type="button" (click)="cancelEdit()">
+                <fa-icon [icon]="faXmark"></fa-icon>
+                Cancel
+              </button>
+            }
+          </app-page-sub-header>
+
+          <form [formGroup]="addressForm" class="organization-form" (ngSubmit)="saveAddress()">
+            <!-- CURRENT ADDRESS -->
+            <div class="section-title">Current Address</div>
+
+            <div class="form-row">
+              <div class="field full-width">
+                <label>
+                  Address Line 1
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="currentAddressLine1"
+                  placeholder="Enter address line 1"
+                  [class.invalid]="isInvalid('currentAddressLine1')"
+                />
+
+                @if (isInvalid('currentAddressLine1')) {
+                  <div class="field-error">
+                    {{ getError('currentAddressLine1') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field full-width">
+                <label>Address Line 2</label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="currentAddressLine2"
+                  placeholder="Enter address line 2"
+                  [class.invalid]="isInvalid('currentAddressLine2')"
+                />
+
+                @if (isInvalid('currentAddressLine2')) {
+                  <div class="field-error">
+                    {{ getError('currentAddressLine2') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  City
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="currentCity"
+                  placeholder="Enter city"
+                  [class.invalid]="isInvalid('currentCity')"
+                />
+
+                @if (isInvalid('currentCity')) {
+                  <div class="field-error">
+                    {{ getError('currentCity') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  State
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="currentState"
+                  placeholder="Enter state"
+                  [class.invalid]="isInvalid('currentState')"
+                />
+
+                @if (isInvalid('currentState')) {
+                  <div class="field-error">
+                    {{ getError('currentState') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Country
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="currentCountry"
+                  placeholder="Enter country"
+                  [class.invalid]="isInvalid('currentCountry')"
+                />
+
+                @if (isInvalid('currentCountry')) {
+                  <div class="field-error">
+                    {{ getError('currentCountry') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Postal Code
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="currentPostalCode"
+                  placeholder="Enter postal code"
+                  [class.invalid]="isInvalid('currentPostalCode')"
+                />
+
+                @if (isInvalid('currentPostalCode')) {
+                  <div class="field-error">
+                    {{ getError('currentPostalCode') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- SAME AS CURRENT -->
+            <div class="checkbox-row">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  formControlName="sameAsCurrent"
+                />
+
+                <span>Same as Current Address</span>
+              </label>
+            </div>
+
+            <!-- PERMANENT ADDRESS -->
+            <div class="section-title mt-6">Permanent Address</div>
+
+            <div class="form-row">
+              <div class="field full-width">
+                <label>
+                  Address Line 1
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="permanentAddressLine1"
+                  placeholder="Enter address line 1"
+                  [class.invalid]="isInvalid('permanentAddressLine1')"
+                />
+
+                @if (isInvalid('permanentAddressLine1')) {
+                  <div class="field-error">
+                    {{ getError('permanentAddressLine1') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field full-width">
+                <label>Address Line 2</label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="permanentAddressLine2"
+                  placeholder="Enter address line 2"
+                  [class.invalid]="isInvalid('permanentAddressLine2')"
+                />
+
+                @if (isInvalid('permanentAddressLine2')) {
+                  <div class="field-error">
+                    {{ getError('permanentAddressLine2') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  City
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="permanentCity"
+                  placeholder="Enter city"
+                  [class.invalid]="isInvalid('permanentCity')"
+                />
+
+                @if (isInvalid('permanentCity')) {
+                  <div class="field-error">
+                    {{ getError('permanentCity') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  State
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="permanentState"
+                  placeholder="Enter state"
+                  [class.invalid]="isInvalid('permanentState')"
+                />
+
+                @if (isInvalid('permanentState')) {
+                  <div class="field-error">
+                    {{ getError('permanentState') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label>
+                  Country
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="permanentCountry"
+                  placeholder="Enter country"
+                  [class.invalid]="isInvalid('permanentCountry')"
+                />
+
+                @if (isInvalid('permanentCountry')) {
+                  <div class="field-error">
+                    {{ getError('permanentCountry') }}
+                  </div>
+                }
+              </div>
+
+              <div class="field">
+                <label>
+                  Postal Code
+                  <span>*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="hrms-input"
+                  formControlName="permanentPostalCode"
+                  placeholder="Enter postal code"
+                  [class.invalid]="isInvalid('permanentPostalCode')"
+                />
+
+                @if (isInvalid('permanentPostalCode')) {
+                  <div class="field-error">
+                    {{ getError('permanentPostalCode') }}
+                  </div>
+                }
+              </div>
+            </div>
+
+            @if (isEditMode()) {
+              <div class="form-actions">
+                <button type="button" class="secondary-btn" (click)="resetForm()">
+                  Reset
+                </button>
+
+                <button type="submit" class="primary-btn">
+                  {{ isSaved() ? 'Update Changes' : 'Save Changes' }}
+                </button>
+              </div>
+            }
+          </form>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="organization-right-section">
+          <div class="organization-brand-card">
+            <app-page-sub-header
+              title="Upload Documents"
+              subtitle="Upload address verification documents"
+              [icon]="faFileArrowUp"
+            >
+            </app-page-sub-header>
+
+            <!-- UPLOAD BOX -->
+            <label class="logo-upload-box" [class.invalid]="documentError()">
+              <input
+                type="file"
+                hidden
+                multiple
+                accept=".pdf,.png,.jpg,.jpeg"
+                (change)="onDocumentUpload($event)"
+              />
+
+              <div class="logo-empty">
+                <div class="empty-icon">
+                  <fa-icon [icon]="faFileArrowUp"></fa-icon>
+                </div>
+
+                <div class="upload-title">Upload Documents</div>
+
+                <div class="upload-sub">
+                  PDF, PNG, JPG, JPEG supported (Max 5MB)
+                </div>
+              </div>
+            </label>
+
+            @if (documentError()) {
+              <div class="field-error logo-error-text">
+                {{ documentError() }}
+              </div>
+            }
+
+            <!-- DOCUMENT LIST -->
+            @if (uploadedDocuments().length > 0) {
+              <div class="uploaded-documents-list mt-4">
+                @for (doc of uploadedDocuments(); track doc.name; let i = $index) {
+                  <div class="uploaded-document-item">
+                    <div class="document-info">
+                      <div class="document-icon">
+                        <fa-icon [icon]="faFile"></fa-icon>
+                      </div>
+
+                      <div class="document-meta">
+                        <div class="document-name">
+                          {{ doc.name }}
+                        </div>
+
+                        <div class="document-size">
+                          {{ doc.size }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="document-actions">
+                      <button
+                        type="button"
+                        class="icon-btn"
+                        (click)="viewDocument(doc.url)"
+                      >
+                        <fa-icon [icon]="faEye"></fa-icon>
+                      </button>
+
+                      <button
+                        type="button"
+                        class="icon-btn danger"
+                        (click)="removeDocument(i)"
+                      >
+                        <fa-icon [icon]="faTrash"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
