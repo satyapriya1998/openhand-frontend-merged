@@ -1,81 +1,83 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-        "./src/**/*.{html,ts}"
-  ],
-   theme: {
+  content: ['./src/**/*.{html,ts}'],
+  darkMode: 'class',
+  theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
-          950: '#172554',
-        },
-        border: {
-          DEFAULT: 'oklch(0.9 0.01 250)',
-        },
-        foreground: {
-          DEFAULT: 'oklch(0.15 0.03 280)',
-        },
-        secondary: {
-          DEFAULT: 'oklch(0.97 0.01 280)',
-        },
-        background: {
-          DEFAULT: 'oklch(0.99 0.01 280)',
-        },
-        muted: {
-          foreground: 'oklch(0.55 0.02 280)',
-        },
-        accent: {
-          DEFAULT: 'oklch(0.97 0.02 280)',
-        },
-        'primary-foreground': {
-          DEFAULT: 'oklch(0.98 0.01 280)',
-        },
-        'muted-foreground': {
-          DEFAULT: 'oklch(0.55 0.02 280)',
-        },
-        'accent-foreground': {
-          DEFAULT: 'oklch(0.15 0.03 280)',
-        },
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
         card: {
-          DEFAULT: 'oklch(0.99 0.01 280)',
-        },
-        'card-foreground': {
-          DEFAULT: 'oklch(0.15 0.03 280)',
+          DEFAULT: 'var(--card)',
+          foreground: 'var(--card-foreground)',
         },
         popover: {
-          DEFAULT: 'oklch(0.99 0.01 280)',
+          DEFAULT: 'var(--popover)',
+          foreground: 'var(--popover-foreground)',
         },
-        'popover-foreground': {
-          DEFAULT: 'oklch(0.15 0.03 280)',
+        primary: {
+          DEFAULT: 'var(--primary)',
+          foreground: 'var(--primary-foreground)',
+          50: 'var(--hrms-primary-light)',
+          100: '#c6d9fc',
+          200: '#a0c0fa',
+          300: '#7aa7f7',
+          400: '#5d94f5',
+          500: '#3f81f3',
+          600: 'var(--hrms-primary)',
+          700: '#316eef',
+          800: '#2964ed',
+          900: '#1b51ea',
         },
-        destructive: {
-          DEFAULT: 'oklch(0.55 0.2 25)',
+        secondary: {
+          DEFAULT: 'var(--secondary)',
+          foreground: 'var(--secondary-foreground)',
         },
-        'destructive-foreground': {
-          DEFAULT: 'oklch(0.98 0.01 280)',
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
         },
-        input: 'oklch(0.9 0.01 250)',
-        ring: 'oklch(0.6 0.2 250)',
+        accent: {
+          DEFAULT: 'var(--accent)',
+          foreground: 'var(--accent-foreground)',
+        },
+        destructive: 'var(--destructive)',
+        border: 'var(--border)',
+        input: 'var(--input)',
+        ring: 'var(--ring)',
+        'chart-1': 'var(--chart-1)',
+        'chart-2': 'var(--chart-2)',
+        'chart-3': 'var(--chart-3)',
+        'chart-4': 'var(--chart-4)',
+        'chart-5': 'var(--chart-5)',
+        'aurora-1': 'var(--aurora-1)',
+        'aurora-2': 'var(--aurora-2)',
+        'aurora-3': 'var(--aurora-3)',
+        'hrms-bg': 'var(--hrms-bg)',
+        'hrms-surface': 'var(--hrms-surface)',
+        'hrms-text': 'var(--hrms-text)',
+        'hrms-text-muted': 'var(--hrms-text-muted)',
+        'hrms-border': 'var(--hrms-border)',
+        'hrms-success': 'var(--hrms-success)',
+        'hrms-warning': 'var(--hrms-warning)',
+        'hrms-danger': 'var(--hrms-danger)',
+        'hrms-info': 'var(--hrms-info)',
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) * 0.8)',
+        sm: 'calc(var(--radius) * 0.6)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'],
       },
-      transitionProperty: {
-        'width': 'width',
-        'spacing': 'margin, padding',
-      }
+      boxShadow: {
+        'hrms-sm': 'var(--hrms-shadow-sm)',
+        'hrms': 'var(--hrms-shadow)',
+        'hrms-lg': 'var(--hrms-shadow-lg)',
+        'hrms-primary': 'var(--hrms-shadow-primary)',
+      },
     },
   },
   plugins: [],
-}
-
+};
